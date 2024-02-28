@@ -1,46 +1,67 @@
 package main
 
 import (
-	"context"
-
 	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
 	"github.com/yusufocaliskan/tiny-go-mvc/database"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/server"
-	"go.mongodb.org/mongo-driver/bson"
 )
+
+var fw = framework.Framework{}
 
 func main() {
 
-	// initial dbConncction
-	dbInstance := database.MongoDatabase{}
-	dbInstance.Address = "mongodb://127.0.0.1:27017/"
-	dbInstance.DBName = "tinyGoMvc"
-	dbInstance.Connect()
+	//Initializing the framework
+	//1. Start the Gin Framework, set it to the framework
+	//2. Make database connection, set it to the framework
+	InitialTheTinyGoMvc()
+}
 
-	//Test
-	ctx := context.Background()
-	coll := dbInstance.Database.Collection("user")
-	coll.InsertOne(ctx, bson.M{"mail": "test@mail.com"})
+func InitialTheTinyGoMvc() {
 
-	//Create Gin Server
+	//1. Make database connection ad it to ginServer
+	MongoDBConnection()
+
+	//2. Create Gin Server
 	RunGinServer()
 }
 
 // Runing the Gin Server
 func RunGinServer() {
 
+	ginServer := server.GinServer{}
+
 	//Create the server
-	gsServer := &server.GinServer{}
-	gsServer.CreateServer(4141)
+	ginServer.CreateServer(4141)
+
+	//Set it the framwork
+	fw.GinServer = &ginServer
 
 	//Load routes
-	LoadV1Routes(gsServer)
+	LoadV1Routes()
 
 	//Start it
-	gsServer.Start()
+	ginServer.Start()
 }
 
 // Loads the v1 routes
-func LoadV1Routes(gsServer *server.GinServer) {
-	v1routes.SetUserRoutes(gsServer)
+func LoadV1Routes() {
+	v1routes.SetUserRoutes(&fw)
+
+	//(..., call others here)
+}
+
+// Make db connection
+func MongoDBConnection() {
+
+	// initial dbConncction
+	dbInstance := database.MongoDatabase{}
+
+	//TODO: Get the frome .env
+	dbInstance.DbUri = "mongodb://127.0.0.1:27017/"
+	dbInstance.DBName = "tinyGoMvc"
+	dbInstance.Connect()
+
+	fw.Database = &dbInstance
+
 }

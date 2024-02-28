@@ -15,6 +15,7 @@ type GinServer struct {
 // Creates a new Gin server
 func (gs *GinServer) CreateServer(ports ...int) {
 
+	fmt.Println("------------ {Establishing a Gin Server.} ------------")
 	r := gin.Default()
 	gs.Engine = r
 	port := 8080
@@ -28,7 +29,8 @@ func (gs *GinServer) CreateServer(ports ...int) {
 	}
 
 	gs.Address = fmt.Sprintf(":%d", port)
-	fmt.Println("A Gin Server has been created.")
+	fmt.Println("------------ {The Gin Server has been created.} ------------")
+
 }
 
 // Start the initialized server

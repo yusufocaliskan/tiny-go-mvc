@@ -2,13 +2,16 @@ package v1routes
 
 import (
 	usercontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/users-controller"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/server"
+	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
-func SetUserRoutes(ginServer *server.GinServer) {
-	v1 := ginServer.Engine.Group("/v1/api/user")
+func SetUserRoutes(fw *framework.Framework) {
+	v1 := fw.GinServer.Engine.Group("/v1/api/user")
 	{
-		uController := &usercontroller.User{}
-		v1.GET("/getById/:Id", uController.GetUserId)
+		uService := &userservice.UService{Fw: fw}
+		uCtrl := &usercontroller.UserController{Service: *uService}
+
+		v1.GET("/getById/:Id", uCtrl.GetUserId)
 	}
 }

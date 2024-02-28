@@ -2,35 +2,46 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type MongoDatabase struct {
-	Client   *mongo.Client
-	Database *mongo.Database
-	Address  string
+	DbClient *mongo.Client
+	Instance *mongo.Database
+	DbUri    string
 	DBName   string
 }
 
 // Make a Mongo db Connection
 func (mongDb *MongoDatabase) Connect() {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
-	defer cancel()
+	fmt.Println("------------ {Establising Database Connection} ------------ ")
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongDb.Address))
+	ctx := context.Background()
+
+	//Database connection
+	clientOptions := options.Client().ApplyURI(mongDb.DbUri)
+	client, err := mongo.Connect(ctx, clientOptions)
+	// defer client.Disconnect(context.Background())
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//check if the database accessable
+	// isConnected := client.Ping(context.Background(), nil)
+	// if isConnected != nil {
+	// 	log.Fatal("Failed to Ping database", isConnected)
+	// }
+
 	db := client.Database(mongDb.DBName)
 
 	//set the to the struct
-	mongDb.Client = client
-	mongDb.Database = db
+	mongDb.DbClient = client
+	mongDb.Instance = db
 
 }
