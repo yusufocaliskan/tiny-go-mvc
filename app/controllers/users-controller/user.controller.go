@@ -24,7 +24,7 @@ func (uCtrl *UserController) CreateNewUser(ginCtx *gin.Context) {
 	}
 
 	//Create new user
-	uCtrl.Service.CreateNewUser()
+	uCtrl.Service.CreateNewUser(&uCtrl.User)
 
 	Response.Success(uCtrl.User)
 }
