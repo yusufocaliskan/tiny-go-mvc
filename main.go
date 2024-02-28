@@ -4,10 +4,15 @@ import (
 	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
 	"github.com/yusufocaliskan/tiny-go-mvc/database"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/loader"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/server"
 )
 
 var fw = framework.Framework{}
+
+// Loadd the configuratins
+var ldr = loader.Loader{}
+var confs = ldr.LoadEnvironmetns()
 
 func main() {
 
@@ -32,10 +37,13 @@ func RunGinServer() {
 	ginServer := server.GinServer{}
 
 	//Create the server
-	ginServer.CreateServer(4141)
+	ginServer.CreateServer(confs.GIN_SERVER_PORT)
 
 	//Set it the framwork
 	fw.GinServer = &ginServer
+
+	//set the configurationss
+	fw.Configs = &confs
 
 	//Load routes
 	LoadV1Routes()
@@ -58,8 +66,8 @@ func MongoDBConnection() {
 	dbInstance := database.MongoDatabase{}
 
 	//TODO: Get the frome .env
-	dbInstance.DbUri = "mongodb://127.0.0.1:27017/"
-	dbInstance.DBName = "tinyGoMvc"
+	dbInstance.DbUri = confs.DBUri
+	dbInstance.DBName = confs.DBName
 	dbInstance.Connect()
 
 	fw.Database = &dbInstance
