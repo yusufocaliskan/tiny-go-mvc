@@ -3,19 +3,13 @@ package userservice
 import (
 	"fmt"
 
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/model/user-model"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
-type User struct {
-	FullName string
-	LastName string
-	Email    string
-	Password string
-}
-
 type UserService struct {
 	Collection string
-	User       User
+	User       *usermodel.UserModel
 	Fw         *framework.Framework
 }
 

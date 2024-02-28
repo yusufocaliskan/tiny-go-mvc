@@ -1,11 +1,10 @@
 package usercontroller
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/model/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/Response"
 )
 
 type UserController struct {
@@ -14,12 +13,18 @@ type UserController struct {
 }
 
 // Get user by id
-func (uCtrl *UserController) GetUserId(ginCtx *gin.Context) {
+func (uCtrl *UserController) CreateNewUser(ginCtx *gin.Context) {
 
-	// coll := uCtrl.Fw.Database.Instance.Collection("test")
-	// coll.InsertOne(context.Background(), bson.M{"newInstanceeee": "TestooInstan"})
+	Response := tinyresponse.Response{Ctx: ginCtx}
+	err := ginCtx.ShouldBindJSON(&uCtrl.User)
+
+	if err != nil {
+		Response.Bad(err)
+		return
+	}
+
+	//Create new user
 	uCtrl.Service.CreateNewUser()
 
-	// fmt.Println("Testooooooo==?", coll)
-	ginCtx.JSON(http.StatusOK, gin.H{"userId": uCtrl.Service.Fw.Database.DBName})
+	Response.Success(uCtrl.User)
 }

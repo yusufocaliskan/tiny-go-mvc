@@ -7,11 +7,11 @@ import (
 )
 
 func SetUserRoutes(fw *framework.Framework) {
-	v1 := fw.GinServer.Engine.Group("/v1/api/user")
+	v1 := fw.GinServer.Engine.Group("/api/v1/user")
 	{
 		uService := &userservice.UserService{Fw: fw}
 		uCtrl := &usercontroller.UserController{Service: *uService}
 
-		v1.GET("/getById/:Id", uCtrl.GetUserId)
+		v1.POST("/create/", uCtrl.CreateNewUser)
 	}
 }
