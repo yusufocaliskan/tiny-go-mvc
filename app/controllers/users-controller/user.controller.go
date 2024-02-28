@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/model/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	form "github.com/yusufocaliskan/tiny-go-mvc/framework/form/validate"
 	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/Response"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,28 +16,26 @@ type UserController struct {
 	Service userservice.UserService
 }
 
-var validate = validator.New()
-
 // Get user by id
 func (uCtrl *UserController) CreateNewUser(ginCtx *gin.Context) {
 
 	Response := tinyresponse.Response{Ctx: ginCtx}
+	validate := form.FormValidator{}
 
 	//Set the data in comming data to the user model
 	ginCtx.BindJSON(&uCtrl.User)
 
 	//check if the validation is okay
-	validationError := validate.Struct(&uCtrl.User)
-	if validationError != nil {
-		Response.Bad(validationError)
+	validationErrors := validate.Check(&uCtrl.User)
+	if validationErrors != nil {
+		Response.Bad(validationErrors)
 		return
 	}
 
-	//Genetate Id
+	//Genetate Id & Create new user
 	uCtrl.User.Id = primitive.NewObjectID()
 	uCtrl.User.CreatedAt = time.Now()
 
-	//Create new user
 	uCtrl.Service.CreateNewUser(&uCtrl.User)
 
 	Response.Success(uCtrl.User)
