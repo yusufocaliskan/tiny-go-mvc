@@ -13,13 +13,13 @@ type User struct {
 	Password string
 }
 
-type UService struct {
+type UserService struct {
 	Collection string
 	User       User
 	Fw         *framework.Framework
 }
 
-func (uSrv *UService) CreateNewUser() {
+func (uSrv *UserService) CreateNewUser() {
 
 	fmt.Println("UService----", uSrv.Fw.Database.DBName)
 }

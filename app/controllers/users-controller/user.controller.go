@@ -4,18 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/model/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 )
 
 type UserController struct {
-	Service userservice.UService
-}
-
-type User struct {
-	FullName string
-	LastName string
-	Email    string
-	Password string
+	User    usermodel.UserModel
+	Service userservice.UserService
 }
 
 // Get user by id
