@@ -5,7 +5,7 @@ run:
 
 # start the application in hotreload using fresh.yaml 
 # Use it in dev mode
-start hot:
+hot:
 	fresh
 
-.PHONY: run start hot
+.PHONY: run hot

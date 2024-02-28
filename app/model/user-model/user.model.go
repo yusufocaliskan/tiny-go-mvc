@@ -1,8 +1,17 @@
 package usermodel
 
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type UserModel struct {
-	FullName string `json:"fullname"`
-	UserName string `json:"username"`
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password"`
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	FullName  string             `json:"fullname"`
+	UserName  string             `json:"username" validate:"required"`
+	Email     string             `json:"email" validate:"required,email"`
+	Password  string             `json:"password" validate:"required"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
 }

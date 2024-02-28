@@ -8,7 +8,7 @@ Basically run the main.go
 `go run main.go`
 
 the framework also support hot-reload using fresh, use the below codes.
-`make run hot`
+`make hot`
 
 # Database
 
