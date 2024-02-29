@@ -16,7 +16,9 @@ type Envs struct {
 	DBName string `mapstructure:"DB_NAME"`
 	DBUri  string `mapstructure:"DB_URI"`
 
-	GIN_SERVER_PORT int `mapstructure:"GIN_SERVER_PORT"`
+	GIN_SERVER_PORT  int    `mapstructure:"GIN_SERVER_PORT"`
+	SESSION_KEY_NAME string `mapstructure:"SESSION_KEY_NAME"`
+	REDIS_DRIVER     string `mapstructure:"REDIS_DRIVER"`
 }
 
 // using Viper to load .env files

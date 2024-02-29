@@ -12,11 +12,10 @@ func SetUserRoutes(fw *framework.Framework) {
 	{
 		uService := &userservice.UserService{Fw: fw, Collection: "user"}
 		uController := &usercontroller.UserController{Service: *uService}
-		ValidationCheck := middlewares.ValidationCheck{}
 
 		//Creates new user
 		v1UserRoutes.POST("/createByEmail/",
-			ValidationCheck.IsValidate(&uController.User),
+			middlewares.Check4ValidData(&uController.User),
 			uController.CreateNewUserByEmailAdress)
 
 	}

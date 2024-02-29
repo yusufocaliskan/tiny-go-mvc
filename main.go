@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
 	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
 	"github.com/yusufocaliskan/tiny-go-mvc/database"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
@@ -17,22 +20,33 @@ var confs = ldr.LoadEnvironmetns()
 func main() {
 
 	//Initializing the framework
-	//1. Start the Gin Framework, set it to the framework
-	//2. Make database connection, set it to the framework
 	InitialTheTinyGoMvc()
 }
 
+// Workflow of the app..
 func InitialTheTinyGoMvc() {
 
 	//1. Make database connection ad it to ginServer
 	MongoDBConnection()
 
 	//2. Create Gin Server
-	RunGinServer()
+	BuildGinServer()
+
+	//3. Routes
+	LoadV1Routes()
+
+	//4. Create session store using redis
+	CreateSessionStore()
+
+	//5. Middlewaress
+	LoadMiddleWares()
+
+	//Start it 🚀
+	fw.GinServer.Start()
 }
 
 // Runing the Gin Server
-func RunGinServer() {
+func BuildGinServer() {
 
 	ginServer := server.GinServer{}
 
@@ -45,11 +59,20 @@ func RunGinServer() {
 	//set the configurationss
 	fw.Configs = &confs
 
-	//Load routes
-	LoadV1Routes()
+}
 
-	//Start it
-	ginServer.Start()
+// Set your general middleware
+func LoadMiddleWares() {
+	fw.GinServer.Engine.Use(middlewares.RateLimeter())
+}
+
+// Create a session store
+func CreateSessionStore() {
+
+	//Create session store using redis
+	redisStore, _ := redis.NewStore(10, "tcp", confs.REDIS_DRIVER, "", []byte("secret"))
+	fw.GinServer.Engine.Use(sessions.Sessions(confs.SESSION_KEY_NAME, redisStore))
+
 }
 
 // Loads the v1 routes
@@ -72,4 +95,7 @@ func MongoDBConnection() {
 
 	fw.Database = &dbInstance
 
+}
+
+func CreateRedisStore() {
 }

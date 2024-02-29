@@ -6,10 +6,8 @@ import (
 	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/response"
 )
 
-type ValidationCheck struct{}
-
-// Checking if the coming database valid
-func (vCheck ValidationCheck) IsValidate(data interface{}) gin.HandlerFunc {
+// Checking if the coming data valid
+func Check4ValidData(data interface{}) gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
 
