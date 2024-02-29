@@ -3,27 +3,21 @@ package middlewares
 import (
 	"fmt"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	tinysession "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-session"
 )
 
 func RateLimeter() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ss := sessions.Default(ctx)
 
-		var counter int
-		if val, ok := ss.Get("RateLimiteCounter").(int); ok {
+		fmt.Println("Hereeeee worksssss....")
 
-			counter = val
-		}
+		tinySession := &tinysession.TinySession{}
+		session := tinySession.New(ctx)
 
-		counter++
-		ss.Set("RateLimiteCounter", counter)
-		fmt.Println("RateLimiteCounter", counter)
-
-		// ss.Delete("RateLimiteCounter")
-		ss.Save()
-
+		session.Set("test", "test session value")
+		fmt.Println("Valuessssss===", session.Get("test"))
+		session.Save()
 		// Proceed with the request
 		ctx.Next()
 	}

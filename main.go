@@ -32,14 +32,14 @@ func InitialTheTinyGoMvc() {
 	//2. Create Gin Server
 	BuildGinServer()
 
-	//3. Routes
-	LoadV1Routes()
-
-	//4. Create session store using redis
+	//3. Create session store using redis
 	CreateSessionStore()
 
 	//5. Middlewaress
 	LoadMiddleWares()
+
+	//5. Routes
+	LoadV1Routes()
 
 	//Start it 🚀
 	fw.GinServer.Start()
@@ -88,14 +88,10 @@ func MongoDBConnection() {
 	// initial dbConncction
 	dbInstance := database.MongoDatabase{}
 
-	//TODO: Get the frome .env
 	dbInstance.DbUri = confs.DBUri
 	dbInstance.DBName = confs.DBName
 	dbInstance.Connect()
 
 	fw.Database = &dbInstance
 
-}
-
-func CreateRedisStore() {
 }
