@@ -31,3 +31,12 @@ func (resp *Response) Bad(err error) {
 	}
 	resp.Create(data, http.StatusBadRequest)
 }
+
+// Stops the process, Use it when no need more execution
+func (resp *Response) BadWithAbort(err error) {
+	data := gin.H{
+		"error": err.Error(),
+		"code":  http.StatusBadRequest,
+	}
+	resp.Ctx.AbortWithStatusJSON(http.StatusInternalServerError, data)
+}

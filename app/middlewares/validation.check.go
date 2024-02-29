@@ -16,14 +16,16 @@ func (vCheck ValidationCheck) IsValidate(data interface{}) gin.HandlerFunc {
 		validate := form.FormValidator{}
 		response := tinyresponse.Response{Ctx: ctx}
 
-		ctx.BindJSON(&data)
+		//1. Binding the incoming data with the struct
+		bindingError := ctx.BindJSON(&data)
+		if bindingError != nil {
+			response.BadWithAbort(bindingError)
+		}
 
-		//Check if is validated
+		//2. Check if is validated
 		validationError := validate.Check(data)
-
 		if validationError != nil {
-			response.Bad(validationError)
-			ctx.Abort()
+			response.BadWithAbort(validationError)
 		}
 
 		ctx.Next()

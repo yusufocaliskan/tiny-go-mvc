@@ -14,6 +14,9 @@ func SetUserRoutes(fw *framework.Framework) {
 		uController := &usercontroller.UserController{Service: *uService}
 		ValidationCheck := middlewares.ValidationCheck{}
 
-		v1UserRoutes.POST("/create/", ValidationCheck.IsValidate(&uController.User), uController.CreateNewUser)
+		//Creates new user
+		v1UserRoutes.POST("/create/",
+			ValidationCheck.IsValidate(&uController.User),
+			uController.CreateNewUser)
 	}
 }
