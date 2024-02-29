@@ -15,8 +15,9 @@ func SetUserRoutes(fw *framework.Framework) {
 		ValidationCheck := middlewares.ValidationCheck{}
 
 		//Creates new user
-		v1UserRoutes.POST("/create/",
+		v1UserRoutes.POST("/createByEmail/",
 			ValidationCheck.IsValidate(&uController.User),
-			uController.CreateNewUser)
+			uController.CreateNewUserByEmailAdress)
+
 	}
 }

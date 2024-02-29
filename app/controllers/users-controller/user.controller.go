@@ -4,9 +4,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
-	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/Response"
+	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/response"
+	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -16,15 +18,22 @@ type UserController struct {
 	Service userservice.UserService
 }
 
-func (uCtrl *UserController) CreateNewUser(ginCtx *gin.Context) {
+func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
 	Response := tinyresponse.Response{Ctx: ginCtx}
 
-	//Genetate Id & Create new user
-	uCtrl.User.Id = primitive.NewObjectID()
-	uCtrl.User.CreatedAt = time.Now()
+	//Is user exists?
+	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
+	if isExists {
+		Response.BadWithAbort(tinyerror.New(errormessages.UserExists))
+		return
+	}
 
-	uCtrl.Service.CreateNewUser(&uCtrl.User)
-	Response.Success(uCtrl.User)
+	//Genetate Id & Create new user
+	uController.User.Id = primitive.NewObjectID()
+	uController.User.CreatedAt = time.Now()
+
+	uController.Service.CreateNewUser(&uController.User)
+	Response.Success(uController.User)
 
 }

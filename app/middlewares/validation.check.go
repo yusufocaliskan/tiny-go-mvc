@@ -3,7 +3,7 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	form "github.com/yusufocaliskan/tiny-go-mvc/framework/form/validate"
-	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/Response"
+	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/response"
 )
 
 type ValidationCheck struct{}

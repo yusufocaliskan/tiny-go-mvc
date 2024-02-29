@@ -1,4 +1,4 @@
-package tinyresponse
+package response
 
 import (
 	"net/http"
@@ -36,7 +36,7 @@ func (resp *Response) Bad(err error) {
 func (resp *Response) BadWithAbort(err error) {
 	data := gin.H{
 		"error": err.Error(),
-		"code":  http.StatusBadRequest,
+		"code":  http.StatusInternalServerError,
 	}
 	resp.Ctx.AbortWithStatusJSON(http.StatusInternalServerError, data)
 }
