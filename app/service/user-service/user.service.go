@@ -2,12 +2,12 @@ package userservice
 
 import (
 	"context"
-	"fmt"
 
-	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/model/user-model"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
+// check user.route
 type UserService struct {
 	Collection string // user
 	Fw         *framework.Framework
@@ -17,7 +17,5 @@ type UserService struct {
 func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
 	ctx := context.Background()
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
-	fmt.Println("user--->", user)
 	coll.InsertOne(ctx, user)
-
 }

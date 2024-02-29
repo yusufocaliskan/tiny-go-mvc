@@ -2,16 +2,18 @@ package v1routes
 
 import (
 	usercontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/users-controller"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
 func SetUserRoutes(fw *framework.Framework) {
-	v1 := fw.GinServer.Engine.Group("/api/v1/user")
+	v1UserRoutes := fw.GinServer.Engine.Group("/api/v1/user")
 	{
 		uService := &userservice.UserService{Fw: fw, Collection: "user"}
-		uCtrl := &usercontroller.UserController{Service: *uService}
+		uController := &usercontroller.UserController{Service: *uService}
+		ValidationCheck := middlewares.ValidationCheck{}
 
-		v1.POST("/create/", uCtrl.CreateNewUser)
+		v1UserRoutes.POST("/create/", ValidationCheck.IsValidate(&uController.User), uController.CreateNewUser)
 	}
 }
