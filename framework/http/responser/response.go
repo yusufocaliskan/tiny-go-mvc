@@ -4,7 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
 )
+
+/**
+* Useage
+* response.Code(http.StatusRequestTimeout).SetError(message).BadWithAbort()
+* response.Payload(message).Success()
+ */
 
 type Response struct {
 	Ctx        *gin.Context
@@ -13,21 +20,28 @@ type Response struct {
 	Data       interface{}
 }
 
-// setters
+/* --------------------------------- setters -------------------------------- */
+
+// status code
 func (resp *Response) Code(code int) *Response {
 	resp.StatusCode = code
 	return resp
 }
+
+// Sets the data
 func (resp *Response) Payload(data interface{}) *Response {
 	resp.Data = data
 	return resp
 
 }
 
-func (resp *Response) SetError(err error) *Response {
-	resp.Error = err
+// Set errror message
+func (resp *Response) SetError(err string) *Response {
+	resp.Error = tinyerror.New(err)
 	return resp
 }
+
+/* ---------------------------------- resp ---------------------------------- */
 
 func (resp *Response) CreateResponse(data interface{}, status int) {
 	resp.Ctx.JSON(status, data)

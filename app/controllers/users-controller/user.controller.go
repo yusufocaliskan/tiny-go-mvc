@@ -8,7 +8,6 @@ import (
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
-	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -25,10 +24,9 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	//Is user exists?
 	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
 
+	//User Exists
 	if isExists {
-
-		response.Error = tinyerror.New(errormessages.UserExists)
-		response.BadWithAbort()
+		response.SetError(errormessages.UserExists).BadWithAbort()
 		return
 	}
 

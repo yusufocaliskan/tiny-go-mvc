@@ -12,7 +12,6 @@ import (
 	"github.com/yusufocaliskan/tiny-go-mvc/config"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/request"
 	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
-	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
 	tinysession "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-session"
 )
 
@@ -66,7 +65,6 @@ func RateLimeter() gin.HandlerFunc {
 
 				//is ther remainedTime?
 				if remainedTime <= 0 && limiterInfo.Token <= 0 {
-
 					limiterInfo = Limiter{
 						LastRequestTime: time.Now(),
 						Token:           config.RateLimiterToken,
@@ -77,7 +75,7 @@ func RateLimeter() gin.HandlerFunc {
 
 				if limiterInfo.Token == 0 {
 					message := fmt.Sprintf(errormessages.RateLimiterThresholMessage, remainedTime.Minutes())
-					response.Code(http.StatusRequestTimeout).SetError(tinyerror.New(message)).BadWithAbort()
+					response.Code(http.StatusRequestTimeout).SetError(message).BadWithAbort()
 				}
 
 			}
