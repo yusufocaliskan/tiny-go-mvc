@@ -39,7 +39,9 @@ func (lDr *Loader) LoadEnvironmetns() (env Envs) {
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	viper.Unmarshal(&env)
 

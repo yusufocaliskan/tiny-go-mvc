@@ -3,7 +3,7 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	form "github.com/yusufocaliskan/tiny-go-mvc/framework/form/validate"
-	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/response"
+	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 )
 
 // Checking if the coming data valid
@@ -12,7 +12,7 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		validate := form.FormValidator{}
-		response := tinyresponse.Response{Ctx: ctx}
+		response := responser.Response{Ctx: ctx}
 
 		//1. Binding the incoming data with the struct
 		bindingError := ctx.BindJSON(&data)

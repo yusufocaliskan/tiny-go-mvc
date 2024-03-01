@@ -7,7 +7,7 @@ import (
 	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
-	tinyresponse "github.com/yusufocaliskan/tiny-go-mvc/framework/http/response"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,7 +20,7 @@ type UserController struct {
 
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
-	Response := tinyresponse.Response{Ctx: ginCtx}
+	Response := responser.Response{Ctx: ginCtx}
 
 	//Is user exists?
 	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)

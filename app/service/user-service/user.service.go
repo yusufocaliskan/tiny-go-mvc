@@ -3,6 +3,7 @@ package userservice
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
@@ -18,9 +19,14 @@ type UserService struct {
 
 // Creeate a new user
 func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
+
 	ctx := context.Background()
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+
+	fmt.Println("Inserttting")
 	coll.InsertOne(ctx, user)
+	fmt.Println("Inserted")
+
 }
 
 // Check if user exists by given email address
