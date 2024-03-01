@@ -3,6 +3,7 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -72,12 +73,11 @@ func RateLimeter() gin.HandlerFunc {
 						ClientIp:        clientIp,
 						Endpoint:        *ctx.Request.URL,
 					}
-
 				}
 
 				if limiterInfo.Token == 0 {
 					message := fmt.Sprintf(errormessages.RateLimiterThresholMessage, remainedTime.Minutes())
-					response.BadWithAbort(tinyerror.New(message))
+					response.Code(http.StatusRequestTimeout).SetError(tinyerror.New(message)).BadWithAbort()
 				}
 
 			}

@@ -17,13 +17,17 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 		//1. Binding the incoming data with the struct
 		bindingError := ctx.BindJSON(&data)
 		if bindingError != nil {
-			response.BadWithAbort(bindingError)
+
+			response.Error = bindingError
+			response.BadWithAbort()
 		}
 
 		//2. Check if is validated
 		validationError := validate.Check(data)
+
 		if validationError != nil {
-			response.BadWithAbort(validationError)
+			response.Error = validationError
+			response.BadWithAbort()
 		}
 
 		ctx.Next()

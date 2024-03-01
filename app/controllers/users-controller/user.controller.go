@@ -20,12 +20,15 @@ type UserController struct {
 
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
-	Response := responser.Response{Ctx: ginCtx}
+	response := responser.Response{Ctx: ginCtx}
 
 	//Is user exists?
 	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
+
 	if isExists {
-		Response.BadWithAbort(tinyerror.New(errormessages.UserExists))
+
+		response.Error = tinyerror.New(errormessages.UserExists)
+		response.BadWithAbort()
 		return
 	}
 
@@ -34,6 +37,6 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	uController.User.CreatedAt = time.Now()
 
 	uController.Service.CreateNewUser(&uController.User)
-	Response.Success(uController.User)
+	response.Payload(uController.User).Success()
 
 }
