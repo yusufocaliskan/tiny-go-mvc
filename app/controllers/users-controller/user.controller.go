@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
@@ -20,18 +21,20 @@ type UserController struct {
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
-	UserAccessTokens := tinytoken.TinyToken{}
+	UserAccessTokens := tinytoken.TinyToken{
+		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
+	}
 	UserAccessTokens.AccessTokenGenerator(&uController.User)
 	UserAccessTokens.RefreshTokenGenerator(&uController.User)
 
 	//Is user exists?
-	// isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
+	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
 
-	//User Exists
-	// if isExists {
-	// 	response.SetError(errormessages.UserExists).BadWithAbort()
-	// 	return
-	// }
+	// User Exists
+	if isExists {
+		response.SetError(errormessages.UserExists).BadWithAbort()
+		return
+	}
 
 	//Genetate Id & Create new user
 	uController.User.Id = primitive.NewObjectID()

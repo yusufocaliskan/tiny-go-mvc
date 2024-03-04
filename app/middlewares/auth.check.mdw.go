@@ -5,12 +5,13 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 )
 
 // Checking if the coming data valid
 // AuthCheck validates the Authorization header token.
-func AuthCheck() gin.HandlerFunc {
+func AuthCheck(fw *framework.Framework) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authHeader := ctx.GetHeader("Authorization")
 		if authHeader == "" {
@@ -26,7 +27,7 @@ func AuthCheck() gin.HandlerFunc {
 		}
 
 		// Verify the token
-		claims, err := tinytoken.VerifyToken(bearerToken)
+		claims, err := tinytoken.VerifyToken(bearerToken, fw.Configs.AUTH_TOKEN_SECRET_KEY)
 		if err != nil {
 			fmt.Println("Error: ", err)
 			ctx.AbortWithStatusJSON(401, gin.H{"error": "Invalid or expired token"})

@@ -14,9 +14,8 @@ type SingleToken struct {
 type TinyToken struct {
 	AccessToken  SingleToken `json:"access_oken"`
 	RefreshToken SingleToken `json:"refresh_token"`
+	SecretKey    string
 }
-
-var secretKey = []byte("secret-key-test")
 
 func (tToken *TinyToken) Genera(data interface{}) {
 
@@ -30,6 +29,7 @@ func (tToken *TinyToken) CreateToken(data interface{}, expiryTime time.Duration)
 		"exp":  time.Now().Add(expiryTime).Unix(),
 	})
 
+	var secretKey = []byte(tToken.SecretKey)
 	stringifiedToken, err := token.SignedString(secretKey)
 	if err != nil {
 		return "", err
@@ -59,12 +59,14 @@ func (tToken *TinyToken) RefreshTokenGenerator(data interface{}) {
 	}
 }
 
-func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+func VerifyToken(tokenString string, secretKey string) (jwt.MapClaims, error) {
+
+	var secretKeyInByte = []byte(secretKey)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
 		}
-		return secretKey, nil
+		return secretKeyInByte, nil
 	})
 
 	if err != nil {

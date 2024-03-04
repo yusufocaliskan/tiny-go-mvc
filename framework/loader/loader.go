@@ -16,9 +16,10 @@ type Envs struct {
 	DBName string `mapstructure:"DB_NAME"`
 	DBUri  string `mapstructure:"DB_URI"`
 
-	GIN_SERVER_PORT  int    `mapstructure:"GIN_SERVER_PORT"`
-	SESSION_KEY_NAME string `mapstructure:"SESSION_KEY_NAME"`
-	REDIS_DRIVER     string `mapstructure:"REDIS_DRIVER"`
+	GIN_SERVER_PORT       int    `mapstructure:"GIN_SERVER_PORT"`
+	SESSION_KEY_NAME      string `mapstructure:"SESSION_KEY_NAME"`
+	REDIS_DRIVER          string `mapstructure:"REDIS_DRIVER"`
+	AUTH_TOKEN_SECRET_KEY string `mapstructure:"AUTH_TOKEN_SECRET_KEY"`
 }
 
 // using Viper to load .env files
@@ -32,6 +33,7 @@ func (lDr *Loader) LoadEnvironmetns() (env Envs) {
 	if mode == "production" {
 		envFileName = "prod"
 	}
+
 	viper.AddConfigPath("config/")
 	viper.SetConfigName(envFileName)
 	viper.SetConfigType("env")
