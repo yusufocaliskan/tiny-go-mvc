@@ -24,11 +24,11 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	UserAccessTokens := tinytoken.TinyToken{
 		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
 	}
-	UserAccessTokens.AccessTokenGenerator(&uController.User)
-	UserAccessTokens.RefreshTokenGenerator(&uController.User)
+	UserAccessTokens.AccessTokenGenerator(&uController.User.Email)
+	UserAccessTokens.RefreshTokenGenerator(&uController.User.Email)
 
 	//Is user exists?
-	isExists := uController.Service.CheckByEmailAddress(uController.User.Email)
+	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
 
 	// User Exists
 	if isExists {

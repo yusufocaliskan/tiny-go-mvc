@@ -30,20 +30,23 @@ func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) CheckByEmailAddress(email string) bool {
+func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.UserModel) {
 
 	ctx := context.Background()
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"email": email})
 
+	var user usermodel.UserModel
+	result.Decode(&user)
+
 	//User not found
 	if result.Err() != nil {
 		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
 
-			return false
+			return false, &user
 		}
 	}
 
-	return true
+	return true, &user
 }

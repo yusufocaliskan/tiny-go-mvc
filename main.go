@@ -82,6 +82,7 @@ func CreateSessionStore() {
 
 // Loads the v1 routes
 func LoadV1Routes() {
+	v1routes.SetAuthRoutes(&fw)
 	v1routes.SetUserRoutes(&fw)
 
 	//(..., call others here)
