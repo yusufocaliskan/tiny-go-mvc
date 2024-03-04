@@ -1,6 +1,7 @@
 package tinytoken
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -26,7 +27,7 @@ func (tToken *TinyToken) Genera(data interface{}) {
 func (tToken *TinyToken) CreateToken(data interface{}, expiryTime time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"data": data,
-		"exp":  time.Now().Add(expiryTime),
+		"exp":  time.Now().Add(expiryTime).Unix(),
 	})
 
 	stringifiedToken, err := token.SignedString(secretKey)
@@ -58,4 +59,25 @@ func (tToken *TinyToken) RefreshTokenGenerator(data interface{}) {
 	}
 }
 
-// func VerifyToken()
+func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return secretKey, nil
+	})
+
+	if err != nil {
+		return nil, err // Token parsing error
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if exp, ok := claims["exp"].(float64); ok {
+			if time.Unix(int64(exp), 0).Before(time.Now()) {
+				return nil, errors.New("token is expired")
+			}
+		}
+		return claims, nil // Token is valid
+	}
+	return nil, errors.New("invalid token")
+}
