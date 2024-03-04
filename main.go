@@ -1,10 +1,13 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
 	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
+	"github.com/yusufocaliskan/tiny-go-mvc/config"
 	"github.com/yusufocaliskan/tiny-go-mvc/database"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/loader"
@@ -63,7 +66,13 @@ func BuildGinServer() {
 
 // Set your general middleware
 func LoadMiddleWares() {
-	fw.GinServer.Engine.Use(middlewares.RateLimeter())
+
+	//Activating RateLimiiter.
+	if config.ActivateReteLimiter {
+
+		fmt.Println("-------- Rate Limitter is activated ----------")
+		fw.GinServer.Engine.Use(middlewares.RateLimeter())
+	}
 }
 
 // Create a session store

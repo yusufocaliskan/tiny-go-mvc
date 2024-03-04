@@ -25,7 +25,7 @@ type Limiter struct {
 func RateLimeter() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		fmt.Println("..-------- Rate Limits works ----------")
+		fmt.Println("-------- Rate Limits works ----------")
 
 		tinySession := &tinysession.TinySession{}
 		session := tinySession.New(ctx)
@@ -48,8 +48,6 @@ func RateLimeter() gin.HandlerFunc {
 				// Handle error
 				fmt.Println("Error decoding limiterInfo JSON:", err)
 			}
-
-			//set remained time,
 
 			elapsedTime = time.Since(limiterInfo.LastRequestTime)
 			rateLimit = config.RateLimterTime * time.Second
@@ -102,6 +100,7 @@ func RateLimeter() gin.HandlerFunc {
 			session.Set(sessionKey, string(limiterInfoAsJson))
 			session.Save()
 		}
+
 		// Proceed with the request
 		ctx.Next()
 	}
