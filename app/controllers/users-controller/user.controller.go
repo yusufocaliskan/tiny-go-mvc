@@ -21,12 +21,6 @@ type UserController struct {
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
-	UserAccessTokens := tinytoken.TinyToken{
-		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
-	}
-	UserAccessTokens.AccessTokenGenerator(&uController.User.Email)
-	UserAccessTokens.RefreshTokenGenerator(&uController.User.Email)
-
 	//Is user exists?
 	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
 
@@ -36,15 +30,24 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 		return
 	}
 
+	//Generate tokens
+	token := tinytoken.TinyToken{}
+	token.GenerateAccessTokens(&uController.User.Email)
+
 	//Genetate Id & Create new user
 	uController.User.Id = primitive.NewObjectID()
 	uController.User.CreatedAt = time.Now()
-	uController.User.Token = UserAccessTokens
 
 	//Create new user
 	uController.Service.CreateNewUser(&uController.User)
 
+	//Generate payload
+	payload := usermodel.UserWithToken{
+		Token: token.Data,
+		User:  uController.User,
+	}
+
 	//return the resonse
-	response.Payload(uController.User).Success()
+	response.Payload(payload).Success()
 
 }

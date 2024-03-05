@@ -9,18 +9,27 @@ import (
 
 type SingleToken struct {
 	ExpiryTime time.Duration `json:"expiry_time"`
-	BearerKey  string        `json:"brearer_key"`
+	BearerKey  string        `json:"key"`
 }
-type TinyToken struct {
+
+type TinyTokenData struct {
 	AccessToken  SingleToken `json:"access_oken"`
 	RefreshToken SingleToken `json:"refresh_token"`
-	SecretKey    string
 }
 
-func (tToken *TinyToken) Genera(data interface{}) {
+type TinyToken struct {
+	Data      TinyTokenData
+	SecretKey string
+}
 
-	tToken.AccessTokenGenerator(data)
-	tToken.RefreshTokenGenerator(data)
+func (tToken *TinyToken) GenerateAccessTokens(data interface{}) {
+	access := tToken.AccessTokenGenerator(data)
+	refresh := tToken.RefreshTokenGenerator(data)
+
+	tToken.Data = TinyTokenData{
+		AccessToken:  *access,
+		RefreshToken: *refresh,
+	}
 }
 
 func (tToken *TinyToken) CreateToken(data interface{}, expiryTime time.Duration) (string, error) {
@@ -38,22 +47,22 @@ func (tToken *TinyToken) CreateToken(data interface{}, expiryTime time.Duration)
 }
 
 // Creates Refresh token for 1 day
-func (tToken *TinyToken) AccessTokenGenerator(data interface{}) {
+func (tToken *TinyToken) AccessTokenGenerator(data interface{}) *SingleToken {
 
 	expiryTime := time.Hour * 24
 	token, _ := tToken.CreateToken(data, expiryTime)
-	tToken.AccessToken = SingleToken{
+	return &SingleToken{
 		BearerKey:  token,
 		ExpiryTime: expiryTime,
 	}
 }
 
 // Creates Refresh token for 7 days
-func (tToken *TinyToken) RefreshTokenGenerator(data interface{}) {
+func (tToken *TinyToken) RefreshTokenGenerator(data interface{}) *SingleToken {
 
 	expiryTime := time.Hour * 24 * 7
 	token, _ := tToken.CreateToken(data, expiryTime)
-	tToken.RefreshToken = SingleToken{
+	return &SingleToken{
 		BearerKey:  token,
 		ExpiryTime: expiryTime,
 	}
