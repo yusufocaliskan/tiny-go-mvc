@@ -17,7 +17,14 @@ type UserModel struct {
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
+type UserModelResponse struct {
+	Id       primitive.ObjectID `json:"id"`
+	FullName string             `json:"fullname"`
+	UserName string             `json:"username"`
+	Email    string             `json:"email" `
+}
+
 type UserWithToken struct {
 	Token tinytoken.TinyTokenData `json:"tokens"`
-	User  UserModel               `json:"user"`
+	User  UserModelResponse       `json:"user"`
 }

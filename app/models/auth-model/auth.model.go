@@ -1,5 +1,5 @@
 package authmodel
 
-type AuthRefreshTokenData struct {
+type AuthRefreshTokenModel struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
 }

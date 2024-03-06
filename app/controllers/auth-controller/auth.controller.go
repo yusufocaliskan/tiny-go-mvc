@@ -1,10 +1,10 @@
 package authcontroller
 
 import (
-	"strings"
-
 	"github.com/gin-gonic/gin"
 	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
+	authmodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/auth-model"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
@@ -12,7 +12,8 @@ import (
 
 type AuthController struct {
 	// users being binded in IsValidate()
-	UserService userservice.UserService
+	UserService           userservice.UserService
+	AuthRefreshTokenModel authmodel.AuthRefreshTokenModel
 }
 
 // Generating new accessToken using refreshToken
@@ -20,9 +21,7 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 
 	response := responser.Response{Ctx: ginCtx}
 
-	authHeader := ginCtx.GetHeader("Authorization")
-	bearerToken := strings.TrimPrefix(authHeader, "Bearer ")
-	data, _ := tinytoken.VerifyToken(bearerToken, authCtrl.UserService.Fw.Configs.AUTH_TOKEN_SECRET_KEY)
+	data, _ := tinytoken.VerifyToken(authCtrl.AuthRefreshTokenModel.RefreshToken, authCtrl.UserService.Fw.Configs.AUTH_TOKEN_SECRET_KEY)
 
 	//extract user data from bearer token
 	userEmail := data["data"].(string)
@@ -37,13 +36,17 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 	}
 
 	//Generate new tokens.
-	UserAccessTokens := tinytoken.TinyToken{
+	token := tinytoken.TinyToken{
 		SecretKey: authCtrl.UserService.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
 	}
-	UserAccessTokens.AccessTokenGenerator(user.Email)
-	UserAccessTokens.RefreshTokenGenerator(user.Email)
+
+	token.GenerateAccessTokens(user.Email)
+	payload := usermodel.UserWithToken{
+		Token: token.Data,
+		User:  *user,
+	}
 
 	//return the resonse
-	response.Payload(UserAccessTokens).Success()
+	response.Payload(payload).Success()
 
 }

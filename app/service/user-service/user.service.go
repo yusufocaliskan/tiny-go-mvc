@@ -26,14 +26,14 @@ func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.UserModel) {
+func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.UserModelResponse) {
 
 	ctx := context.Background()
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"email": email})
 
-	var user usermodel.UserModel
+	var user usermodel.UserModelResponse
 	result.Decode(&user)
 
 	//User not found

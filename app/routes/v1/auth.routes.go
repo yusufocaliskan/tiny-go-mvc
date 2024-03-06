@@ -15,8 +15,10 @@ func SetAuthRoutes(fw *framework.Framework) {
 
 		//Creates new user
 		v1AuthRoutes.POST("/refreshToken/",
-			middlewares.AuthCheck(fw.Configs.AUTH_TOKEN_SECRET_KEY),
-			middlewares.RateLimeter(),
+
+			//Valided need params and set the incoming data to the model
+			//we then use it in controller
+			middlewares.Check4ValidData(&authController.AuthRefreshTokenModel),
 			authController.GenerateNewAccessTokenByRefreshToken)
 
 	}

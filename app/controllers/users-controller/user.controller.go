@@ -13,7 +13,7 @@ import (
 )
 
 type UserController struct {
-	// users being binded in IsValidate()
+	// users being binded in Check4ValidData()
 	User    usermodel.UserModel
 	Service userservice.UserService
 }
@@ -22,7 +22,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
-	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
+	isExists, user := uController.Service.CheckByEmailAddress(uController.User.Email)
 
 	// User Exists
 	if isExists {
@@ -31,7 +31,9 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	}
 
 	//Generate tokens
-	token := tinytoken.TinyToken{}
+	token := tinytoken.TinyToken{
+		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
+	}
 	token.GenerateAccessTokens(&uController.User.Email)
 
 	//Genetate Id & Create new user
@@ -44,7 +46,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	//Generate payload
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
-		User:  uController.User,
+		User:  *user,
 	}
 
 	//return the resonse

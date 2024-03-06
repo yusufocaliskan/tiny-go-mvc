@@ -15,7 +15,7 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Creates new user
 		v1UserRoutes.POST("/createByEmail/",
-			middlewares.AuthCheck(fw.Configs.AUTH_TOKEN_SECRET_KEY),
+			// middlewares.AuthCheck(fw.Configs.AUTH_TOKEN_SECRET_KEY),
 			middlewares.Check4ValidData(&uController.User),
 			middlewares.RateLimeter(),
 			uController.CreateNewUserByEmailAdress)
