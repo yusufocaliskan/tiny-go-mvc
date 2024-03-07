@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
+	textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
@@ -14,8 +14,9 @@ import (
 
 type UserController struct {
 	// users being binded in Check4ValidData()
-	User    usermodel.UserModel
-	Service userservice.UserService
+	User            usermodel.UserModel
+	UserDeleteModel usermodel.UserDeleteModel
+	Service         userservice.UserService
 }
 
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
@@ -26,7 +27,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	// User Exists
 	if isExists {
-		response.SetError(errormessages.UserExists).BadWithAbort()
+		response.SetError(textholder.UserExists).BadWithAbort()
 		return
 	}
 
@@ -52,4 +53,19 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	//return the resonse
 	response.Payload(payload).Success()
 
+}
+
+// Deletes a user
+func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+
+	isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
+
+	if !isDeleted {
+		response.SetError(textholder.UserConnotBeDeleted).BadWithAbort()
+		return
+	}
+
+	response.SetMessage(textholder.UserDeleted).Success()
 }

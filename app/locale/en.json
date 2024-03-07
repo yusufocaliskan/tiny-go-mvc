@@ -1,0 +1,10 @@
+{
+  "user_not_found": {
+    "text": "User connot be found",
+    "code": "UF001"
+  },
+  "user_deleted": {
+    "text": "User deleted succesfully",
+    "code": "UF002"
+  }
+}

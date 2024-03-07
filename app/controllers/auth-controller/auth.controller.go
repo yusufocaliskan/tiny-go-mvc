@@ -2,7 +2,7 @@ package authcontroller
 
 import (
 	"github.com/gin-gonic/gin"
-	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
+	textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
 	authmodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/auth-model"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
@@ -31,7 +31,7 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 
 	// User Exists
 	if !isExists {
-		response.SetError(errormessages.UserDoesntExists).BadWithAbort()
+		response.SetError(textholder.UserDoesntExists).BadWithAbort()
 		return
 	}
 

@@ -1,0 +1,10 @@
+{
+  "user_not_found": {
+    "text": "Kullanici silinemiyor.",
+    "code": "UF001"
+  },
+  "user_deleted": {
+    "text": "Kullanici basariyla silindi",
+    "code": "UF002"
+  }
+}

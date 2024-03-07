@@ -46,3 +46,14 @@ func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.User
 
 	return true, &user
 }
+
+// Delete user by id
+func (uSrv UserService) DeleteUserById(data *usermodel.UserDeleteModel) bool {
+
+	ctx := context.Background()
+
+	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+	result, _ := coll.DeleteOne(ctx, bson.M{"_id": data.Id})
+	return result.DeletedCount > 0
+
+}

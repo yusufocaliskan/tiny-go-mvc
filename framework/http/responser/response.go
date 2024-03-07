@@ -18,13 +18,18 @@ type Response struct {
 	StatusCode int
 	Error      error
 	Data       interface{}
+	Message    string
 }
 
 /* --------------------------------- setters -------------------------------- */
 
 // status code
-func (resp *Response) Code(code int) *Response {
+func (resp *Response) SetStatusCode(code int) *Response {
 	resp.StatusCode = code
+	return resp
+}
+func (resp *Response) SetMessage(text string) *Response {
+	resp.Message = text
 	return resp
 }
 
@@ -54,8 +59,14 @@ func (resp *Response) Success() {
 		code = resp.StatusCode
 	}
 	data := gin.H{
-		"data": resp.Data,
+
 		"code": code,
+	}
+	if resp.Data != nil {
+		data["data"] = resp.Data
+	}
+	if resp.Message != "" {
+		data["Message"] = resp.Message
 	}
 	resp.CreateResponse(data, code)
 }

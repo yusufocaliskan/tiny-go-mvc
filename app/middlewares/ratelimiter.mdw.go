@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	errormessages "github.com/yusufocaliskan/tiny-go-mvc/app/constants/error-messages"
+	textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
 	"github.com/yusufocaliskan/tiny-go-mvc/config"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/request"
 	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
@@ -72,8 +72,8 @@ func RateLimeter() gin.HandlerFunc {
 				}
 
 				if limiterInfo.Token == 0 {
-					message := fmt.Sprintf(errormessages.RateLimiterThresholMessage, remainedTime.Minutes())
-					response.Code(http.StatusRequestTimeout).SetError(message).BadWithAbort()
+					message := fmt.Sprintf(textholder.RateLimiterThresholMessage, remainedTime.Minutes())
+					response.SetStatusCode(http.StatusRequestTimeout).SetError(message).BadWithAbort()
 				}
 
 			}

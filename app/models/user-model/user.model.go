@@ -24,6 +24,10 @@ type UserModelResponse struct {
 	Email    string             `json:"email" `
 }
 
+type UserDeleteModel struct {
+	Id primitive.ObjectID `json:"id"`
+}
+
 type UserWithToken struct {
 	Token tinytoken.TinyTokenData `json:"tokens"`
 	User  UserModelResponse       `json:"user"`

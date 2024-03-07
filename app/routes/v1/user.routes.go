@@ -8,6 +8,7 @@ import (
 )
 
 func SetUserRoutes(fw *framework.Framework) {
+
 	v1UserRoutes := fw.GinServer.Engine.Group("/api/v1/user")
 	{
 		uService := &userservice.UserService{Fw: fw, Collection: "user"}
@@ -19,6 +20,13 @@ func SetUserRoutes(fw *framework.Framework) {
 			middlewares.Check4ValidData(&uController.User),
 			middlewares.RateLimeter(),
 			uController.CreateNewUserByEmailAdress)
+
+		//Delete user
+		v1UserRoutes.POST("/deleteById/",
+			middlewares.AuthCheck(fw.Configs.AUTH_TOKEN_SECRET_KEY),
+			middlewares.Check4ValidData(&uController.UserDeleteModel),
+			middlewares.RateLimeter(),
+			uController.DeleteUserById)
 
 	}
 }
