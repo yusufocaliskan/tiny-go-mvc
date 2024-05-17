@@ -2,9 +2,12 @@ package config
 
 const (
 	ActivateReteLimiter = true
+	//6 request in 2 mins
+	RateLimiterToken = 6  //5 request
+	RateLimterTime   = 21 //scs
 
-	//5 request in 2 mins
-	RateLimiterToken = 5  //5 request
-	RateLimterTime   = 20 //scs
+	DefaultLanguage = "en"
 
 )
+
+var AcceptableLangs = []string{"en", "tr"}

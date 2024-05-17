@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
 	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
 	"github.com/yusufocaliskan/tiny-go-mvc/database"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework"
@@ -24,6 +25,11 @@ func main() {
 
 // Workflow of the app..
 func InitialTheTinyGoMvc() {
+		
+	// translation := translator.LoadErrorTextFile()
+	
+	// print("translation: ", translator.GetMessage(translation,"user_not_found"))
+	
 
 	//1. Make database connection ad it to ginServer
 	MongoDBConnection()
@@ -48,7 +54,6 @@ func InitialTheTinyGoMvc() {
 func BuildGinServer() {
 
 	ginServer := server.GinServer{}
-
 	//Create the server
 	ginServer.CreateServer(confs.GIN_SERVER_PORT)
 
@@ -63,11 +68,19 @@ func BuildGinServer() {
 // Set your general middleware
 func LoadMiddleWares() {
 
-	// //Activating RateLimiiter.
+	//translation files
+	fw.GinServer.Engine.Use(middlewares.LoadTranslationFile())
+
+	//1. XSS attack protection
+	fw.GinServer.Engine.Use(middlewares.AttackProtectionMiddleware())
+
+
+	//Activating RateLimiiter.
 	// if config.ActivateReteLimiter {
 
-	// 	// fmt.Println("-------- Rate Limitter is activated ----------")
-	// 	// fw.GinServer.Engine.Use(middlewares.RateLimeter())
+	// 	fmt.Println("-------- Rate Limitter is activated ----------")
+	// 	fw.GinServer.Engine.Use(middlewares.RateLimeter())
+
 	// }
 }
 

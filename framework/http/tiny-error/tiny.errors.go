@@ -1,9 +1,8 @@
 package tinyerror
 
-import "errors"
+import "github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 
 // Create a custom error message
-func New(err string) error {
-	return errors.New(err)
-
+func New(err *translator.TranslationEntry) *translator.TranslationEntry{
+	return err 
 }

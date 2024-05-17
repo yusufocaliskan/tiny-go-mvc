@@ -4,11 +4,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
+	// textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
 	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -27,7 +28,8 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	// User Exists
 	if isExists {
-		response.SetError(textholder.UserExists).BadWithAbort()
+
+		response.SetError(translator.GetMessage(ginCtx,"user_exists")).BadWithAbort()
 		return
 	}
 
@@ -58,14 +60,14 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 // Deletes a user
 func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
 
-	response := responser.Response{Ctx: ginCtx}
+	// response := responser.Response{Ctx: ginCtx}
 
 	isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
 
 	if !isDeleted {
-		response.SetError(textholder.UserConnotBeDeleted).BadWithAbort()
+		// response.SetError(textholder.UserConnotBeDeleted).BadWithAbort()
 		return
 	}
 
-	response.SetMessage(textholder.UserDeleted).Success()
+	// response.SetMessage(textholder.UserDeleted).Success()
 }

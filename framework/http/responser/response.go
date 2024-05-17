@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	tinyerror "github.com/yusufocaliskan/tiny-go-mvc/framework/http/tiny-error"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 /**
@@ -16,7 +16,7 @@ import (
 type Response struct {
 	Ctx        *gin.Context
 	StatusCode int
-	Error      error
+	Error      *translator.TranslationEntry
 	Data       interface{}
 	Message    string
 }
@@ -41,8 +41,8 @@ func (resp *Response) Payload(data interface{}) *Response {
 }
 
 // Set errror message
-func (resp *Response) SetError(err string) *Response {
-	resp.Error = tinyerror.New(err)
+func (resp *Response) SetError(err *translator.TranslationEntry) *Response {
+	resp.Error = err
 	return resp
 }
 
@@ -59,15 +59,17 @@ func (resp *Response) Success() {
 		code = resp.StatusCode
 	}
 	data := gin.H{
-
 		"code": code,
 	}
+
 	if resp.Data != nil {
 		data["data"] = resp.Data
 	}
+
 	if resp.Message != "" {
 		data["Message"] = resp.Message
 	}
+
 	resp.CreateResponse(data, code)
 }
 
@@ -75,8 +77,8 @@ func (resp *Response) Success() {
 func (resp *Response) Bad(err error) {
 
 	data := gin.H{
-		"error": resp.Error.Error(),
-		"code":  http.StatusBadRequest,
+		"error": resp.Error.Text,
+		"code":  resp.Error.Code,
 	}
 	resp.CreateResponse(data, http.StatusBadRequest)
 }
@@ -87,9 +89,10 @@ func (resp *Response) BadWithAbort() {
 	if resp.StatusCode != 0 {
 		code = resp.StatusCode
 	}
+
 	data := gin.H{
-		"error": resp.Error.Error(),
-		"code":  code,
+		"error": resp.Error.Text,
+		"code":  resp.Error.Code,
 	}
 	resp.Ctx.AbortWithStatusJSON(code, data)
 }

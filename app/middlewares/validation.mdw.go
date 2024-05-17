@@ -18,7 +18,8 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 		bindingError := ctx.BindJSON(&data)
 		if bindingError != nil {
 
-			response.Error = bindingError
+			print("bindingError", bindingError)
+			// response.Error = bindingError
 			response.BadWithAbort()
 		}
 
@@ -26,7 +27,7 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 		validationError := validate.Check(data)
 
 		if validationError != nil {
-			response.Error = validationError
+			// response.Error = validationError
 			response.BadWithAbort()
 		}
 

@@ -3,15 +3,13 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"net/url"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
+	// textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
 	"github.com/yusufocaliskan/tiny-go-mvc/config"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/request"
-	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 	tinysession "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-session"
 )
 
@@ -30,7 +28,7 @@ func RateLimeter() gin.HandlerFunc {
 		tinySession := &tinysession.TinySession{}
 		session := tinySession.New(ctx)
 		clientIp := request.GetLocalIP()
-		response := responser.Response{Ctx: ctx}
+		// response := responser.Response{Ctx: ctx}
 
 		sessionKey := fmt.Sprintf("limitterInfo-%s", clientIp)
 
@@ -72,8 +70,8 @@ func RateLimeter() gin.HandlerFunc {
 				}
 
 				if limiterInfo.Token == 0 {
-					message := fmt.Sprintf(textholder.RateLimiterThresholMessage, remainedTime.Minutes())
-					response.SetStatusCode(http.StatusRequestTimeout).SetError(message).BadWithAbort()
+					// message := fmt.Sprintf(textholder.RateLimiterThresholMessage, remainedTime.Minutes())
+					// response.SetStatusCode(http.StatusRequestTimeout).SetError(message).BadWithAbort()
 				}
 
 			}

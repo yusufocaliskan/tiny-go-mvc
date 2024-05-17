@@ -3,8 +3,12 @@
     "text": "User connot be found",
     "code": "UF001"
   },
+  "user_exists": {
+    "text": "The user has already existed",
+    "code": "UF002"
+  },
   "user_deleted": {
     "text": "User deleted succesfully",
-    "code": "UF002"
+    "code": "UF003"
   }
 }
