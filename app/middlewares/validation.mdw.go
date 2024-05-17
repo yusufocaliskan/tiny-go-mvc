@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	form "github.com/yusufocaliskan/tiny-go-mvc/framework/form/validate"
 	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 // Checking if the coming data valid
@@ -16,19 +17,20 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 
 		//1. Binding the incoming data with the struct
 		bindingError := ctx.BindJSON(&data)
+
 		if bindingError != nil {
 
-			print("bindingError", bindingError)
+		print("bindingError", bindingError.Error())
 			// response.Error = bindingError
-			response.BadWithAbort()
+			response.SetError(translator.GetMessage(ctx, "validation_errors")).BadWithAbort()
 		}
 
 		//2. Check if is validated
-		validationError := validate.Check(data)
+		validationError, isError:= validate.Check(data)
 
-		if validationError != nil {
+		if isError {
 			// response.Error = validationError
-			response.BadWithAbort()
+			response.SetError(validationError).BadWithAbort()
 		}
 
 		ctx.Next()

@@ -10,5 +10,9 @@
   "user_deleted": {
     "text": "User deleted succesfully",
     "code": "UF003"
+  },
+  "validation_errors": {
+    "text": "validation_errorsssssss",
+    "code": "UF003"
   }
 }

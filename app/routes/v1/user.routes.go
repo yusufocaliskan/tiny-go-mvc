@@ -19,6 +19,7 @@ func SetUserRoutes(fw *framework.Framework) {
 			// middlewares.AuthCheck(fw.Configs.AUTH_TOKEN_SECRET_KEY),
 			middlewares.Check4ValidData(&uController.User),
 			middlewares.RateLimeter(),
+
 			uController.CreateNewUserByEmailAdress)
 
 		//Delete user

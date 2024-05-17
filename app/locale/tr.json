@@ -1,6 +1,6 @@
 {
   "user_not_found": {
-    "text": "Kullanici silinemiyor.",
+    "text": "Kullanici bulunamadi.",
     "code": "UF001"
   },
   "user_exists": {

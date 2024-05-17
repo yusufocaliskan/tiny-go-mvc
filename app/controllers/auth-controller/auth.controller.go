@@ -7,6 +7,7 @@ import (
 	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
 	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
 	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 type AuthController struct {
@@ -30,7 +31,7 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 
 	// User Exists
 	if !isExists {
-		// response.SetError(textholder.UserDoesntExists).BadWithAbort()
+		response.SetError(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
 		return
 	}
 
