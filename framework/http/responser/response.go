@@ -9,16 +9,15 @@ import (
 
 /**
 * Useage
-* response.Code(http.StatusRequestTimeout).SetError(message).BadWithAbort()
+* response.Code(http.StatusRequestTimeout).SetMessage(message).BadWithAbort()
 * response.Payload(message).Success()
  */
 
 type Response struct {
 	Ctx        *gin.Context
 	StatusCode int
-	Error      *translator.TranslationEntry
 	Data       interface{}
-	Message    string
+	Message    *translator.TranslationEntry
 }
 
 /* --------------------------------- setters -------------------------------- */
@@ -28,7 +27,7 @@ func (resp *Response) SetStatusCode(code int) *Response {
 	resp.StatusCode = code
 	return resp
 }
-func (resp *Response) SetMessage(text string) *Response {
+func (resp *Response) SetMessage(text *translator.TranslationEntry) *Response {
 	resp.Message = text
 	return resp
 }
@@ -38,12 +37,6 @@ func (resp *Response) Payload(data interface{}) *Response {
 	resp.Data = data
 	return resp
 
-}
-
-// Set errror message
-func (resp *Response) SetError(err *translator.TranslationEntry) *Response {
-	resp.Error = err
-	return resp
 }
 
 /* ---------------------------------- resp ---------------------------------- */
@@ -66,8 +59,8 @@ func (resp *Response) Success() {
 		data["data"] = resp.Data
 	}
 
-	if resp.Message != "" {
-		data["Message"] = resp.Message
+	if resp.Message.Text != "" {
+		data["message"] = resp.Message
 	}
 
 	resp.CreateResponse(data, code)
@@ -77,12 +70,12 @@ func (resp *Response) Success() {
 func (resp *Response) Bad(err error) {
 
 	data := gin.H{
-		"error": resp.Error.Text,
+		"message": resp.Message.Text,
 	}
-	if resp.Error.Code != "" {
+	if resp.Message.Code != "" {
 		data = gin.H{
-			"error": resp.Error.Text,
-			"code":  resp.Error.Code,
+			"message": resp.Message.Text,
+			"code":    resp.Message.Code,
 		}
 	}
 	resp.CreateResponse(data, http.StatusBadRequest)
@@ -95,12 +88,12 @@ func (resp *Response) BadWithAbort() {
 		code = resp.StatusCode
 	}
 	data := gin.H{
-		"error": resp.Error.Text,
+		"message": resp.Message.Text,
 	}
-	if resp.Error.Code != "" {
+	if resp.Message.Code != "" {
 		data = gin.H{
-			"error": resp.Error.Text,
-			"code":  resp.Error.Code,
+			"message": resp.Message.Text,
+			"code":    resp.Message.Code,
 		}
 	}
 

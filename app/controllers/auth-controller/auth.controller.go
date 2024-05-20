@@ -31,7 +31,7 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 
 	// User Exists
 	if !isExists {
-		response.SetError(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
+		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
 		return
 	}
 

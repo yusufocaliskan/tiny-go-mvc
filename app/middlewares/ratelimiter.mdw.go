@@ -71,7 +71,7 @@ func RateLimeter() gin.HandlerFunc {
 
 				if limiterInfo.Token == 0 {
 					// message := fmt.Sprintf(textholder.RateLimiterThresholMessage, remainedTime.Minutes())
-					// response.SetStatusCode(http.StatusRequestTimeout).SetError(message).BadWithAbort()
+					// response.SetStatusCode(http.StatusRequestTimeout).SetMessage(message).BadWithAbort()
 				}
 
 			}

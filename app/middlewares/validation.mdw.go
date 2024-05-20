@@ -24,7 +24,7 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 
 			print("bindingError", bindingError.Error())
 			// response.Error = bindingError
-			response.SetError(translator.GetMessage(ctx, bindingError.Error())).BadWithAbort()
+			response.SetMessage(translator.GetMessage(ctx, bindingError.Error())).BadWithAbort()
 		}
 
 		fmt.Println("data--", data)
@@ -33,7 +33,7 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 
 		if isError {
 			// response.Error = validationError
-			response.SetError(validationError).BadWithAbort()
+			response.SetMessage(validationError).BadWithAbort()
 		}
 
 		ctx.Next()

@@ -11,8 +11,8 @@
     "text": "User deleted succesfully",
     "code": "UF003"
   },
-  "validation_errors": {
-    "text": "validation_errorsssssss",
-    "code": "UF003"
+  "connot_delete_user": {
+    "text": "Connot delete the user",
+    "code": "UF004"
   }
 }

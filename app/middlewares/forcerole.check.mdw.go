@@ -9,7 +9,7 @@ import (
 // Check for the role
 // For some page that should be protected
 // from other roles
-func OnlyRole(allowedRole string) gin.HandlerFunc {
+func ForceOnlyRole(allowedRole string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userRole, _ := ctx.Get("UserRole")
 
