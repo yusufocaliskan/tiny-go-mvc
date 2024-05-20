@@ -35,8 +35,8 @@ var DefinedPermissions = map[string]map[string]bool{
 }
 
 var PermissionLookUp = map[string]string{
-	"read":   "get",
-	"write":  "post",
+	"get":    "read",
+	"post":   "write",
 	"delete": "delete",
-	"update": "put",
+	"put":    "update",
 }

@@ -51,7 +51,8 @@ func AuthCheck(fw *framework.Framework, uController *usercontroller.UserControll
 func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
 	_, getUserData := uController.Service.GetUserByEmailAddress(emailAddress)
 
-	requestMethod := strings.ToLower(ctx.Request.Method)
+	requestMethod := config.PermissionLookUp[strings.ToLower(ctx.Request.Method)]
+
 	userRolePermissions := config.DefinedPermissions[getUserData.Role]
 
 	//is user allowed for the method?
