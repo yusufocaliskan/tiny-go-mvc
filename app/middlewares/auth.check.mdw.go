@@ -5,14 +5,17 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 )
 
 // Checking if the coming data valid
 // AuthCheck validates the Authorization header token.
-func AuthCheck(secretKey string) gin.HandlerFunc {
+func AuthCheck(fw *framework.Framework) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		var secretKey = fw.Configs.AUTH_TOKEN_SECRET_KEY
 		authHeader := ctx.GetHeader("Authorization")
+
 		if authHeader == "" {
 			ctx.AbortWithStatusJSON(401, gin.H{"error": "Authorization header is required"})
 			return

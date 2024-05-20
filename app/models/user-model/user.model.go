@@ -15,6 +15,7 @@ type UserModel struct {
 	Password  string             `json:"password" validate:"required"`
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+	Role      string             `json:"role" validate:"required"`
 }
 
 type UserModelResponse struct {

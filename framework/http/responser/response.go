@@ -78,7 +78,12 @@ func (resp *Response) Bad(err error) {
 
 	data := gin.H{
 		"error": resp.Error.Text,
-		"code":  resp.Error.Code,
+	}
+	if resp.Error.Code != "" {
+		data = gin.H{
+			"error": resp.Error.Text,
+			"code":  resp.Error.Code,
+		}
 	}
 	resp.CreateResponse(data, http.StatusBadRequest)
 }
@@ -89,10 +94,15 @@ func (resp *Response) BadWithAbort() {
 	if resp.StatusCode != 0 {
 		code = resp.StatusCode
 	}
-
 	data := gin.H{
 		"error": resp.Error.Text,
-		"code":  resp.Error.Code,
 	}
+	if resp.Error.Code != "" {
+		data = gin.H{
+			"error": resp.Error.Text,
+			"code":  resp.Error.Code,
+		}
+	}
+
 	resp.Ctx.AbortWithStatusJSON(code, data)
 }

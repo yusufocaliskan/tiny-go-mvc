@@ -29,7 +29,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	// User Exists
 	if isExists {
 
-		useExistsError := translator.GetMessage(ginCtx,"user_exists")
+		useExistsError := translator.GetMessage(ginCtx, "user_exists")
 
 		response.SetError(useExistsError).BadWithAbort()
 		return
