@@ -10,10 +10,12 @@ import (
 )
 
 type MongoDatabase struct {
-	DbClient *mongo.Client
-	Instance *mongo.Database
-	DbUri    string
-	DBName   string
+	DbClient   *mongo.Client
+	Instance   *mongo.Database
+	DbUri      string
+	DBName     string
+	DBUser     string
+	DBPassword string
 }
 
 // Make a Mongo db Connection
@@ -23,8 +25,14 @@ func (mongDb *MongoDatabase) Connect() {
 
 	ctx := context.Background()
 
+	//Set auth
+	authCredential := options.Credential{
+		Username: mongDb.DBUser,
+		Password: mongDb.DBPassword,
+	}
+
 	//Database connection
-	clientOptions := options.Client().ApplyURI(mongDb.DbUri)
+	clientOptions := options.Client().ApplyURI(mongDb.DbUri).SetAuth(authCredential)
 	client, err := mongo.Connect(ctx, clientOptions)
 	// defer client.Disconnect(context.Background())
 

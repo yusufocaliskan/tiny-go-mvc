@@ -13,8 +13,10 @@ type Loader struct{}
 type Envs struct {
 	APP_MODE string `mapstructure:"APP_MODE"`
 
-	DBName string `mapstructure:"DB_NAME"`
-	DBUri  string `mapstructure:"DB_URI"`
+	DBName      string `mapstructure:"DB_NAME"`
+	DBUri       string `mapstructure:"DB_URI"`
+	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
+	DB_USER     string `mapstructure:"DB_USER"`
 
 	GIN_SERVER_PORT       int    `mapstructure:"GIN_SERVER_PORT"`
 	SESSION_KEY_NAME      string `mapstructure:"SESSION_KEY_NAME"`

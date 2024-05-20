@@ -25,11 +25,10 @@ func main() {
 
 // Workflow of the app..
 func InitialTheTinyGoMvc() {
-		
+
 	// translation := translator.LoadErrorTextFile()
-	
+
 	// print("translation: ", translator.GetMessage(translation,"user_not_found"))
-	
 
 	//1. Make database connection ad it to ginServer
 	MongoDBConnection()
@@ -74,7 +73,6 @@ func LoadMiddleWares() {
 	//1. XSS attack protection
 	fw.GinServer.Engine.Use(middlewares.AttackProtectionMiddleware())
 
-
 	//Activating RateLimiiter.
 	// if config.ActivateReteLimiter {
 
@@ -109,6 +107,8 @@ func MongoDBConnection() {
 
 	dbInstance.DbUri = confs.DBUri
 	dbInstance.DBName = confs.DBName
+	dbInstance.DBPassword = confs.DB_PASSWORD
+	dbInstance.DBUser = confs.DB_USER
 	dbInstance.Connect()
 
 	fw.Database = &dbInstance
