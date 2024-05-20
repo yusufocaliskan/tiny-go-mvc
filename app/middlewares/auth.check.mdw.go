@@ -14,7 +14,7 @@ import (
 
 // Checking if the coming data valid
 // AuthCheck validates the Authorization header token.
-func AuthCheck(allowedRole string, fw *framework.Framework, uController *usercontroller.UserController) gin.HandlerFunc {
+func AuthCheck(fw *framework.Framework, uController *usercontroller.UserController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var secretKey = fw.Configs.AUTH_TOKEN_SECRET_KEY
 		authHeader := ctx.GetHeader("Authorization")
@@ -38,24 +38,21 @@ func AuthCheck(allowedRole string, fw *framework.Framework, uController *usercon
 			ctx.AbortWithStatusJSON(401, gin.H{"error": "Invalid or expired token"})
 			return
 		}
-		CheckPermissions(allowedRole, uController, ctx, claims["data"].(string))
 
-		fmt.Println("Auth Check successful, claims:", claims["data"])
+		//Check Permissions
+		CheckPermissions(uController, ctx, claims["data"].(string))
+
 		ctx.Set("claim", claims["data"])
 		ctx.Next()
 	}
 }
 
-func CheckPermissions(allowedRole string, uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
+// Actions that would be allowed only for given role
+func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
 	_, getUserData := uController.Service.GetUserByEmailAddress(emailAddress)
 
 	requestMethod := strings.ToLower(ctx.Request.Method)
 	userRolePermissions := config.DefinedPermissions[getUserData.Role]
-
-	if allowedRole != getUserData.Role {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Not allowed permission"})
-		ctx.Abort()
-	}
 
 	//is user allowed for the method?
 	if !userRolePermissions[requestMethod] {
@@ -63,6 +60,6 @@ func CheckPermissions(allowedRole string, uController *usercontroller.UserContro
 		ctx.Abort()
 	}
 
-	fmt.Println("Everything is okay")
+	ctx.Set("UserRole", getUserData.Role)
 	ctx.Next()
 }
