@@ -21,13 +21,12 @@ func SetUserRoutes(fw *framework.Framework) {
 			uController.CreateNewUserByEmailAdress)
 
 		//Delete user
-		v1UserRoutes.POST("/deleteById/",
+		v1UserRoutes.DELETE("/deleteById/",
 
 			middlewares.RateLimeter(),
 			middlewares.Check4ValidData(&uController.UserDeleteModel),
 
-			middlewares.AuthCheck(fw),
-			middlewares.RoleCheck(uController),
+			middlewares.AuthCheck("admin", fw, uController),
 
 			uController.DeleteUserById)
 

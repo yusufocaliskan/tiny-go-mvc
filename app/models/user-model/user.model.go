@@ -31,5 +31,5 @@ type UserDeleteModel struct {
 
 type UserWithToken struct {
 	Token tinytoken.TinyTokenData `json:"tokens"`
-	User  UserModelResponse       `json:"user"`
+	User  *UserModel              `json:"user"`
 }

@@ -16,13 +16,27 @@ var DefinedPermissions = map[string]map[string]bool{
 		"write":  true,
 		"read":   true,
 		"delete": true,
+		"update": true,
 	},
 
 	"moderator": {
-		"write": true,
-		"read":  true,
+		"write":  true,
+		"read":   true,
+		"delete": false,
+		"update": true,
 	},
+
 	"user": {
-		"read": true,
+		"read":   true,
+		"write":  false,
+		"delete": false,
+		"update": false,
 	},
+}
+
+var PermissionLookUp = map[string]string{
+	"read":   "get",
+	"write":  "post",
+	"delete": "delete",
+	"update": "put",
 }

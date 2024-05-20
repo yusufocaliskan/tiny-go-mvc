@@ -43,7 +43,7 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 	token.GenerateAccessTokens(user.Email)
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
-		User:  *user,
+		User:  user,
 	}
 
 	//return the resonse

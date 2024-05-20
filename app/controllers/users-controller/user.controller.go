@@ -1,6 +1,7 @@
 package usercontroller
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
-	isExists, user := uController.Service.CheckByEmailAddress(uController.User.Email)
+	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
 
 	// User Exists
 	if isExists {
@@ -47,11 +48,12 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	//Create new user
 	uController.Service.CreateNewUser(&uController.User)
+	fmt.Println("&uController.User", &uController.User)
 
 	//Generate payload
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
-		User:  *user,
+		User:  &uController.User,
 	}
 
 	//return the resonse
@@ -64,12 +66,12 @@ func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
 
 	// response := responser.Response{Ctx: ginCtx}
 
-	isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
+	// isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
 
-	if !isDeleted {
-		// response.SetError(textholder.UserConnotBeDeleted).BadWithAbort()
-		return
-	}
+	// if !isDeleted {
+	// 	// response.SetError(textholder.UserConnotBeDeleted).BadWithAbort()
+	// 	return
+	// }
 
 	// response.SetMessage(textholder.UserDeleted).Success()
 }

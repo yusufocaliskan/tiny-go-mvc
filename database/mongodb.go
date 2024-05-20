@@ -26,13 +26,13 @@ func (mongDb *MongoDatabase) Connect() {
 	ctx := context.Background()
 
 	//Set auth
-	authCredential := options.Credential{
-		Username: mongDb.DBUser,
-		Password: mongDb.DBPassword,
-	}
+	// authCredential := options.Credential{
+	// 	Username: mongDb.DBUser,
+	// 	Password: mongDb.DBPassword,
+	// }
 
 	//Database connection
-	clientOptions := options.Client().ApplyURI(mongDb.DbUri).SetAuth(authCredential)
+	clientOptions := options.Client().ApplyURI(mongDb.DbUri)
 	client, err := mongo.Connect(ctx, clientOptions)
 	// defer client.Disconnect(context.Background())
 

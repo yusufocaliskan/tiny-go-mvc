@@ -28,14 +28,14 @@ func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.UserModelResponse) {
+func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.UserModel) {
 
 	ctx := context.Background()
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"email": email})
 
-	var user usermodel.UserModelResponse
+	var user usermodel.UserModel
 	result.Decode(&user)
 
 	//User not found
@@ -50,17 +50,41 @@ func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.User
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) GetUserById(id primitive.ObjectID) (bool, *usermodel.UserModelResponse) {
+func (uSrv UserService) GetUserById(id primitive.ObjectID) (bool, *usermodel.UserModel) {
 
 	ctx := context.Background()
-	fmt.Println("USER ID ", id)
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"_id": id})
 
-	var user usermodel.UserModelResponse
+	fmt.Println(result)
+	var user usermodel.UserModel
+
 	result.Decode(&user)
-	fmt.Println("user-->", result)
+
+	//User not found
+	if result.Err() != nil {
+		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
+			return false, &user
+		}
+	}
+
+	fmt.Println("&user", &user)
+	return true, &user
+}
+
+// Get user by email address
+func (uSrv UserService) GetUserByEmailAddress(email string) (bool, *usermodel.UserModel) {
+
+	ctx := context.Background()
+
+	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+	result := coll.FindOne(ctx, bson.M{"email": email})
+
+	fmt.Println(result)
+	var user usermodel.UserModel
+
+	result.Decode(&user)
 
 	//User not found
 	if result.Err() != nil {
