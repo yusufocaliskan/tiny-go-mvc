@@ -25,8 +25,9 @@ type UserController struct {
 // @ID				create-user
 // @Accept			json
 // @Produce		json
-// @Success		200		{object}	usermodel.UserSwaggerParams
-// @Param			request	body		usermodel.UserSwaggerParams	true	"query params"
+// @Success		200				{object}	usermodel.UserSwaggerParams
+// @Param			request			body		usermodel.UserSwaggerParams	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
@@ -69,14 +70,42 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 }
 
 // @Tags			Users
+// @Summary		Get User
+// @Description	Get user by id
+// @ID				Get-User
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200				{object}	translator.TranslationSwaggerResponse
+// @Param			request			body		usermodel.UserDeleteModel	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
+//
+// @Router			/api/v1/user/getUserById [GET]
+func (uController *UserController) GetUserById(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+
+	isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
+
+	if !isDeleted {
+		response.SetMessage(translator.GetMessage(ginCtx, "connot_delete_user")).BadWithAbort()
+		return
+	}
+
+	response.SetMessage(translator.GetMessage(ginCtx, "user_deleted")).Success()
+
+}
+
+// @Tags			Users
 // @Summary		Delete user
 // @Description	Deletes a user by given user id
 // @ID				Delete-User
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
-// @Success		200		{object}	translator.TranslationSwaggerResponse
-// @Param			request	body		usermodel.UserDeleteModel	true	"query params"
+// @Success		200				{object}	translator.TranslationSwaggerResponse
+// @Param			request			body		usermodel.UserDeleteModel	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/deleteById [delete]
 func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {

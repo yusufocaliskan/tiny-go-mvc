@@ -46,6 +46,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/usermodel.UserSwaggerParams"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -86,6 +92,58 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/usermodel.UserDeleteModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/translator.TranslationSwaggerResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/getUserById": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User",
+                "operationId": "Get-User",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserDeleteModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
                     }
                 ],
                 "responses": {

@@ -66,6 +66,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/usermodel.UserSwaggerParams'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
       produces:
       - application/json
       responses:
@@ -89,6 +93,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/usermodel.UserDeleteModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
       produces:
       - application/json
       responses:
@@ -99,6 +107,35 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete user
+      tags:
+      - Users
+  /api/v1/user/getUserById:
+    get:
+      consumes:
+      - application/json
+      description: Get user by id
+      operationId: Get-User
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserDeleteModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translator.TranslationSwaggerResponse'
+      security:
+      - BearerAuth: []
+      summary: Get User
       tags:
       - Users
 securityDefinitions:

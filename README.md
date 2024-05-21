@@ -2,7 +2,7 @@
 
 A tiny-funny go framework created base on MVC structure.
 
-# Instllation
+## Instllation
 
 Basically run the main.go
 `go run main.go`
@@ -13,6 +13,8 @@ or use makefile
 the framework also support hot-reload using fresh, use the below codes.
 `make hot`
 
-# Database
+## Swagger
 
-# gRPC Serve
+    http://localhost:4141/swagger/index.html
+
+## gRPC Serve
