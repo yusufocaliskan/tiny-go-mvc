@@ -1,4 +1,28 @@
-basePath: /api/v1
+definitions:
+  usermodel.UserModel:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - role
+    - username
+    type: object
 host: localhost:4141
 info:
   contact:
@@ -17,7 +41,14 @@ paths:
       consumes:
       - application/json
       description: Creates new user
-      operationId: ping-example
+      operationId: create-user
+      parameters:
+      - description: User Params
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserModel'
       produces:
       - application/json
       responses:

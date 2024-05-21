@@ -33,7 +33,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "New user",
-                "operationId": "ping-example",
+                "operationId": "create-user",
+                "parameters": [
+                    {
+                        "description": "User Params",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserModel"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -44,6 +55,43 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "definitions": {
+        "usermodel.UserModel": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "role",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        }
     }
 }`
 
@@ -51,7 +99,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:4141",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "GPTVerse Admin Backend",
 	Description:      "To manage the whole gptv.",

@@ -8,8 +8,8 @@ import (
 func AttackProtectionMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-        ctx.Header("X-Content-Type-Options", "nosniff")
-        ctx.Writer.Header().Set("Content-Security-Policy", "default-src 'self'")
+		ctx.Header("X-Content-Type-Options", "nosniff")
+		// ctx.Writer.Header().Set("Content-Security-Policy", "default-src 'self'")
 
 		ctx.Writer.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 		ctx.Writer.Header().Set("X-Frame-Options", "DENY")

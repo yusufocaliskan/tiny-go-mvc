@@ -21,10 +21,11 @@ type UserController struct {
 
 // @Summary		New user
 // @Description	Creates new user
-// @ID				ping-example
+// @ID				create-user
 // @Accept			json
 // @Produce		json
 // @Success		200	{string}	string	"ok"
+// @Param body usermodel.UserModel true "User Params"
 // @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
