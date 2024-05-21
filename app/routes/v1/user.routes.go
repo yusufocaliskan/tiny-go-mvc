@@ -26,6 +26,8 @@ func SetUserRoutes(fw *framework.Framework) {
 			middlewares.RateLimeter(),
 			middlewares.Check4ValidData(&uController.UserDeleteModel),
 			middlewares.AuthCheck(fw, uController),
+			// middlewares.ForceOnlyRole("admin"),
+
 			uController.DeleteUserById)
 
 	}
