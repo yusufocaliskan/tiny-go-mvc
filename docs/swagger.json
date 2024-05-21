@@ -1,0 +1,42 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "To manage the whole gptv.",
+        "title": "GPTVerse Admin Backend",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "@yusufocaliskan",
+            "email": "yusufocaliskan@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:4141",
+    "basePath": "/api/v1",
+    "paths": {
+        "/api/v1/user/createByEmail": {
+            "post": {
+                "description": "Creates new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "New user",
+                "operationId": "ping-example",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

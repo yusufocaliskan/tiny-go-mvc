@@ -19,6 +19,13 @@ type UserController struct {
 	Service         userservice.UserService
 }
 
+// @Summary		New user
+// @Description	Creates new user
+// @ID				ping-example
+// @Accept			json
+// @Produce		json
+// @Success		200	{string}	string	"ok"
+// @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}

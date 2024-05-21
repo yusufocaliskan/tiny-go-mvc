@@ -1,0 +1,29 @@
+basePath: /api/v1
+host: localhost:4141
+info:
+  contact:
+    email: yusufocaliskan@gmail.com
+    name: '@yusufocaliskan'
+  description: To manage the whole gptv.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: GPTVerse Admin Backend
+  version: "1.0"
+paths:
+  /api/v1/user/createByEmail:
+    post:
+      consumes:
+      - application/json
+      description: Creates new user
+      operationId: ping-example
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: New user
+swagger: "2.0"

@@ -6,10 +6,25 @@ import (
 	"github.com/gptverse/init/app/middlewares"
 	v1routes "github.com/gptverse/init/app/routes/v1"
 	"github.com/gptverse/init/database"
+	_ "github.com/gptverse/init/docs"
 	"github.com/gptverse/init/framework"
 	"github.com/gptverse/init/framework/loader"
 	"github.com/gptverse/init/framework/server"
 )
+
+//	@title			GPTVerse Admin Backend
+//	@version		1.0
+//	@description	To manage the whole gptv.
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	@yusufocaliskan
+//	@contact.email	yusufocaliskan@gmail.com
+
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+
+//	@host		localhost:4141
+//	@BasePath	/api/v1
 
 var fw = framework.Framework{}
 
@@ -95,6 +110,7 @@ func CreateSessionStore() {
 func LoadV1Routes() {
 	v1routes.SetAuthRoutes(&fw)
 	v1routes.SetUserRoutes(&fw)
+	v1routes.SetSwaggerRoute(&fw)
 
 	//(..., call others here)
 }
