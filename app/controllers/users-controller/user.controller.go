@@ -4,11 +4,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
-	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
-	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
+	usermodel "github.com/gptverse/init/app/models/user-model"
+	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/framework/http/responser"
+	tinytoken "github.com/gptverse/init/framework/tiny-token"
+	"github.com/gptverse/init/framework/translator"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

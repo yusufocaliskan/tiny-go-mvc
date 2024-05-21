@@ -1,10 +1,10 @@
 package v1routes
 
 import (
-	usercontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/users-controller"
-	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
-	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	usercontroller "github.com/gptverse/init/app/controllers/users-controller"
+	"github.com/gptverse/init/app/middlewares"
+	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/framework"
 )
 
 func SetUserRoutes(fw *framework.Framework) {

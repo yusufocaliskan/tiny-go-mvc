@@ -2,9 +2,9 @@ package framework
 
 import (
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/yusufocaliskan/tiny-go-mvc/database"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/loader"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/server"
+	"github.com/gptverse/init/database"
+	"github.com/gptverse/init/framework/loader"
+	"github.com/gptverse/init/framework/server"
 )
 
 type Framework struct {

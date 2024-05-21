@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yusufocaliskan/tiny-go-mvc/app/utils"
-	"github.com/yusufocaliskan/tiny-go-mvc/config"
+	"github.com/gptverse/init/app/utils"
+	"github.com/gptverse/init/config"
 )
 
 type TranslationEntry struct {

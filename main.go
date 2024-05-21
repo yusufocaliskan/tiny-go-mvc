@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
-	v1routes "github.com/yusufocaliskan/tiny-go-mvc/app/routes/v1"
-	"github.com/yusufocaliskan/tiny-go-mvc/database"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/loader"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/server"
+	"github.com/gptverse/init/app/middlewares"
+	v1routes "github.com/gptverse/init/app/routes/v1"
+	"github.com/gptverse/init/database"
+	"github.com/gptverse/init/framework"
+	"github.com/gptverse/init/framework/loader"
+	"github.com/gptverse/init/framework/server"
 )
 
 var fw = framework.Framework{}

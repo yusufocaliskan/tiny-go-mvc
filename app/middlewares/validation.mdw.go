@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	form "github.com/yusufocaliskan/tiny-go-mvc/framework/form/validate"
-	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
+	form "github.com/gptverse/init/framework/form/validate"
+	responser "github.com/gptverse/init/framework/http/responser"
+	"github.com/gptverse/init/framework/translator"
 )
 
 // Checking if the coming data valid

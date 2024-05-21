@@ -3,7 +3,7 @@ package usermodel
 import (
 	"time"
 
-	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
+	tinytoken "github.com/gptverse/init/framework/tiny-token"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

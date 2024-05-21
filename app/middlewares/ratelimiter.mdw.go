@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	// textholder "github.com/yusufocaliskan/tiny-go-mvc/app/constants/text-holder/eng"
-	"github.com/yusufocaliskan/tiny-go-mvc/config"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/request"
-	tinysession "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-session"
+	// textholder "github.com/gptverse/init/app/constants/text-holder/eng"
+	"github.com/gptverse/init/config"
+	"github.com/gptverse/init/framework/http/request"
+	tinysession "github.com/gptverse/init/framework/tiny-session"
 )
 
 type Limiter struct {

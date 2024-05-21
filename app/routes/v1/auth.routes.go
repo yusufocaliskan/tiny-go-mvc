@@ -1,10 +1,10 @@
 package v1routes
 
 import (
-	authcontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/auth-controller"
-	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
-	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	authcontroller "github.com/gptverse/init/app/controllers/auth-controller"
+	"github.com/gptverse/init/app/middlewares"
+	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/framework"
 )
 
 func SetAuthRoutes(fw *framework.Framework) {

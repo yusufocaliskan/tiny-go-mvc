@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	usercontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/users-controller"
-	"github.com/yusufocaliskan/tiny-go-mvc/config"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework"
-	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
+	usercontroller "github.com/gptverse/init/app/controllers/users-controller"
+	"github.com/gptverse/init/config"
+	"github.com/gptverse/init/framework"
+	tinytoken "github.com/gptverse/init/framework/tiny-token"
 )
 
 // Checking if the coming data valid

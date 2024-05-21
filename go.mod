@@ -1,4 +1,4 @@
-module github.com/yusufocaliskan/tiny-go-mvc
+module github.com/gptverse/init
 
 go 1.21.3
 

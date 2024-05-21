@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
-	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	usermodel "github.com/gptverse/init/app/models/user-model"
+	"github.com/gptverse/init/framework"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
