@@ -19,6 +19,7 @@ type UserController struct {
 	Service         userservice.UserService
 }
 
+// @Tags			Users
 // @Summary		New user
 // @Description	Creates new user
 // @ID				create-user
@@ -67,6 +68,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 }
 
+// @Tags			Users
 // @Summary		Delete user
 // @Description	Deletes a user by given user id
 // @ID				Delete-User

@@ -32,6 +32,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Users"
+                ],
                 "summary": "New user",
                 "operationId": "create-user",
                 "parameters": [
@@ -68,6 +71,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Users"
                 ],
                 "summary": "Delete user",
                 "operationId": "Delete-User",

@@ -74,6 +74,8 @@ paths:
           schema:
             $ref: '#/definitions/usermodel.UserSwaggerParams'
       summary: New user
+      tags:
+      - Users
   /api/v1/user/deleteById:
     delete:
       consumes:
@@ -97,6 +99,8 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete user
+      tags:
+      - Users
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and JWT token.
