@@ -32,7 +32,6 @@ func Check4ValidData(data interface{}) gin.HandlerFunc {
 		validationError, isError := validate.Check(data)
 
 		if isError {
-			// response.Error = validationError
 			response.SetMessage(validationError).BadWithAbort()
 		}
 

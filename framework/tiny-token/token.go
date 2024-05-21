@@ -13,7 +13,7 @@ type SingleToken struct {
 }
 
 type TinyTokenData struct {
-	AccessToken  SingleToken `json:"access_oken"`
+	AccessToken  SingleToken `json:"access_token"`
 	RefreshToken SingleToken `json:"refresh_token"`
 }
 

@@ -33,3 +33,12 @@ type UserWithToken struct {
 	Token tinytoken.TinyTokenData `json:"tokens"`
 	User  *UserModel              `json:"user"`
 }
+
+type UserSwaggerParams struct {
+	Email    string `json:"email" binding:"required" example:"user@example.com"`
+	Password string `json:"password" binding:"required" example:"password123"`
+	Name     string `json:"name" example:"johndoe"`
+	FullName string `json:"fullname" example:"John Doe"`
+	UserName string `json:"username" example:"johndoe"`
+	Role     string `json:"role" example:"admin"`
+}

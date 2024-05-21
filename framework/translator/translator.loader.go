@@ -58,9 +58,11 @@ func GetMessage(ctx *gin.Context, key string) *TranslationEntry {
 
 	translations := val.(TranslationsMap)
 
-	print("test--key", key)
 	if entry, ok := translations[key]; ok {
+
+		//Return the actual text
 		return &entry
 	}
+
 	return &TranslationEntry{Text: key}
 }

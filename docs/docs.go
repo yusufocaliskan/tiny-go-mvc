@@ -36,20 +36,20 @@ const docTemplate = `{
                 "operationId": "create-user",
                 "parameters": [
                     {
-                        "description": "User Params",
-                        "name": "user",
+                        "description": "query params",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usermodel.UserModel"
+                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
                         }
                     }
                 }
@@ -57,40 +57,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "usermodel.UserModel": {
+        "usermodel.UserSwaggerParams": {
             "type": "object",
             "required": [
                 "email",
-                "password",
-                "role",
-                "username"
+                "password"
             ],
             "properties": {
-                "created_at": {
-                    "type": "string"
-                },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user@example.com"
                 },
                 "fullname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John Doe"
                 },
-                "id": {
-                    "type": "string"
+                "name": {
+                    "type": "string",
+                    "example": "johndoe"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password123"
                 },
                 "role": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin"
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "johndoe"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

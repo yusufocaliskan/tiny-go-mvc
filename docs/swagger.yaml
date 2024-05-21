@@ -1,27 +1,27 @@
 definitions:
-  usermodel.UserModel:
+  usermodel.UserSwaggerParams:
     properties:
-      created_at:
-        type: string
       email:
+        example: user@example.com
         type: string
       fullname:
+        example: John Doe
         type: string
-      id:
+      name:
+        example: johndoe
         type: string
       password:
+        example: password123
         type: string
       role:
-        type: string
-      updated_at:
+        example: admin
         type: string
       username:
+        example: johndoe
         type: string
     required:
     - email
     - password
-    - role
-    - username
     type: object
 host: localhost:4141
 info:
@@ -43,18 +43,23 @@ paths:
       description: Creates new user
       operationId: create-user
       parameters:
-      - description: User Params
+      - description: query params
         in: body
-        name: user
+        name: request
         required: true
         schema:
-          $ref: '#/definitions/usermodel.UserModel'
+          $ref: '#/definitions/usermodel.UserSwaggerParams'
       produces:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/usermodel.UserSwaggerParams'
       summary: New user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

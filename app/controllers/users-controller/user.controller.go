@@ -24,8 +24,9 @@ type UserController struct {
 // @ID				create-user
 // @Accept			json
 // @Produce		json
-// @Success		200	{string}	string	"ok"
-// @Param body usermodel.UserModel true "User Params"
+// @Success		200		{object}	usermodel.UserSwaggerParams
+// @Param			request	body		usermodel.UserSwaggerParams	true	"query params"
+//
 // @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
@@ -62,7 +63,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	}
 
 	//return the resonse
-	response.Payload(payload).Success()
+	response.SetMessage(translator.GetMessage(ginCtx, "success_message")).Payload(payload).Success()
 
 }
 

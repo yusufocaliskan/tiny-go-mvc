@@ -51,18 +51,13 @@ func (resp *Response) Success() {
 	if resp.StatusCode != 0 {
 		code = resp.StatusCode
 	}
-	data := gin.H{
-		"code": code,
-	}
+	data := gin.H{}
 
 	if resp.Data != nil {
 		data["data"] = resp.Data
 	}
 
-	if resp.Message.Text != "" {
-		data["message"] = resp.Message
-	}
-
+	data["message"] = resp.Message
 	resp.CreateResponse(data, code)
 }
 

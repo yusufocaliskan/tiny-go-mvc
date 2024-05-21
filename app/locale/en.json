@@ -14,5 +14,9 @@
   "connot_delete_user": {
     "text": "Connot delete the user",
     "code": "UF004"
+  },
+  "success_message": {
+    "text": "Is okay",
+    "code": "UF005"
   }
 }
