@@ -49,18 +49,45 @@ func AuthCheck(fw *framework.Framework, uController *usercontroller.UserControll
 
 // Actions that would be allowed only for given role
 func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
-	_, getUserData := uController.Service.GetUserByEmailAddress(emailAddress)
+	// Get the role from the context
+	role, exists := ctx.Get("UserRole")
+	if !exists {
+		err, user := uController.Service.GetUserByEmailAddress(emailAddress)
+		if !err {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})
+			ctx.Abort()
+			return
+		}
 
-	requestMethod := config.PermissionLookUp[strings.ToLower(ctx.Request.Method)]
-
-	userRolePermissions := config.DefinedPermissions[getUserData.Role]
-
-	//is user allowed for the method?
-	if !userRolePermissions[requestMethod] {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Not allowed permission"})
-		ctx.Abort()
+		// Set the role in the context for future use
+		role = user.Role
+		ctx.Set("UserRole", user.Role)
 	}
 
-	ctx.Set("UserRole", getUserData.Role)
+	requestMethod := strings.ToLower(ctx.Request.Method)
+
+	requestPermission, ok := config.PermissionLookUp[requestMethod]
+	if !ok {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Request method not allowed"})
+		ctx.Abort()
+		return
+	}
+
+	userRolePermissions, ok := config.DefinedPermissions[role.(string)]
+	if !ok {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Role does not have defined permissions"})
+		ctx.Abort()
+		return
+	}
+
+	// Check if the user role has permission for the request method
+	if !userRolePermissions[requestPermission] {
+		// If not allowed, respond with an error
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Not allowed permission"})
+		ctx.Abort()
+		return
+	}
+
+	// Proceed to the next handler
 	ctx.Next()
 }

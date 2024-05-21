@@ -15,6 +15,9 @@ type TranslationEntry struct {
 	Text string `json:"text"`
 	Code string `json:"code"`
 }
+type TranslationSwaggerResponse struct {
+	Message TranslationEntry `json:"message"`
+}
 
 type TranslationsMap map[string]TranslationEntry
 

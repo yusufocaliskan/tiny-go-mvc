@@ -67,7 +67,16 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 }
 
-// Deletes a user
+// @Summary		Delete user
+// @Description	Deletes a user by given user id
+// @ID				Delete-User
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200		{object}	translator.TranslationSwaggerResponse
+// @Param			request	body		usermodel.UserDeleteModel	true	"query params"
+//
+// @Router			/api/v1/user/deleteById [delete]
 func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}

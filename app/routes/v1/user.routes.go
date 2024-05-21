@@ -16,17 +16,21 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Creates new user
 		v1UserRoutes.POST("/createByEmail/",
+
+			middlewares.RateLimeter(),
 			middlewares.Check4ValidData(&uController.User),
+			middlewares.AuthCheck(fw, uController),
+
 			// middlewares.RateLimeter(),
 			uController.CreateNewUserByEmailAdress)
 
 		//Delete user
 		v1UserRoutes.DELETE("/deleteById/",
-
 			middlewares.RateLimeter(),
-			middlewares.Check4ValidData(&uController.UserDeleteModel),
+
 			middlewares.AuthCheck(fw, uController),
-			// middlewares.ForceOnlyRole("admin"),
+			middlewares.Check4ValidData(&uController.UserDeleteModel),
+			middlewares.ForceOnlyRole("admin"),
 
 			uController.DeleteUserById)
 

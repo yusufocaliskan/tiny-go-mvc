@@ -1,4 +1,21 @@
 definitions:
+  translator.TranslationEntry:
+    properties:
+      code:
+        type: string
+      text:
+        type: string
+    type: object
+  translator.TranslationSwaggerResponse:
+    properties:
+      message:
+        $ref: '#/definitions/translator.TranslationEntry'
+    type: object
+  usermodel.UserDeleteModel:
+    properties:
+      id:
+        type: string
+    type: object
   usermodel.UserSwaggerParams:
     properties:
       email:
@@ -57,8 +74,32 @@ paths:
           schema:
             $ref: '#/definitions/usermodel.UserSwaggerParams'
       summary: New user
+  /api/v1/user/deleteById:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user by given user id
+      operationId: Delete-User
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserDeleteModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translator.TranslationSwaggerResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user
 securityDefinitions:
   BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey

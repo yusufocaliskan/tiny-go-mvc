@@ -54,9 +54,73 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/deleteById": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a user by given user id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete user",
+                "operationId": "Delete-User",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserDeleteModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/translator.TranslationSwaggerResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "translator.TranslationEntry": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "translator.TranslationSwaggerResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "$ref": "#/definitions/translator.TranslationEntry"
+                }
+            }
+        },
+        "usermodel.UserDeleteModel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "usermodel.UserSwaggerParams": {
             "type": "object",
             "required": [
@@ -93,6 +157,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
