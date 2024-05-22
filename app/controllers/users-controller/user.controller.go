@@ -106,6 +106,8 @@ func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Contex
 	newInformations := &uController.UserUpdateModel
 
 	id := newInformations.Id
+	newInformations.UpdatedAt = time.Now()
+
 	//Is user exists?
 	_, isExists := uController.Service.GetUserById(id)
 
@@ -120,6 +122,7 @@ func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Contex
 
 	if !isUpdated {
 		response.SetMessage(translator.GetMessage(ginCtx, "connot_update")).BadWithAbort()
+		return
 	}
 
 	//return the resonse

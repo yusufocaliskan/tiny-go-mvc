@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	usermodel "github.com/gptverse/init/app/models/user-model"
@@ -87,7 +88,6 @@ func (uSrv UserService) GetUserById(id string) (*usermodel.UserWitoutPasswordMod
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"_id": userId})
 
-	fmt.Println(result)
 	var user usermodel.UserWitoutPasswordModel
 
 	result.Decode(&user)
@@ -134,4 +134,21 @@ func (uSrv UserService) DeleteUserById(data *usermodel.UserDeleteModel) bool {
 	result, _ := coll.DeleteOne(ctx, bson.M{"_id": data.Id})
 	return result.DeletedCount > 0
 
+}
+
+func structToBsonM(v interface{}) bson.M {
+	elem := reflect.ValueOf(v).Elem()
+	typeOfT := elem.Type()
+
+	bsonMap := bson.M{}
+
+	for i := 0; i < elem.NumField(); i++ {
+		field := elem.Field(i)
+		if field.CanInterface() {
+			bsonMap[typeOfT.Field(i).Name] = field.Interface()
+		}
+	}
+
+	fmt.Println("bsonMapbsonMapbsonMapbsonMap00>", bsonMap)
+	return bsonMap
 }

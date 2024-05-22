@@ -30,11 +30,12 @@ type UserWitoutPasswordModel struct {
 	Role      string             `json:"role" validate:"required"`
 }
 type UserUpdateModel struct {
-	Id       string `bson:"_id,omitempty" json:"id"`
-	FullName string `json:"fullname" bson:"fullname"`
-	UserName string `json:"username" validate:"required" bson:"username"`
-	Email    string `json:"email" validate:"required,email" bson:"email"`
-	Role     string `json:"role" validate:"required" bson:"role"`
+	Id        string    `bson:"_id,omitempty" json:"id"`
+	FullName  string    `json:"fullname" bson:"fullname"`
+	UserName  string    `json:"username" validate:"required" bson:"username"`
+	Email     string    `json:"email" validate:"required,email" bson:"email"`
+	Role      string    `json:"role" validate:"required" bson:"role"`
+	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
 
 type UserModelResponse struct {

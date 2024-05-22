@@ -276,6 +276,9 @@ const docTemplate = `{
                 "role": {
                     "type": "string"
                 },
+                "updated_at": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
