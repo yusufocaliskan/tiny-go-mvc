@@ -8,8 +8,9 @@ import (
 )
 
 type Framework struct {
-	GinServer  *server.GinServer
-	Database   *database.MongoDatabase
-	Configs    *loader.Envs
-	RedisStore *redis.Store
+	GinServer    *server.GinServer
+	Database     *database.MongoDatabase
+	Configs      *loader.Envs
+	RedisStore   *redis.Store
+	SessionStore *redis.Store
 }

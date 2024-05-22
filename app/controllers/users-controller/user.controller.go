@@ -1,11 +1,14 @@
 package usercontroller
 
 import (
+	"fmt"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/framework/http/request"
 	"github.com/gptverse/init/framework/http/responser"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
 	"github.com/gptverse/init/framework/translator"
@@ -14,35 +17,49 @@ import (
 
 type UserController struct {
 	// users being binded in ValidateAndBind()
-	User                  usermodel.UserModel
-	UserDeleteModel       usermodel.UserDeleteModel
-	UserWithIDFormIDModel usermodel.UserWithIDFormIDModel
-	Service               userservice.UserService
+	User                    usermodel.UserModel
+	UserDeleteModel         usermodel.UserDeleteModel
+	UserWithIDFormIDModel   usermodel.UserWithIDFormIDModel
+	UserWitoutPasswordModel usermodel.UserWitoutPasswordModel
+	UserUpdateModel         usermodel.UserUpdateModel
+	Service                 userservice.UserService
 }
 
-//	@Tags			Users
-//	@Summary		New user
-//	@Description	Creates new user
-//	@ID				create-user
-//	@Accept			json
-//	@Produce		json
-//	@Success		200				{object}	usermodel.UserSwaggerParams
-//	@Param			id				query		string	true	"query params"
-//	@Param			Accept-Language	header		string	false	"Language preference"
+// @Tags			Users
+// @Summary		New user
+// @Description	Creates new user
+// @ID				create-user
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	usermodel.UserSwaggerParams
+// @Param			id				query		string	true	"query params"
+// @Param			Accept-Language	header		string	false	"Language preference"
 //
-//	@Router			/api/v1/user/createByEmail [post]
+// @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
+	sesStore := sessions.Default(ginCtx)
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
 	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
 
-	// User Exists
+	sRole := sesStore.Get("UserRole")
+	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
+	fmt.Println("fetchCurrentUserInfo", fetchCurrentUserInfo)
+	fmt.Println("User Controll sSSSS Rolee", sRole)
+
+	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
+
 	if isExists {
 
-		useExistsError := translator.GetMessage(ginCtx, "user_exists")
+		response.SetMessage(translator.GetMessage(ginCtx, "user_exists")).BadWithAbort()
+		return
+	}
 
-		response.SetMessage(useExistsError).BadWithAbort()
+	//No current user informations added to the Context
+	if fetchCurrentUserInfo == nil {
+		response.SetMessage(translator.GetMessage(ginCtx, "unknow_errors")).BadWithAbort()
+
 		return
 	}
 
@@ -54,7 +71,9 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	//Genetate Id & Create new user
 	uController.User.Id = primitive.NewObjectID()
+	uController.User.Ip = request.GetLocalIP()
 	uController.User.CreatedAt = time.Now()
+	uController.User.CreatedBy = currentUserInfo.Id
 
 	//Create new user
 	uController.Service.CreateNewUser(&uController.User)
@@ -70,17 +89,55 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 }
 
-//	@Tags			Users
-//	@Summary		Get User
-//	@Description	Get user details by id
-//	@ID				get-user-by-id
-//	@Produce		json
-//	@Security		BearerAuth
-//	@Success		200				{object}	usermodel.UserWitoutPasswordModel
-//	@Param			id				query		string	true	"user id"	Format(ObjectID)
-//	@Param			Accept-Language	header		string	false	"Language preference"
+// @Tags			Users
+// @Summary		Update User
+// @Description	Updates user informations by giving the Id
+// @ID				update-user-informations
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	usermodel.UserSwaggerParams
+// @Param			request			body		usermodel.UserUpdateModel	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
-//	@Router			/api/v1/user/getUserById [GET]
+// @Router			/api/v1/user/updateUserInformationsById [put]
+func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+	newInformations := &uController.UserUpdateModel
+
+	id := newInformations.Id
+	//Is user exists?
+	_, isExists := uController.Service.GetUserById(id)
+
+	// User Exists
+	if !isExists {
+		useExistsError := translator.GetMessage(ginCtx, "user_not_found")
+		response.SetMessage(useExistsError).BadWithAbort()
+	}
+
+	//Create new user
+	isUpdated, _ := uController.Service.UpdateUserInformations(newInformations, id)
+
+	if !isUpdated {
+		response.SetMessage(translator.GetMessage(ginCtx, "connot_update")).BadWithAbort()
+	}
+
+	//return the resonse
+	response.SetMessage(translator.GetMessage(ginCtx, "success_message")).Success()
+
+}
+
+// @Tags			Users
+// @Summary		Get User
+// @Description	Get user details by id
+// @ID				get-user-by-id
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200				{object}	usermodel.UserWitoutPasswordModel
+// @Param			id				query		string	true	"user id"	Format(ObjectID)
+// @Param			Accept-Language	header		string	false	"Language preference"
+//
+// @Router			/api/v1/user/getUserById [GET]
 func (uController *UserController) GetUserById(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -97,18 +154,18 @@ func (uController *UserController) GetUserById(ginCtx *gin.Context) {
 
 }
 
-//	@Tags			Users
-//	@Summary		Delete user
-//	@Description	Deletes a user by given user id
-//	@ID				Delete-User
-//	@Accept			json
-//	@Produce		json
-//	@Security		BearerAuth
-//	@Success		200				{object}	translator.TranslationSwaggerResponse
-//	@Param			request			body		usermodel.UserDeleteModel	true	"query params"
-//	@Param			Accept-Language	header		string						false	"Language preference"
+// @Tags			Users
+// @Summary		Delete user
+// @Description	Deletes a user by given user id
+// @ID				Delete-User
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200				{object}	translator.TranslationSwaggerResponse
+// @Param			request			body		usermodel.UserDeleteModel	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
-//	@Router			/api/v1/user/deleteById [delete]
+// @Router			/api/v1/user/deleteById [delete]
 func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}

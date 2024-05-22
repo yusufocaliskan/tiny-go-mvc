@@ -3,6 +3,7 @@ package middlewares
 import (
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +12,9 @@ import (
 // from other roles
 func ForceOnlyRole(allowedRole string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		userRole, _ := ctx.Get("UserRole")
+		sesStore := sessions.Default(ctx)
+
+		userRole := sesStore.Get("UserRole")
 
 		//Do it only for non-admin roles
 		if userRole != "admin" && userRole != allowedRole {

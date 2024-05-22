@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usercontroller "github.com/gptverse/init/app/controllers/users-controller"
 	"github.com/gptverse/init/config"
@@ -50,9 +51,13 @@ func AuthCheck(fw *framework.Framework, uController *usercontroller.UserControll
 // Actions that would be allowed only for given role
 func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
 	// Get the role from the context
-	role, exists := ctx.Get("UserRole")
-	if !exists {
+	sesStore := sessions.Default(ctx)
+	sRole := sesStore.Get("UserRole")
+
+	if sRole == nil {
+
 		err, user := uController.Service.GetUserByEmailAddress(emailAddress)
+
 		if !err {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})
 			ctx.Abort()
@@ -60,8 +65,11 @@ func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Conte
 		}
 
 		// Set the role in the context for future use
-		role = user.Role
-		ctx.Set("UserRole", user.Role)
+		sRole = user.Role
+
+		sesStore.Set("UserRole", user.Role)
+		sesStore.Set("CurrentUserInformations", user)
+
 	}
 
 	requestMethod := strings.ToLower(ctx.Request.Method)
@@ -73,7 +81,7 @@ func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Conte
 		return
 	}
 
-	userRolePermissions, ok := config.DefinedPermissions[role.(string)]
+	userRolePermissions, ok := config.DefinedPermissions[sRole.(string)]
 	if !ok {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Role does not have defined permissions"})
 		ctx.Abort()

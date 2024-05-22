@@ -16,7 +16,10 @@ type UserModel struct {
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 	Role      string             `json:"role" validate:"required"`
+	Ip        string             `json:"ip" bson:"ip"`
+	CreatedBy primitive.ObjectID `json:"created_by" bson:"created_by"`
 }
+
 type UserWitoutPasswordModel struct {
 	Id        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	FullName  string             `json:"fullname"`
@@ -25,6 +28,13 @@ type UserWitoutPasswordModel struct {
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 	Role      string             `json:"role" validate:"required"`
+}
+type UserUpdateModel struct {
+	Id       string `bson:"_id,omitempty" json:"id"`
+	FullName string `json:"fullname" bson:"fullname"`
+	UserName string `json:"username" validate:"required" bson:"username"`
+	Email    string `json:"email" validate:"required,email" bson:"email"`
+	Role     string `json:"role" validate:"required" bson:"role"`
 }
 
 type UserModelResponse struct {

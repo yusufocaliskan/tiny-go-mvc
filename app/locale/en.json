@@ -22,5 +22,9 @@
   "reached_request_threshold": {
     "text": "Reached the request limit.",
     "code": "UF006"
+  },
+  "unknow_errors": {
+    "text": "Unknow Error.",
+    "code": "UF007"
   }
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	"github.com/gptverse/init/framework"
@@ -24,6 +25,34 @@ func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
 	ctx := context.Background()
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	coll.InsertOne(ctx, user)
+
+}
+
+// Creeate a new user
+func (uSrv *UserService) UpdateUserInformations(user *usermodel.UserUpdateModel, userId string) (bool, int64) {
+
+	ctx := context.TODO()
+	id, _ := primitive.ObjectIDFromHex(userId)
+
+	filter := bson.M{"_id": id}
+
+	updateData := bson.M{
+		"$set": bson.M{
+			"email":      user.Email,
+			"fullname":   user.FullName,
+			"username":   user.UserName,
+			"role":       user.Role,
+			"updated_at": time.Now(),
+		},
+	}
+
+	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+	result, err := coll.UpdateOne(ctx, filter, updateData)
+	if err != nil {
+		return false, 0
+	}
+
+	return true, result.ModifiedCount
 
 }
 

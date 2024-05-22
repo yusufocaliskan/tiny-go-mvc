@@ -149,6 +149,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/updateUserInformationsById": {
+            "put": {
+                "description": "Updates user informations by giving the Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update User",
+                "operationId": "update-user-informations",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserUpdateModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -212,6 +253,31 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "johndoe"
+                }
+            }
+        },
+        "usermodel.UserUpdateModel": {
+            "type": "object",
+            "required": [
+                "email",
+                "role",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

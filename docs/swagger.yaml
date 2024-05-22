@@ -42,6 +42,23 @@ definitions:
     - email
     - password
     type: object
+  usermodel.UserUpdateModel:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - role
+    - username
+    type: object
   usermodel.UserWitoutPasswordModel:
     properties:
       created_at:
@@ -156,6 +173,33 @@ paths:
       security:
       - BearerAuth: []
       summary: Get User
+      tags:
+      - Users
+  /api/v1/user/updateUserInformationsById:
+    put:
+      consumes:
+      - application/json
+      description: Updates user informations by giving the Id
+      operationId: update-user-informations
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserUpdateModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usermodel.UserSwaggerParams'
+      summary: Update User
       tags:
       - Users
 securityDefinitions:
