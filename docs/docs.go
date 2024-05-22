@@ -39,13 +39,11 @@ const docTemplate = `{
                 "operationId": "create-user",
                 "parameters": [
                     {
+                        "type": "string",
                         "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
-                        }
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -117,10 +115,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get user by id",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Get user details by id",
                 "produces": [
                     "application/json"
                 ],
@@ -128,16 +123,15 @@ const docTemplate = `{
                     "Users"
                 ],
                 "summary": "Get User",
-                "operationId": "Get-User",
+                "operationId": "get-user-by-id",
                 "parameters": [
                     {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/usermodel.UserDeleteModel"
-                        }
+                        "type": "string",
+                        "format": "ObjectID",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -150,7 +144,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/translator.TranslationSwaggerResponse"
+                            "$ref": "#/definitions/usermodel.UserWitoutPasswordModel"
                         }
                     }
                 }
@@ -179,6 +173,9 @@ const docTemplate = `{
         },
         "usermodel.UserDeleteModel": {
             "type": "object",
+            "required": [
+                "id"
+            ],
             "properties": {
                 "id": {
                     "type": "string"
@@ -215,6 +212,37 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "johndoe"
+                }
+            }
+        },
+        "usermodel.UserWitoutPasswordModel": {
+            "type": "object",
+            "required": [
+                "email",
+                "role",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

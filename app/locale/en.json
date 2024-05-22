@@ -16,7 +16,11 @@
     "code": "UF004"
   },
   "success_message": {
-    "text": "Is okay",
+    "text": "Success!",
     "code": "UF005"
+  },
+  "reached_request_threshold": {
+    "text": "Reached the request limit.",
+    "code": "UF006"
   }
 }

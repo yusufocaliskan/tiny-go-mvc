@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	form "github.com/gptverse/init/framework/form/validate"
 	responser "github.com/gptverse/init/framework/http/responser"
@@ -10,28 +8,25 @@ import (
 )
 
 // Checking if the coming data valid
-func Check4ValidData(data interface{}) gin.HandlerFunc {
-
+func ValidateAndBind(data interface{}) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
 		validate := form.FormValidator{}
 		response := responser.Response{Ctx: ctx}
 
-		//1. Binding the incoming data with the struct
-		bindingError := ctx.BindJSON(&data)
-
-		if bindingError != nil {
-
-			print("bindingError", bindingError.Error())
-			// response.Error = bindingError
-			response.SetMessage(translator.GetMessage(ctx, bindingError.Error())).BadWithAbort()
+		var bindingError error
+		switch ctx.Request.Method {
+		case "GET":
+			bindingError = ctx.ShouldBindQuery(data)
+		default:
+			bindingError = ctx.ShouldBindJSON(data)
 		}
 
-		fmt.Println("data--", data)
-		//2. Check if is validated
-		validationError, isError := validate.Check(data)
+		if bindingError != nil {
+			response.SetMessage(translator.GetMessage(ctx, bindingError.Error())).BadWithAbort()
+			return
+		}
 
-		if isError {
+		if validationError, isError := validate.Check(data); isError {
 			response.SetMessage(validationError).BadWithAbort()
 		}
 

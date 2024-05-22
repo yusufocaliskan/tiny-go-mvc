@@ -18,7 +18,7 @@ func SetAuthRoutes(fw *framework.Framework) {
 
 			//Valided need params and set the incoming data to the model
 			//we then use it in controller
-			middlewares.Check4ValidData(&authController.AuthRefreshTokenModel),
+			middlewares.ValidateAndBind(&authController.AuthRefreshTokenModel),
 			authController.GenerateNewAccessTokenByRefreshToken)
 
 	}

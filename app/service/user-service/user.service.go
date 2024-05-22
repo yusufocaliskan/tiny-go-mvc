@@ -50,27 +50,27 @@ func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.User
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) GetUserById(id primitive.ObjectID) (bool, *usermodel.UserModel) {
+func (uSrv UserService) GetUserById(id string) (*usermodel.UserWitoutPasswordModel, bool) {
 
+	userId, _ := primitive.ObjectIDFromHex(id)
 	ctx := context.Background()
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
-	result := coll.FindOne(ctx, bson.M{"_id": id})
+	result := coll.FindOne(ctx, bson.M{"_id": userId})
 
 	fmt.Println(result)
-	var user usermodel.UserModel
+	var user usermodel.UserWitoutPasswordModel
 
 	result.Decode(&user)
 
 	//User not found
 	if result.Err() != nil {
 		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
-			return false, &user
+			return &user, false
 		}
 	}
 
-	fmt.Println("&user", &user)
-	return true, &user
+	return &user, true
 }
 
 // Get user by email address

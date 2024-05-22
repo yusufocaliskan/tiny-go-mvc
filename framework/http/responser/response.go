@@ -51,7 +51,9 @@ func (resp *Response) Success() {
 	if resp.StatusCode != 0 {
 		code = resp.StatusCode
 	}
-	data := gin.H{}
+	data := gin.H{
+		"status": code,
+	}
 
 	if resp.Data != nil {
 		data["data"] = resp.Data
@@ -64,16 +66,17 @@ func (resp *Response) Success() {
 // Bad request
 func (resp *Response) Bad(err error) {
 
+	code := http.StatusBadRequest
 	data := gin.H{
-		"message": resp.Message.Text,
+		"message": resp.Message,
+		"status":  code,
 	}
-	if resp.Message.Code != "" {
-		data = gin.H{
-			"message": resp.Message.Text,
-			"code":    resp.Message.Code,
-		}
-	}
-	resp.CreateResponse(data, http.StatusBadRequest)
+	// if resp.Message.Code != "" {
+	// 	data = gin.H{
+	// 		"message": resp.Message,
+	// 	}
+	// }
+	resp.CreateResponse(data, code)
 }
 
 // Stops the process, Use it when no need more execution
@@ -83,14 +86,15 @@ func (resp *Response) BadWithAbort() {
 		code = resp.StatusCode
 	}
 	data := gin.H{
-		"message": resp.Message.Text,
+		"message": resp.Message,
+		"status":  code,
 	}
-	if resp.Message.Code != "" {
-		data = gin.H{
-			"message": resp.Message.Text,
-			"code":    resp.Message.Code,
-		}
-	}
+	// if resp.Message.Code != "" {
+	// 	data = gin.H{
+	// 		"message": resp.Message.Text,
+	// 		"code":    resp.Message.Code,
+	// 	}
+	// }
 
 	resp.Ctx.AbortWithStatusJSON(code, data)
 }

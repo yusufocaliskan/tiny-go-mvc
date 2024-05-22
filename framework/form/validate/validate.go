@@ -31,7 +31,7 @@ func (Fv FormValidator) Check(s interface{}) (*translator.TranslationEntry, bool
 	errs, isError := TranslateError(validationError, trans)
 	if isError {
 
-		return &translator.TranslationEntry{Text: errs, Code: ""}, true
+		return &translator.TranslationEntry{Text: errs, Code: "UF000"}, true
 	}
 
 	return &translator.TranslationEntry{Text: "", Code: ""}, false

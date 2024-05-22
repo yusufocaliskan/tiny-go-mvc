@@ -3,6 +3,7 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -10,7 +11,9 @@ import (
 	// textholder "github.com/gptverse/init/app/constants/text-holder/eng"
 	"github.com/gptverse/init/config"
 	"github.com/gptverse/init/framework/http/request"
+	responser "github.com/gptverse/init/framework/http/responser"
 	tinysession "github.com/gptverse/init/framework/tiny-session"
+	"github.com/gptverse/init/framework/translator"
 )
 
 type Limiter struct {
@@ -28,7 +31,7 @@ func RateLimeter() gin.HandlerFunc {
 		tinySession := &tinysession.TinySession{}
 		session := tinySession.New(ctx)
 		clientIp := request.GetLocalIP()
-		// response := responser.Response{Ctx: ctx}
+		response := responser.Response{Ctx: ctx}
 
 		sessionKey := fmt.Sprintf("limitterInfo-%s", clientIp)
 
@@ -70,8 +73,7 @@ func RateLimeter() gin.HandlerFunc {
 				}
 
 				if limiterInfo.Token == 0 {
-					// message := fmt.Sprintf(textholder.RateLimiterThresholMessage, remainedTime.Minutes())
-					// response.SetStatusCode(http.StatusRequestTimeout).SetMessage(message).BadWithAbort()
+					response.SetStatusCode(http.StatusRequestTimeout).SetMessage(translator.GetMessage(ctx, "reached_request_threshold")).BadWithAbort()
 				}
 
 			}
