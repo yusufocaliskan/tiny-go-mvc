@@ -227,7 +227,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "password"
+                "password",
+                "role"
             ],
             "properties": {
                 "email": {
@@ -248,7 +249,11 @@ const docTemplate = `{
                 },
                 "role": {
                     "type": "string",
-                    "example": "admin"
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "username": {
                     "type": "string",
@@ -274,7 +279,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "updated_at": {
                     "type": "string"
@@ -305,7 +315,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "updated_at": {
                     "type": "string"

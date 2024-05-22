@@ -33,7 +33,10 @@ definitions:
         example: password123
         type: string
       role:
-        example: admin
+        enum:
+        - admin
+        - moderator
+        - user
         type: string
       username:
         example: johndoe
@@ -41,6 +44,7 @@ definitions:
     required:
     - email
     - password
+    - role
     type: object
   usermodel.UserUpdateModel:
     properties:
@@ -51,6 +55,10 @@ definitions:
       id:
         type: string
       role:
+        enum:
+        - admin
+        - moderator
+        - user
         type: string
       updated_at:
         type: string
@@ -72,6 +80,10 @@ definitions:
       id:
         type: string
       role:
+        enum:
+        - admin
+        - moderator
+        - user
         type: string
       updated_at:
         type: string

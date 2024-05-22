@@ -15,7 +15,7 @@ type UserModel struct {
 	Password  string             `json:"password" validate:"required"`
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Role      string             `json:"role" validate:"required"`
+	Role      string             `json:"role" validate:"required,oneof=admin moderator user"`
 	Ip        string             `json:"ip" bson:"ip"`
 	CreatedBy primitive.ObjectID `json:"created_by" bson:"created_by"`
 }
@@ -27,14 +27,14 @@ type UserWitoutPasswordModel struct {
 	Email     string             `json:"email" validate:"required,email"`
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Role      string             `json:"role" validate:"required"`
+	Role      string             `json:"role" validate:"required,oneof=admin moderator user"`
 }
 type UserUpdateModel struct {
 	Id        string    `bson:"_id,omitempty" json:"id"`
 	FullName  string    `json:"fullname" bson:"fullname"`
 	UserName  string    `json:"username" validate:"required" bson:"username"`
 	Email     string    `json:"email" validate:"required,email" bson:"email"`
-	Role      string    `json:"role" validate:"required" bson:"role"`
+	Role      string    `json:"role" validate:"required,oneof=admin moderator user"`
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
 
@@ -63,5 +63,5 @@ type UserSwaggerParams struct {
 	Name     string `json:"name" example:"johndoe"`
 	FullName string `json:"fullname" example:"John Doe"`
 	UserName string `json:"username" example:"johndoe"`
-	Role     string `json:"role" example:"admin"`
+	Role     string `json:"role" validate:"required,oneof=admin moderator user"`
 }

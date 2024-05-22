@@ -220,7 +220,8 @@
             "type": "object",
             "required": [
                 "email",
-                "password"
+                "password",
+                "role"
             ],
             "properties": {
                 "email": {
@@ -241,7 +242,11 @@
                 },
                 "role": {
                     "type": "string",
-                    "example": "admin"
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "username": {
                     "type": "string",
@@ -267,7 +272,12 @@
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "updated_at": {
                     "type": "string"
@@ -298,7 +308,12 @@
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
                 },
                 "updated_at": {
                     "type": "string"
