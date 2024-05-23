@@ -3,7 +3,9 @@ package v1routes
 import (
 	usercontroller "github.com/gptverse/init/app/controllers/users-controller"
 	"github.com/gptverse/init/app/middlewares"
+	authservice "github.com/gptverse/init/app/service/auth-service"
 	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/database"
 	"github.com/gptverse/init/framework"
 )
 
@@ -11,8 +13,12 @@ func SetUserRoutes(fw *framework.Framework) {
 
 	v1UserRoutes := fw.GinServer.Engine.Group("/api/v1/user")
 	{
-		uService := &userservice.UserService{Fw: fw, Collection: "user"}
-		uController := &usercontroller.UserController{Service: *uService}
+		//services
+		uService := &userservice.UserService{Fw: fw, Collection: database.UserCollectionName}
+		authService := &authservice.AuthService{Fw: fw, Collection: database.AuthCollectionName}
+
+		//userControler
+		uController := &usercontroller.UserController{Service: *uService, AuthService: *authService}
 
 		//Creates new user
 		v1UserRoutes.POST("/createByEmail/",

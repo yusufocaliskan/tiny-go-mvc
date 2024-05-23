@@ -7,7 +7,7 @@ run:
 # Use it in dev mode
 hot:
 	swag fmt
-	swag init
+	swag init --parseDependency --parseInternal
 	fresh
 
 .PHONY: run hot

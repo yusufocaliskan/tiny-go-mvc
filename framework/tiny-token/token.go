@@ -8,18 +8,21 @@ import (
 )
 
 type SingleToken struct {
-	ExpiryTime time.Duration `json:"expiry_time"`
-	BearerKey  string        `json:"key"`
+	ExpiryTime time.Duration `json:"expiry_time" bson:"expiry_time" example:"86400000000000"`
+	BearerKey  string        `json:"key" bson:"bearer_key"`
 }
 
 type TinyTokenData struct {
-	AccessToken  SingleToken `json:"access_token"`
-	RefreshToken SingleToken `json:"refresh_token"`
+	AccessToken  SingleToken `json:"access_token" bson:"access_token"`
+	RefreshToken SingleToken `json:"refresh_token" bson:"refresh_token"`
 }
 
 type TinyToken struct {
 	Data      TinyTokenData
 	SecretKey string
+}
+type TinyTokenSwaggerStruct struct {
+	Data TinyTokenData
 }
 
 func (tToken *TinyToken) GenerateAccessTokens(data interface{}) {

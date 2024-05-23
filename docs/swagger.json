@@ -16,6 +16,47 @@
     },
     "host": "localhost:4141",
     "paths": {
+        "/api/v1/auth/refreshToken": {
+            "post": {
+                "description": "Generating new accessToken using refreshToken",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh Token",
+                "operationId": "refresh-token",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authmodel.AuthRefreshTokenModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tinytoken.TinyTokenSwaggerStruct"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/createByEmail": {
             "post": {
                 "description": "Creates new user",
@@ -186,6 +227,76 @@
         }
     },
     "definitions": {
+        "authmodel.AuthRefreshTokenModel": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string",
+                    "example": "the_refresh_token"
+                }
+            }
+        },
+        "time.Duration": {
+            "type": "integer",
+            "enum": [
+                -9223372036854775808,
+                9223372036854775807,
+                1,
+                1000,
+                1000000,
+                1000000000,
+                60000000000,
+                3600000000000
+            ],
+            "x-enum-varnames": [
+                "minDuration",
+                "maxDuration",
+                "Nanosecond",
+                "Microsecond",
+                "Millisecond",
+                "Second",
+                "Minute",
+                "Hour"
+            ]
+        },
+        "tinytoken.SingleToken": {
+            "type": "object",
+            "properties": {
+                "expiry_time": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/time.Duration"
+                        }
+                    ],
+                    "example": 86400000000000
+                },
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "tinytoken.TinyTokenData": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "$ref": "#/definitions/tinytoken.SingleToken"
+                },
+                "refresh_token": {
+                    "$ref": "#/definitions/tinytoken.SingleToken"
+                }
+            }
+        },
+        "tinytoken.TinyTokenSwaggerStruct": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/tinytoken.TinyTokenData"
+                }
+            }
+        },
         "translator.TranslationEntry": {
             "type": "object",
             "properties": {

@@ -1,4 +1,53 @@
 definitions:
+  authmodel.AuthRefreshTokenModel:
+    properties:
+      refresh_token:
+        example: the_refresh_token
+        type: string
+    required:
+    - refresh_token
+    type: object
+  time.Duration:
+    enum:
+    - -9223372036854775808
+    - 9223372036854775807
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    type: integer
+    x-enum-varnames:
+    - minDuration
+    - maxDuration
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+  tinytoken.SingleToken:
+    properties:
+      expiry_time:
+        allOf:
+        - $ref: '#/definitions/time.Duration'
+        example: 86400000000000
+      key:
+        type: string
+    type: object
+  tinytoken.TinyTokenData:
+    properties:
+      access_token:
+        $ref: '#/definitions/tinytoken.SingleToken'
+      refresh_token:
+        $ref: '#/definitions/tinytoken.SingleToken'
+    type: object
+  tinytoken.TinyTokenSwaggerStruct:
+    properties:
+      data:
+        $ref: '#/definitions/tinytoken.TinyTokenData'
+    type: object
   translator.TranslationEntry:
     properties:
       code:
@@ -107,6 +156,33 @@ info:
   title: GPTVerse Admin Backend
   version: "1.0"
 paths:
+  /api/v1/auth/refreshToken:
+    post:
+      consumes:
+      - application/json
+      description: Generating new accessToken using refreshToken
+      operationId: refresh-token
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/authmodel.AuthRefreshTokenModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tinytoken.TinyTokenSwaggerStruct'
+      summary: Refresh Token
+      tags:
+      - Auth
   /api/v1/user/createByEmail:
     post:
       consumes:

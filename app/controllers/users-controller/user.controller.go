@@ -1,12 +1,12 @@
 package usercontroller
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/gptverse/init/app/models/user-model"
+	authservice "github.com/gptverse/init/app/service/auth-service"
 	userservice "github.com/gptverse/init/app/service/user-service"
 	"github.com/gptverse/init/framework/http/request"
 	"github.com/gptverse/init/framework/http/responser"
@@ -23,6 +23,7 @@ type UserController struct {
 	UserWitoutPasswordModel usermodel.UserWitoutPasswordModel
 	UserUpdateModel         usermodel.UserUpdateModel
 	Service                 userservice.UserService
+	AuthService             authservice.AuthService
 }
 
 // @Tags			Users
@@ -42,11 +43,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
 	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
-
-	sRole := sesStore.Get("UserRole")
 	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
-	fmt.Println("fetchCurrentUserInfo", fetchCurrentUserInfo)
-	fmt.Println("User Controll sSSSS Rolee", sRole)
 
 	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
 
@@ -78,6 +75,9 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	//Create new user
 	uController.Service.CreateNewUser(&uController.User)
 
+	//save the token
+	uController.AuthService.SaveToken(&token.Data, uController.User.Id, "active")
+
 	//Generate payload
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
@@ -85,7 +85,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	}
 
 	//return the resonse
-	response.SetMessage(translator.GetMessage(ginCtx, "success_message")).Payload(payload).Success()
+	response.Payload(payload).Success()
 
 }
 

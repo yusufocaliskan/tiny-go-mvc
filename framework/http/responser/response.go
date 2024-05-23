@@ -59,7 +59,7 @@ func (resp *Response) Success() {
 		data["data"] = resp.Data
 	}
 
-	data["message"] = resp.Message
+	data["message"] = translator.GetMessage(resp.Ctx, "success_message")
 	resp.CreateResponse(data, code)
 }
 

@@ -7,6 +7,12 @@ import (
 // Proctection.
 func AttackProtectionMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		// w.Header().Set("Access-Control-Allow-Origin", "*")
+		// w.Header().Set("Access-Control-Expose-Headers", "Content-Type")
+
+		// w.Header().Set("Content-Type", "text/event-stream")
+		// w.Header().Set("Cache-Control", "no-cache")
+		// w.Header().Set("Connection", "keep-alive")
 
 		ctx.Header("X-Content-Type-Options", "nosniff")
 		// ctx.Writer.Header().Set("Content-Security-Policy", "default-src 'self'")

@@ -3,7 +3,7 @@ package authcontroller
 import (
 	"github.com/gin-gonic/gin"
 	authmodel "github.com/gptverse/init/app/models/auth-model"
-	usermodel "github.com/gptverse/init/app/models/user-model"
+	authservice "github.com/gptverse/init/app/service/auth-service"
 	userservice "github.com/gptverse/init/app/service/user-service"
 	"github.com/gptverse/init/framework/http/responser"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
@@ -13,10 +13,21 @@ import (
 type AuthController struct {
 	// users being binded in IsValidate()
 	UserService           userservice.UserService
+	AuthService           authservice.AuthService
 	AuthRefreshTokenModel authmodel.AuthRefreshTokenModel
 }
 
-// Generating new accessToken using refreshToken
+// @Tags			Auth
+// @Summary		Refresh Token
+// @Description	Generating new accessToken using refreshToken
+// @ID				refresh-token
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
+// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+// @Param			Accept-Language	header		string							false	"Language preference"
+//
+// @Router			/api/v1/auth/refreshToken [post]
 func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -41,12 +52,8 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 	}
 
 	token.GenerateAccessTokens(user.Email)
-	payload := usermodel.UserWithToken{
-		Token: token.Data,
-		User:  user,
-	}
 
 	//return the resonse
-	response.Payload(payload).Success()
+	response.Payload(token.Data).Success()
 
 }
