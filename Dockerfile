@@ -8,13 +8,10 @@ RUN go install github.com/gravityblast/fresh@latest \
 
 WORKDIR /app
 
-# Copy the project files
 COPY . .
 
-# Expose the port your app runs on (default 8080, can be overridden by env variable)
 EXPOSE 8080
 
-# Set environment variables for fresh
 ENV GIN_MODE=debug
 ENV GO111MODULE=on
 
