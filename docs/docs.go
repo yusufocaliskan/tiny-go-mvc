@@ -458,7 +458,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "GPTVerse Admin Backend test",
+	Title:            "GPTVerse Admin Backend",
 	Description:      "To manage the whole gptv.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

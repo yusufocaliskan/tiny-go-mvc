@@ -7,8 +7,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
+      - ./storage/mongodb_data:/data/db
+      - ./storage/mongodb_config:/data/configdb
     networks:
       - mongo-net
 
@@ -17,7 +17,7 @@ services:
     depends_on:
       - mongo_gptv
     volumes:
-      - ./mongodb/scripts:/scripts
+      - ./database/mongodb/scripts:/scripts
     restart: 'no'
     entrypoint:
       [
@@ -31,7 +31,7 @@ services:
     networks:
       - mongo-net
 
-  go_app:
+  gptv_backend:
     build: .
     volumes:
       - .:/app

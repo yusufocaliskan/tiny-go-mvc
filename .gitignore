@@ -23,6 +23,4 @@ go.work
 # Fresh temps
 .tmp
 
-mongo-data
-aih-mongo
-db
+storage

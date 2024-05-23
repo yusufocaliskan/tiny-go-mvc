@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "To manage the whole gptv.",
-        "title": "GPTVerse Admin Backend test",
+        "title": "GPTVerse Admin Backend",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "@yusufocaliskan",
