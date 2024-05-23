@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"reflect"
 	"time"
 
 	usermodel "github.com/gptverse/init/app/models/user-model"
@@ -21,11 +20,16 @@ type UserService struct {
 }
 
 // Creeate a new user
-func (uSrv *UserService) CreateNewUser(user *usermodel.UserModel) {
+func (uSrv *UserService) CreateNewUser(ctx context.Context, user *usermodel.UserModel) (interface{}, bool) {
 
-	ctx := context.Background()
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
-	coll.InsertOne(ctx, user)
+	result, err := coll.InsertOne(ctx, user)
+	fmt.Println("err--> CreateNewUser", err)
+	if err != nil {
+		return 0, false
+	}
+
+	return result.InsertedID, true
 
 }
 
@@ -134,21 +138,4 @@ func (uSrv UserService) DeleteUserById(data *usermodel.UserDeleteModel) bool {
 	result, _ := coll.DeleteOne(ctx, bson.M{"_id": data.Id})
 	return result.DeletedCount > 0
 
-}
-
-func structToBsonM(v interface{}) bson.M {
-	elem := reflect.ValueOf(v).Elem()
-	typeOfT := elem.Type()
-
-	bsonMap := bson.M{}
-
-	for i := 0; i < elem.NumField(); i++ {
-		field := elem.Field(i)
-		if field.CanInterface() {
-			bsonMap[typeOfT.Field(i).Name] = field.Interface()
-		}
-	}
-
-	fmt.Println("bsonMapbsonMapbsonMapbsonMap00>", bsonMap)
-	return bsonMap
 }

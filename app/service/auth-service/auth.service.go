@@ -3,7 +3,6 @@ package authservice
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	usermodel "github.com/gptverse/init/app/models/user-model"
@@ -21,9 +20,7 @@ type AuthService struct {
 	Fw         *framework.Framework
 }
 
-func (Srv *AuthService) SaveToken(token *tinytoken.TinyTokenData, userId primitive.ObjectID, status string) (bool, int64) {
-
-	ctx := context.TODO()
+func (Srv *AuthService) SaveToken(ctx context.Context, token *tinytoken.TinyTokenData, userId primitive.ObjectID, status string) (bool, int64) {
 
 	filter := bson.M{"userId": userId}
 
@@ -41,7 +38,6 @@ func (Srv *AuthService) SaveToken(token *tinytoken.TinyTokenData, userId primiti
 	opts := options.Update().SetUpsert(true)
 	result, err := coll.UpdateOne(ctx, filter, updateData, opts)
 	if err != nil {
-		fmt.Println("err---->", err)
 		return false, 0
 	}
 

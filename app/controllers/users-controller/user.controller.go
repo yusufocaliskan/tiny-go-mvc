@@ -1,9 +1,11 @@
 package usercontroller
 
 import (
+	"context"
+	"fmt"
+	"log"
 	"time"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	authservice "github.com/gptverse/init/app/service/auth-service"
@@ -13,6 +15,8 @@ import (
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
 	"github.com/gptverse/init/framework/translator"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type UserController struct {
@@ -39,13 +43,14 @@ type UserController struct {
 // @Router			/api/v1/user/createByEmail [post]
 func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
 
-	sesStore := sessions.Default(ginCtx)
+	// sesStore := sessions.Default(ginCtx)
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
 	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
-	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
+	// fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
 
-	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
+	// currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
+	// fmt.Println("currentUserInfocurrentUserInfocurrentUserInfo-->", currentUserInfo)
 
 	if isExists {
 
@@ -54,29 +59,71 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	}
 
 	//No current user informations added to the Context
-	if fetchCurrentUserInfo == nil {
-		response.SetMessage(translator.GetMessage(ginCtx, "unknow_errors")).BadWithAbort()
+	// if fetchCurrentUserInfo == nil {
+	// 	response.SetMessage(translator.GetMessage(ginCtx, "unknow_errors")).BadWithAbort()
 
-		return
+	// 	return
+	// }
+
+	//Start e transaction
+	ctx := context.TODO()
+
+	dbSession, err := uController.AuthService.Fw.Database.Instance.Client().StartSession()
+	if err != nil {
+		log.Fatalf("Failed to start session %v", err)
 	}
+	//remove it when return
+	defer dbSession.EndSession(ctx)
 
 	//Generate tokens
 	token := tinytoken.TinyToken{
 		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
 	}
+
 	token.GenerateAccessTokens(&uController.User.Email)
+	err = mongo.WithSession(ctx, dbSession, func(sc mongo.SessionContext) error {
+		err := dbSession.StartTransaction(options.Transaction())
+		if err != nil {
+			return err
+		}
 
-	//Genetate Id & Create new user
-	uController.User.Id = primitive.NewObjectID()
-	uController.User.Ip = request.GetLocalIP()
-	uController.User.CreatedAt = time.Now()
-	uController.User.CreatedBy = currentUserInfo.Id
+		//Genetate Id & Create new user
+		uController.User.Id = primitive.NewObjectID()
+		uController.User.Ip = request.GetLocalIP()
+		uController.User.CreatedAt = time.Now()
+		// uController.User.CreatedBy = currentUserInfo.Id
 
-	//Create new user
-	uController.Service.CreateNewUser(&uController.User)
+		//Create new user
+		_, isUserInserted := uController.Service.CreateNewUser(sc, &uController.User)
 
-	//save the token
-	uController.AuthService.SaveToken(&token.Data, uController.User.Id, "active")
+		fmt.Println("err isUserInserted---->", isUserInserted)
+		if !isUserInserted {
+			dbSession.AbortTransaction(sc)
+			return err
+		}
+		//save the token
+		isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Id, "active")
+
+		fmt.Println("err isTokenSaved---->", isTokenSaved)
+		if !isTokenSaved {
+			dbSession.AbortTransaction(sc)
+			return err
+		}
+
+		err = dbSession.CommitTransaction(sc)
+		if err != nil {
+			return err
+		}
+		return nil
+
+	})
+
+	fmt.Println("err---->", err)
+	if err != nil {
+
+		response.SetMessage(translator.GetMessage(ginCtx, "transaction_failed")).BadWithAbort()
+		return
+	}
 
 	//Generate payload
 	payload := usermodel.UserWithToken{

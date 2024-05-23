@@ -24,7 +24,7 @@ func SetUserRoutes(fw *framework.Framework) {
 		v1UserRoutes.POST("/createByEmail/",
 			// middlewares.RateLimeter(),
 			middlewares.ValidateAndBind(&uController.User),
-			middlewares.AuthCheck(fw, uController),
+			// middlewares.AuthCheck(fw, uController),
 			// middlewares.ForceOnlyRole("admin"),
 
 			uController.CreateNewUserByEmailAdress)

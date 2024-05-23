@@ -26,5 +26,9 @@
   "unknow_errors": {
     "text": "Unknow Error.",
     "code": "UF007"
+  },
+  "transaction_failed": {
+    "text": "Transaction has been failed.",
+    "code": "UF008"
   }
 }
