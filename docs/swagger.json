@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "To manage the whole gptv.",
-        "title": "GPTVerse Admin Backend",
+        "title": "GPTVerse Admin Backend test",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "@yusufocaliskan",
@@ -14,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:4141",
+    "host": "localhost:8080",
     "paths": {
         "/api/v1/auth/refreshToken": {
             "post": {

@@ -15,6 +15,6 @@ the framework also support hot-reload using fresh, use the below codes.
 
 ## Swagger
 
-    http://localhost:4141/swagger/index.html
+    http://localhost:8080/swagger/index.html
 
 ## gRPC Serve

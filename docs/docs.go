@@ -455,10 +455,10 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:4141",
+	Host:             "localhost:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "GPTVerse Admin Backend",
+	Title:            "GPTVerse Admin Backend test",
 	Description:      "To manage the whole gptv.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
