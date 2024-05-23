@@ -39,6 +39,11 @@ func (mongDb *MongoDatabase) Connect() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// Check the connection
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//check if the database accessable
 	// isConnected := client.Ping(context.Background(), nil)

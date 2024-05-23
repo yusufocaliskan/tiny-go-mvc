@@ -24,3 +24,5 @@ go.work
 .tmp
 
 mongo-data
+aih-mongo
+db
