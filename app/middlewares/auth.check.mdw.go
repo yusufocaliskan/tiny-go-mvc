@@ -7,7 +7,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	usercontroller "github.com/gptverse/init/app/controllers/users-controller"
+	usermodel "github.com/gptverse/init/app/models/user-model"
 	"github.com/gptverse/init/config"
 	"github.com/gptverse/init/framework"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
@@ -15,7 +15,7 @@ import (
 
 // Checking if the coming data valid
 // AuthCheck validates the Authorization header token.
-func AuthCheck(fw *framework.Framework, uController *usercontroller.UserController) gin.HandlerFunc {
+func AuthCheck(fw *framework.Framework) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var secretKey = fw.Configs.AUTH_TOKEN_SECRET_KEY
 		authHeader := ctx.GetHeader("Authorization")
@@ -41,7 +41,7 @@ func AuthCheck(fw *framework.Framework, uController *usercontroller.UserControll
 		}
 
 		//Check Permissions
-		CheckPermissions(uController, ctx, claims["data"].(string))
+		CheckPermissions(fw, ctx, claims["data"].(string))
 
 		ctx.Set("claim", claims["data"])
 		ctx.Next()
@@ -49,39 +49,39 @@ func AuthCheck(fw *framework.Framework, uController *usercontroller.UserControll
 }
 
 // Actions that would be allowed only for given role
-func CheckPermissions(uController *usercontroller.UserController, ctx *gin.Context, emailAddress string) {
+func CheckPermissions(fw *framework.Framework, ctx *gin.Context, emailAddress string) {
+
 	// Get the role from the context
 	sesStore := sessions.Default(ctx)
-	sRole := sesStore.Get("UserRole")
+	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
 
-	if sRole == nil {
+	currentUserInfo, ok := fetchCurrentUserInfo.(*usermodel.UserModel)
+	if !ok {
 
-		err, user := uController.Service.GetUserByEmailAddress(emailAddress)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})
+		ctx.Abort()
+		return
+	}
 
-		if !err {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})
-			ctx.Abort()
-			return
-		}
+	if currentUserInfo.Role == "" {
 
-		// Set the role in the context for future use
-		sRole = user.Role
-
-		sesStore.Set("UserRole", user.Role)
-		sesStore.Set("CurrentUserInformations", user)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})
+		ctx.Abort()
+		return
 
 	}
 
 	requestMethod := strings.ToLower(ctx.Request.Method)
-
 	requestPermission, ok := config.PermissionLookUp[requestMethod]
+
 	if !ok {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Request method not allowed"})
 		ctx.Abort()
 		return
 	}
 
-	userRolePermissions, ok := config.DefinedPermissions[sRole.(string)]
+	userRolePermissions, ok := config.DefinedPermissions[currentUserInfo.Role]
+
 	if !ok {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Role does not have defined permissions"})
 		ctx.Abort()

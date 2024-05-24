@@ -37,7 +37,7 @@ type UserController struct {
 // @ID				create-user
 // @Accept			json
 // @Produce		json
-// @Success		200				{object}	usermodel.UserSwaggerParams
+// @Success		200				{object}	usermodel.UserWithToken
 // @Param			id				query		string	true	"query params"
 // @Param			Accept-Language	header		string	false	"Language preference"
 //
@@ -181,7 +181,7 @@ func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Contex
 	}
 
 	//return the resonse
-	response.SetMessage(translator.GetMessage(ginCtx, "success_message")).Success()
+	response.Success()
 
 }
 
@@ -208,7 +208,7 @@ func (uController *UserController) GetUserById(ginCtx *gin.Context) {
 	}
 
 	//return the resonse
-	response.SetMessage(translator.GetMessage(ginCtx, "success_message")).Payload(user).Success()
+	response.Payload(user.ToUserWithoutPassword()).Success()
 
 }
 

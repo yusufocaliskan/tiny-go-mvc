@@ -20,17 +20,17 @@ type AuthController struct {
 	AuthRefreshTokenModel authmodel.AuthRefreshTokenModel
 }
 
-//	@Tags			Auth
-//	@Summary		Login
-//	@Description	Sing-in With Access Token
-//	@ID				access-token-login
-//	@Accept			json
-//	@Produce		json
-//	@Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
-//	@Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-//	@Param			Accept-Language	header		string							false	"Language preference"
+// @Tags			Auth
+// @Summary		Login
+// @Description	Sing-in With Access Token
+// @ID				access-token-login
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	usermodel.UserWithToken
+// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+// @Param			Accept-Language	header		string							false	"Language preference"
 //
-//	@Router			/api/v1/auth/login [post]
+// @Router			/api/v1/auth/login [post]
 func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -57,17 +57,54 @@ func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
 
 }
 
-//	@Tags			Auth
-//	@Summary		Refresh Token
-//	@Description	Generating new accessToken using refreshToken
-//	@ID				refresh-token
-//	@Accept			json
-//	@Produce		json
-//	@Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
-//	@Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-//	@Param			Accept-Language	header		string							false	"Language preference"
+// @Tags			Auth
+// @Summary		Logout
+// @Description	Sing out
+// @ID				sing-out
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	translator.TranslationSwaggerResponse
+// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+// @Param			Accept-Language	header		string							false	"Language preference"
 //
-//	@Router			/api/v1/auth/refreshToken [post]
+// @Router			/api/v1/auth/logout [post]
+func (authCtrl *AuthController) Logout(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+
+	user, isExists := authCtrl.UserService.GetUserByEmailAndPassword(authCtrl.AuthLoginModel.Email, authCtrl.AuthLoginModel.Password)
+
+	if !isExists {
+		log.Printf("Failed login attempt for email: %s", authCtrl.AuthLoginModel.Email)
+
+		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
+		return
+	}
+	token := tinytoken.TinyToken{
+		SecretKey: authCtrl.AuthService.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
+	}
+
+	token.GenerateAccessTokens(authCtrl.AuthLoginModel.Email)
+	payload := usermodel.UserWithToken{
+		Token: token.Data,
+		User:  user.ToUserWithoutPassword(),
+	}
+
+	response.Payload(payload).Success()
+
+}
+
+// @Tags			Auth
+// @Summary		Refresh Token
+// @Description	Generating new accessToken using refreshToken
+// @ID				refresh-token
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	usermodel.UserWithToken
+// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+// @Param			Accept-Language	header		string							false	"Language preference"
+//
+// @Router			/api/v1/auth/refreshToken [post]
 func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -92,8 +129,12 @@ func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin
 	}
 
 	token.GenerateAccessTokens(user.Email)
+	payload := usermodel.UserWithToken{
+		Token: token.Data,
+		User:  user.ToUserWithoutPassword(),
+	}
 
 	//return the resonse
-	response.Payload(token.Data).Success()
+	response.Payload(payload).Success()
 
 }

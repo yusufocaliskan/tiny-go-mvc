@@ -58,7 +58,48 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/tinytoken.TinyTokenSwaggerStruct"
+                            "$ref": "#/definitions/usermodel.UserWithToken"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "description": "Sing out",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "sing-out",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authmodel.AuthRefreshTokenModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/translator.TranslationSwaggerResponse"
                         }
                     }
                 }
@@ -99,7 +140,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/tinytoken.TinyTokenSwaggerStruct"
+                            "$ref": "#/definitions/usermodel.UserWithToken"
                         }
                     }
                 }
@@ -138,7 +179,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
+                            "$ref": "#/definitions/usermodel.UserWithToken"
                         }
                     }
                 }
@@ -337,14 +378,6 @@ const docTemplate = `{
                 }
             }
         },
-        "tinytoken.TinyTokenSwaggerStruct": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/tinytoken.TinyTokenData"
-                }
-            }
-        },
         "translator.TranslationEntry": {
             "type": "object",
             "properties": {
@@ -371,6 +404,55 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usermodel.UserModel": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "role",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "hashed_password": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "moderator",
+                        "user"
+                    ]
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -443,6 +525,17 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "usermodel.UserWithToken": {
+            "type": "object",
+            "properties": {
+                "tokens": {
+                    "$ref": "#/definitions/tinytoken.TinyTokenData"
+                },
+                "user": {
+                    "$ref": "#/definitions/usermodel.UserModel"
                 }
             }
         },

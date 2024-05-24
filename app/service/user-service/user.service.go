@@ -84,7 +84,7 @@ func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.User
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) GetUserById(id string) (*usermodel.UserWithoutPasswordModel, bool) {
+func (uSrv UserService) GetUserById(id string) (*usermodel.UserModel, bool) {
 
 	userId, _ := primitive.ObjectIDFromHex(id)
 	ctx := context.Background()
@@ -92,7 +92,7 @@ func (uSrv UserService) GetUserById(id string) (*usermodel.UserWithoutPasswordMo
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"_id": userId})
 
-	var user usermodel.UserWithoutPasswordModel
+	var user usermodel.UserModel
 
 	result.Decode(&user)
 

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/gob"
+
 	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gptverse/init/app/middlewares"
+	usermodel "github.com/gptverse/init/app/models/user-model"
 	v1routes "github.com/gptverse/init/app/routes/v1"
 	"github.com/gptverse/init/config"
 	"github.com/gptverse/init/database"
@@ -103,7 +106,7 @@ func LoadMiddleWares() {
 		FrameDeny:             true,
 		ContentTypeNosniff:    true,
 		BrowserXssFilter:      true,
-		ContentSecurityPolicy: "default-src 'self'",
+		ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;",
 		IENoOpen:              true,
 		ReferrerPolicy:        "strict-origin-when-cross-origin",
 	})
@@ -111,13 +114,9 @@ func LoadMiddleWares() {
 	//Set the secure host
 	fw.GinServer.Engine.Use(secureConfigs)
 
-	//Activating RateLimiiter.
-	// if config.ActivateReteLimiter {
+	//fetch user informations
+	fw.GinServer.Engine.Use(middlewares.SetUserInformation2Session(&fw))
 
-	// 	fmt.Println("-------- Rate Limitter is activated ----------")
-	// 	fw.GinServer.Engine.Use(middlewares.RateLimeter())
-
-	// }
 }
 
 // Create a session store
@@ -127,6 +126,8 @@ func CreateSessionStore() {
 	redisStore, _ := redis.NewStore(10, "tcp", confs.REDIS_DRIVER, "", []byte("secret"))
 	fw.GinServer.Engine.Use(sessions.Sessions(confs.SESSION_KEY_NAME, redisStore))
 
+	// Register the types with gob
+	gob.Register(usermodel.UserModel{})
 }
 
 // Loads the v1 routes

@@ -43,11 +43,6 @@ definitions:
       refresh_token:
         $ref: '#/definitions/tinytoken.SingleToken'
     type: object
-  tinytoken.TinyTokenSwaggerStruct:
-    properties:
-      data:
-        $ref: '#/definitions/tinytoken.TinyTokenData'
-    type: object
   translator.TranslationEntry:
     properties:
       code:
@@ -66,6 +61,40 @@ definitions:
         type: string
     required:
     - id
+    type: object
+  usermodel.UserModel:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      hashed_password:
+        type: string
+      id:
+        type: string
+      ip:
+        type: string
+      password:
+        type: string
+      role:
+        enum:
+        - admin
+        - moderator
+        - user
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - role
+    - username
     type: object
   usermodel.UserSwaggerParams:
     properties:
@@ -117,6 +146,13 @@ definitions:
     - email
     - role
     - username
+    type: object
+  usermodel.UserWithToken:
+    properties:
+      tokens:
+        $ref: '#/definitions/tinytoken.TinyTokenData'
+      user:
+        $ref: '#/definitions/usermodel.UserModel'
     type: object
   usermodel.UserWithoutPasswordModel:
     properties:
@@ -179,8 +215,35 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/tinytoken.TinyTokenSwaggerStruct'
+            $ref: '#/definitions/usermodel.UserWithToken'
       summary: Login
+      tags:
+      - Auth
+  /api/v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Sing out
+      operationId: sing-out
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/authmodel.AuthRefreshTokenModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translator.TranslationSwaggerResponse'
+      summary: Logout
       tags:
       - Auth
   /api/v1/auth/refreshToken:
@@ -206,7 +269,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/tinytoken.TinyTokenSwaggerStruct'
+            $ref: '#/definitions/usermodel.UserWithToken'
       summary: Refresh Token
       tags:
       - Auth
@@ -232,7 +295,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usermodel.UserSwaggerParams'
+            $ref: '#/definitions/usermodel.UserWithToken'
       summary: New user
       tags:
       - Users

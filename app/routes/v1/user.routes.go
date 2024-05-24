@@ -22,9 +22,9 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Creates new user
 		v1UserRoutes.POST("/createByEmail/",
-			// middlewares.RateLimeter(),
+			middlewares.RateLimeter(),
 			middlewares.ValidateAndBind(&uController.User),
-			// middlewares.AuthCheck(fw, uController),
+			middlewares.AuthCheck(fw),
 			// middlewares.ForceOnlyRole("admin"),
 
 			uController.CreateNewUserByEmailAdress)
@@ -32,14 +32,14 @@ func SetUserRoutes(fw *framework.Framework) {
 		//Get by Id
 		v1UserRoutes.GET("/getUserInformationsById",
 			middlewares.RateLimeter(),
-			middlewares.AuthCheck(fw, uController),
+			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserWithIDFormIDModel),
 
 			uController.GetUserById)
 
 		v1UserRoutes.PUT("/updateUserInformationsById",
 			// middlewares.RateLimeter(),
-			middlewares.AuthCheck(fw, uController),
+			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserUpdateModel),
 
 			uController.UpdateUserInformationsById)
@@ -48,7 +48,7 @@ func SetUserRoutes(fw *framework.Framework) {
 		//Only the one with {delete} permissions.
 		v1UserRoutes.DELETE("/deleteById/",
 			middlewares.RateLimeter(),
-			middlewares.AuthCheck(fw, uController),
+			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserDeleteModel),
 
 			uController.DeleteUserById)
