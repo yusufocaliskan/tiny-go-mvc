@@ -12,11 +12,12 @@ type UserModel struct {
 	FullName string             `json:"fullname"`
 	UserName string             `json:"username" validate:"required"`
 
-	Email     string    `json:"email" validate:"required,email"`
-	Password  string    `json:"password" validate:"required"`
-	CreatedAt time.Time `bson:"created_at" json:"created_at"`
-	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
-	Role      string    `json:"role" validate:"required,oneof=admin moderator user"`
+	Email          string    `json:"email" validate:"required,email"`
+	Password       string    `json:"password" validate:"required" bson:"-"`
+	HashedPassword string    `json:"hashed_password" bson:"hashed_password"`
+	CreatedAt      time.Time `bson:"created_at" json:"created_at"`
+	UpdatedAt      time.Time `bson:"updated_at" json:"updated_at"`
+	Role           string    `json:"role" validate:"required,oneof=admin moderator user"`
 
 	Ip        string             `json:"ip" bson:"ip"`
 	CreatedBy primitive.ObjectID `json:"created_by" bson:"created_by"`

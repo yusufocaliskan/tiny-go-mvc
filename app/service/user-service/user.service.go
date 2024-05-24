@@ -24,7 +24,6 @@ func (uSrv *UserService) CreateNewUser(ctx context.Context, user *usermodel.User
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result, err := coll.InsertOne(ctx, user)
-	fmt.Println("err--> CreateNewUser", err)
 	if err != nil {
 		return 0, false
 	}

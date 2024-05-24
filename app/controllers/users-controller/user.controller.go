@@ -16,6 +16,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -90,6 +91,10 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 		uController.User.Id = primitive.NewObjectID()
 		uController.User.Ip = request.GetLocalIP()
 		uController.User.CreatedAt = time.Now()
+
+		//hash the user's password
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(uController.User.Password), bcrypt.DefaultCost)
+		uController.User.HashedPassword = string(hashedPassword)
 		// uController.User.CreatedBy = currentUserInfo.Id
 
 		//Create new user

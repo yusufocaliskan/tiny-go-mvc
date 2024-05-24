@@ -18,6 +18,21 @@ type AuthController struct {
 }
 
 // @Tags			Auth
+// @Summary		Login
+// @Description	Sing-in With Access Token
+// @ID			access-token-login
+// @Accept			json
+// @Produce		json
+// @Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
+// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+// @Param			Accept-Language	header		string							false	"Language preference"
+//
+// @Router			/api/v1/auth/login-access-token [post]
+func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
+
+}
+
+// @Tags			Auth
 // @Summary		Refresh Token
 // @Description	Generating new accessToken using refreshToken
 // @ID				refresh-token
