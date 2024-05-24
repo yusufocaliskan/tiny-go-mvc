@@ -185,7 +185,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/deleteById": {
+        "/api/v1/user/delete": {
             "delete": {
                 "security": [
                     {
