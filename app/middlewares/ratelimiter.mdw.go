@@ -35,6 +35,13 @@ func RateLimeter() gin.HandlerFunc {
 		sessionKey := fmt.Sprintf("limitterInfo-%s", clientIp)
 
 		getSaveInformations := session.Get(sessionKey)
+
+		fmt.Println("getSaveInformations------ ERRO", getSaveInformations)
+		if getSaveInformations == nil {
+
+			fmt.Println("getSaveInformations------ ERRO")
+
+		}
 		var limiterInfo Limiter
 		var limiterInfoAsJson []byte
 		var remainedTime time.Duration

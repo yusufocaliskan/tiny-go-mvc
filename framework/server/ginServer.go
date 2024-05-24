@@ -17,6 +17,7 @@ func (gs *GinServer) CreateServer(port int) {
 
 	fmt.Println("------------ {Establishing a Gin Server.} ------------")
 	r := gin.Default()
+
 	gs.Engine = r
 	gs.Port = port
 

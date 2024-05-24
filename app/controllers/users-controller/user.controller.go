@@ -2,6 +2,7 @@ package usercontroller
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -21,13 +22,13 @@ import (
 
 type UserController struct {
 	// users being binded in ValidateAndBind()
-	User                    usermodel.UserModel
-	UserDeleteModel         usermodel.UserDeleteModel
-	UserWithIDFormIDModel   usermodel.UserWithIDFormIDModel
-	UserWitoutPasswordModel usermodel.UserWitoutPasswordModel
-	UserUpdateModel         usermodel.UserUpdateModel
-	Service                 userservice.UserService
-	AuthService             authservice.AuthService
+	User                     usermodel.UserModel
+	UserDeleteModel          usermodel.UserDeleteModel
+	UserWithIDFormIDModel    usermodel.UserWithIDFormIDModel
+	UserWithoutPasswordModel usermodel.UserWithoutPasswordModel
+	UserUpdateModel          usermodel.UserUpdateModel
+	Service                  userservice.UserService
+	AuthService              authservice.AuthService
 }
 
 // @Tags			Users
@@ -83,18 +84,25 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	err = mongo.WithSession(ctx, dbSession, func(sc mongo.SessionContext) error {
 		err := dbSession.StartTransaction(options.Transaction())
 		if err != nil {
-			return err
+			return fmt.Errorf("connot start the transaction")
 		}
 
 		token.GenerateAccessTokens(&uController.User.Email)
+
 		//Genetate Id & Create new user
 		uController.User.Id = primitive.NewObjectID()
 		uController.User.Ip = request.GetLocalIP()
 		uController.User.CreatedAt = time.Now()
 
 		//hash the user's password
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(uController.User.Password), bcrypt.DefaultCost)
+		hashedPassword, passwordHashingError := bcrypt.GenerateFromPassword([]byte(uController.User.Password), bcrypt.DefaultCost)
 		uController.User.HashedPassword = string(hashedPassword)
+
+		if passwordHashingError != nil {
+
+			dbSession.AbortTransaction(sc)
+			return fmt.Errorf("connot hash the password")
+		}
 		// uController.User.CreatedBy = currentUserInfo.Id
 
 		//Create new user
@@ -102,7 +110,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 		if !isUserInserted {
 			dbSession.AbortTransaction(sc)
-			return err
+			return fmt.Errorf("connot create the user")
 		}
 		// //save the token
 		// isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Id, "active")
@@ -114,7 +122,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 		err = dbSession.CommitTransaction(sc)
 		if err != nil {
-			return err
+			return fmt.Errorf("connot commit the transaction")
 		}
 		return nil
 
@@ -128,7 +136,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 	//Generate payload
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
-		User:  &uController.User,
+		User:  uController.User.ToUserWithoutPassword(),
 	}
 
 	//return the resonse
@@ -183,7 +191,7 @@ func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Contex
 // @ID				get-user-by-id
 // @Produce		json
 // @Security		BearerAuth
-// @Success		200				{object}	usermodel.UserWitoutPasswordModel
+// @Success		200				{object}	usermodel.UserWithoutPasswordModel
 // @Param			id				query		string	true	"user id"	Format(ObjectID)
 // @Param			Accept-Language	header		string	false	"Language preference"
 //

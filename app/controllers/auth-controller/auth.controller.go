@@ -1,8 +1,11 @@
 package authcontroller
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	authmodel "github.com/gptverse/init/app/models/auth-model"
+	usermodel "github.com/gptverse/init/app/models/user-model"
 	authservice "github.com/gptverse/init/app/service/auth-service"
 	userservice "github.com/gptverse/init/app/service/user-service"
 	"github.com/gptverse/init/framework/http/responser"
@@ -11,38 +14,60 @@ import (
 )
 
 type AuthController struct {
-	// users being binded in IsValidate()
 	UserService           userservice.UserService
 	AuthService           authservice.AuthService
+	AuthLoginModel        authmodel.AuthLoginModel
 	AuthRefreshTokenModel authmodel.AuthRefreshTokenModel
 }
 
-// @Tags			Auth
-// @Summary		Login
-// @Description	Sing-in With Access Token
-// @ID			access-token-login
-// @Accept			json
-// @Produce		json
-// @Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
-// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-// @Param			Accept-Language	header		string							false	"Language preference"
+//	@Tags			Auth
+//	@Summary		Login
+//	@Description	Sing-in With Access Token
+//	@ID				access-token-login
+//	@Accept			json
+//	@Produce		json
+//	@Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
+//	@Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+//	@Param			Accept-Language	header		string							false	"Language preference"
 //
-// @Router			/api/v1/auth/login-access-token [post]
+//	@Router			/api/v1/auth/login [post]
 func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+
+	user, isExists := authCtrl.UserService.GetUserByEmailAndPassword(authCtrl.AuthLoginModel.Email, authCtrl.AuthLoginModel.Password)
+
+	if !isExists {
+		log.Printf("Failed login attempt for email: %s", authCtrl.AuthLoginModel.Email)
+
+		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
+		return
+	}
+	token := tinytoken.TinyToken{
+		SecretKey: authCtrl.AuthService.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
+	}
+
+	token.GenerateAccessTokens(authCtrl.AuthLoginModel.Email)
+	payload := usermodel.UserWithToken{
+		Token: token.Data,
+		User:  user.ToUserWithoutPassword(),
+	}
+
+	response.Payload(payload).Success()
 
 }
 
-// @Tags			Auth
-// @Summary		Refresh Token
-// @Description	Generating new accessToken using refreshToken
-// @ID				refresh-token
-// @Accept			json
-// @Produce		json
-// @Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
-// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-// @Param			Accept-Language	header		string							false	"Language preference"
+//	@Tags			Auth
+//	@Summary		Refresh Token
+//	@Description	Generating new accessToken using refreshToken
+//	@ID				refresh-token
+//	@Accept			json
+//	@Produce		json
+//	@Success		200				{object}	tinytoken.TinyTokenSwaggerStruct
+//	@Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
+//	@Param			Accept-Language	header		string							false	"Language preference"
 //
-// @Router			/api/v1/auth/refreshToken [post]
+//	@Router			/api/v1/auth/refreshToken [post]
 func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}

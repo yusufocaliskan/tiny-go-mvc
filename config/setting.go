@@ -14,6 +14,8 @@ const (
 )
 
 var AcceptableLangs = []string{"en", "tr"}
+var AllowedHost = []string{"localhost:8080"}
+var SSLHost = ""
 
 // Request Permissions
 var DefinedPermissions = map[string]map[string]bool{

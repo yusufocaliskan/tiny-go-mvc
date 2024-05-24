@@ -118,7 +118,7 @@ definitions:
     - role
     - username
     type: object
-  usermodel.UserWitoutPasswordModel:
+  usermodel.UserWithoutPasswordModel:
     properties:
       created_at:
         type: string
@@ -156,6 +156,33 @@ info:
   title: GPTVerse Admin Backend
   version: "1.0"
 paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Sing-in With Access Token
+      operationId: access-token-login
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/authmodel.AuthRefreshTokenModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tinytoken.TinyTokenSwaggerStruct'
+      summary: Login
+      tags:
+      - Auth
   /api/v1/auth/refreshToken:
     post:
       consumes:
@@ -259,7 +286,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usermodel.UserWitoutPasswordModel'
+            $ref: '#/definitions/usermodel.UserWithoutPasswordModel'
       security:
       - BearerAuth: []
       summary: Get User

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/gin-contrib/secure"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gptverse/init/app/middlewares"
 	v1routes "github.com/gptverse/init/app/routes/v1"
+	"github.com/gptverse/init/config"
 	"github.com/gptverse/init/database"
 	_ "github.com/gptverse/init/docs"
 	"github.com/gptverse/init/framework"
@@ -90,8 +92,24 @@ func LoadMiddleWares() {
 	//translation files
 	fw.GinServer.Engine.Use(middlewares.LoadTranslationFile())
 
-	//1. XSS attack protection
-	fw.GinServer.Engine.Use(middlewares.AttackProtectionMiddleware())
+	//Secure header
+	secureConfigs := secure.New(secure.Config{
+		AllowedHosts: config.AllowedHost,
+		// SSLRedirect:  true,
+		// SSLHost:               config.SSLHost,
+		// SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
+		STSSeconds:            315360000,
+		STSIncludeSubdomains:  true,
+		FrameDeny:             true,
+		ContentTypeNosniff:    true,
+		BrowserXssFilter:      true,
+		ContentSecurityPolicy: "default-src 'self'",
+		IENoOpen:              true,
+		ReferrerPolicy:        "strict-origin-when-cross-origin",
+	})
+
+	//Set the secure host
+	fw.GinServer.Engine.Use(secureConfigs)
 
 	//Activating RateLimiiter.
 	// if config.ActivateReteLimiter {

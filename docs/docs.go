@@ -23,6 +23,47 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/auth/login": {
+            "post": {
+                "description": "Sing-in With Access Token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "access-token-login",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authmodel.AuthRefreshTokenModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tinytoken.TinyTokenSwaggerStruct"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/refreshToken": {
             "post": {
                 "description": "Generating new accessToken using refreshToken",
@@ -185,7 +226,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usermodel.UserWitoutPasswordModel"
+                            "$ref": "#/definitions/usermodel.UserWithoutPasswordModel"
                         }
                     }
                 }
@@ -405,7 +446,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usermodel.UserWitoutPasswordModel": {
+        "usermodel.UserWithoutPasswordModel": {
             "type": "object",
             "required": [
                 "email",

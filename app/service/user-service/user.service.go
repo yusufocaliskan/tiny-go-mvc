@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // check user.route
@@ -83,7 +84,7 @@ func (uSrv UserService) CheckByEmailAddress(email string) (bool, *usermodel.User
 }
 
 // Check if user exists by given email address
-func (uSrv UserService) GetUserById(id string) (*usermodel.UserWitoutPasswordModel, bool) {
+func (uSrv UserService) GetUserById(id string) (*usermodel.UserWithoutPasswordModel, bool) {
 
 	userId, _ := primitive.ObjectIDFromHex(id)
 	ctx := context.Background()
@@ -91,7 +92,7 @@ func (uSrv UserService) GetUserById(id string) (*usermodel.UserWitoutPasswordMod
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result := coll.FindOne(ctx, bson.M{"_id": userId})
 
-	var user usermodel.UserWitoutPasswordModel
+	var user usermodel.UserWithoutPasswordModel
 
 	result.Decode(&user)
 
@@ -100,6 +101,35 @@ func (uSrv UserService) GetUserById(id string) (*usermodel.UserWitoutPasswordMod
 		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
 			return &user, false
 		}
+	}
+
+	return &user, true
+}
+
+// Check if user exists by given email address and password
+func (uSrv UserService) GetUserByEmailAndPassword(email string, password string) (*usermodel.UserModel, bool) {
+
+	ctx := context.Background()
+
+	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+	result := coll.FindOne(ctx, bson.M{"email": email})
+
+	var user usermodel.UserModel
+
+	result.Decode(&user)
+
+	//User not found
+	if result.Err() != nil {
+		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
+			return &user, false
+		}
+	}
+
+	//Compare the hashd password
+	isPasswordCorret := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(password))
+
+	if isPasswordCorret != nil {
+		return nil, false
 	}
 
 	return &user, true
