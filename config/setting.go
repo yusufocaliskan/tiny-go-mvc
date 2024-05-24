@@ -4,9 +4,9 @@ import "time"
 
 const (
 	ActivateReteLimiter = true
-	//6 request in 2 mins
-	RateLimiterToken = 6  //5 request
-	RateLimterTime   = 21 //scs
+
+	RateLimiterToken = 6 //5 request
+	RateLimterTime   = 5 //scs
 	DefaultLanguage  = "en"
 
 	AccessTokenExpiryTime  = time.Hour * 24     //24 hours
@@ -15,6 +15,7 @@ const (
 
 var AcceptableLangs = []string{"en", "tr"}
 var AllowedHost = []string{"localhost:8080"}
+
 var SSLHost = ""
 
 // Request Permissions

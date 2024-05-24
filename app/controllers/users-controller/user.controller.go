@@ -26,6 +26,7 @@ type UserController struct {
 	UserDeleteModel          usermodel.UserDeleteModel
 	UserWithIDFormIDModel    usermodel.UserWithIDFormIDModel
 	UserWithoutPasswordModel usermodel.UserWithoutPasswordModel
+	UserFilterModel          usermodel.UserFilterModel
 	UserUpdateModel          usermodel.UserUpdateModel
 	Service                  userservice.UserService
 	AuthService              authservice.AuthService
@@ -41,8 +42,8 @@ type UserController struct {
 // @Param			id				query		string	true	"query params"
 // @Param			Accept-Language	header		string	false	"Language preference"
 //
-// @Router			/api/v1/user/createByEmail [post]
-func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Context) {
+// @Router			/api/v1/user/create [post]
+func (uController *UserController) Create(ginCtx *gin.Context) {
 
 	// sesStore := sessions.Default(ginCtx)
 	response := responser.Response{Ctx: ginCtx}
@@ -106,7 +107,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 		// uController.User.CreatedBy = currentUserInfo.Id
 
 		//Create new user
-		_, isUserInserted := uController.Service.CreateNewUser(sc, &uController.User)
+		_, isUserInserted := uController.Service.CreateNewUser(sc, uController.User)
 
 		if !isUserInserted {
 			dbSession.AbortTransaction(sc)
@@ -154,8 +155,8 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 // @Param			request			body		usermodel.UserUpdateModel	true	"query params"
 // @Param			Accept-Language	header		string						false	"Language preference"
 //
-// @Router			/api/v1/user/updateUserInformationsById [put]
-func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Context) {
+// @Router			/api/v1/user/update [put]
+func (uController *UserController) Update(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
 	newInformations := &uController.UserUpdateModel
@@ -195,8 +196,8 @@ func (uController *UserController) UpdateUserInformationsById(ginCtx *gin.Contex
 // @Param			id				query		string	true	"user id"	Format(ObjectID)
 // @Param			Accept-Language	header		string	false	"Language preference"
 //
-// @Router			/api/v1/user/getUserById [GET]
-func (uController *UserController) GetUserById(ginCtx *gin.Context) {
+// @Router			/api/v1/user/fetch [GET]
+func (uController *UserController) Fetch(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
 
@@ -213,6 +214,35 @@ func (uController *UserController) GetUserById(ginCtx *gin.Context) {
 }
 
 // @Tags			Users
+// @Summary		List All Records
+// @Description	Get user details by id
+// @ID				fetch-all-users
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200				{object}	usermodel.UserWithoutPasswordModel
+// @Param			id				query		string	true	"user id"	Format(ObjectID)
+// @Param			Accept-Language	header		string	false	"Language preference"
+//
+// @Router			/api/v1/user/fetch-all [GET]
+func (uController *UserController) FetchAll(ginCtx *gin.Context) {
+
+	response := responser.Response{Ctx: ginCtx}
+
+	filters := uController.UserFilterModel
+
+	users, exists := uController.Service.FetchAll(filters)
+
+	if !exists {
+		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
+		return
+	}
+
+	//return the resonse
+	response.Payload(users).Success()
+
+}
+
+// @Tags			Users
 // @Summary		Delete user
 // @Description	Deletes a user by given user id
 // @ID				Delete-User
@@ -224,7 +254,7 @@ func (uController *UserController) GetUserById(ginCtx *gin.Context) {
 // @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/deleteById [delete]
-func (uController *UserController) DeleteUserById(ginCtx *gin.Context) {
+func (uController *UserController) Delete(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
 

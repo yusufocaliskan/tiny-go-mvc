@@ -21,37 +21,45 @@ func SetUserRoutes(fw *framework.Framework) {
 		uController := &usercontroller.UserController{Service: *uService, AuthService: *authService}
 
 		//Creates new user
-		v1UserRoutes.POST("/createByEmail/",
+		v1UserRoutes.POST("/create/",
 			middlewares.RateLimeter(),
 			middlewares.ValidateAndBind(&uController.User),
 			middlewares.AuthCheck(fw),
 			// middlewares.ForceOnlyRole("admin"),
 
-			uController.CreateNewUserByEmailAdress)
+			uController.Create)
 
 		//Get by Id
-		v1UserRoutes.GET("/getUserInformationsById",
+		v1UserRoutes.GET("/fetch",
 			middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserWithIDFormIDModel),
 
-			uController.GetUserById)
+			uController.Fetch)
 
-		v1UserRoutes.PUT("/updateUserInformationsById",
+		//Get by Id
+		v1UserRoutes.GET("/fetch-all",
+			middlewares.RateLimeter(),
+			middlewares.AuthCheck(fw),
+			middlewares.ValidateAndBind(&uController.UserFilterModel),
+
+			uController.FetchAll)
+
+		v1UserRoutes.PUT("/update",
 			// middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserUpdateModel),
 
-			uController.UpdateUserInformationsById)
+			uController.Update)
 
 		//Delete user
 		//Only the one with {delete} permissions.
-		v1UserRoutes.DELETE("/deleteById/",
+		v1UserRoutes.DELETE("/delete/",
 			middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserDeleteModel),
 
-			uController.DeleteUserById)
+			uController.Delete)
 
 	}
 }

@@ -273,7 +273,7 @@ paths:
       summary: Refresh Token
       tags:
       - Auth
-  /api/v1/user/createByEmail:
+  /api/v1/user/create:
     post:
       consumes:
       - application/json
@@ -328,7 +328,7 @@ paths:
       summary: Delete user
       tags:
       - Users
-  /api/v1/user/getUserById:
+  /api/v1/user/fetch:
     get:
       description: Get user details by id
       operationId: get-user-by-id
@@ -355,7 +355,34 @@ paths:
       summary: Get User
       tags:
       - Users
-  /api/v1/user/updateUserInformationsById:
+  /api/v1/user/fetch-all:
+    get:
+      description: Get user details by id
+      operationId: fetch-all-users
+      parameters:
+      - description: user id
+        format: ObjectID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usermodel.UserWithoutPasswordModel'
+      security:
+      - BearerAuth: []
+      summary: List All Records
+      tags:
+      - Users
+  /api/v1/user/update:
     put:
       consumes:
       - application/json

@@ -65,8 +65,14 @@ type UserModelResponse struct {
 type UserDeleteModel struct {
 	Id primitive.ObjectID `json:"id" validate:"required"`
 }
+
 type UserWithIDFormIDModel struct {
 	Id string `form:"id" validate:"required"`
+}
+
+type UserFilterModel struct {
+	Page  int `form:"page"`
+	Limit int `form:"limit"`
 }
 
 type UserWithToken struct {

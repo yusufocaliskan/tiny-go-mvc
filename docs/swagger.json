@@ -139,7 +139,7 @@
                 }
             }
         },
-        "/api/v1/user/createByEmail": {
+        "/api/v1/user/create": {
             "post": {
                 "description": "Creates new user",
                 "consumes": [
@@ -224,7 +224,7 @@
                 }
             }
         },
-        "/api/v1/user/getUserById": {
+        "/api/v1/user/fetch": {
             "get": {
                 "security": [
                     {
@@ -266,7 +266,49 @@
                 }
             }
         },
-        "/api/v1/user/updateUserInformationsById": {
+        "/api/v1/user/fetch-all": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get user details by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List All Records",
+                "operationId": "fetch-all-users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "ObjectID",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserWithoutPasswordModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/update": {
             "put": {
                 "description": "Updates user informations by giving the Id",
                 "consumes": [

@@ -14,6 +14,7 @@ func ValidateAndBind(data interface{}) gin.HandlerFunc {
 		response := responser.Response{Ctx: ctx}
 
 		var bindingError error
+
 		switch ctx.Request.Method {
 		case "GET":
 			bindingError = ctx.ShouldBindQuery(data)

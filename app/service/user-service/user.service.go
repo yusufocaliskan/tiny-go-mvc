@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -21,7 +22,7 @@ type UserService struct {
 }
 
 // Creeate a new user
-func (uSrv *UserService) CreateNewUser(ctx context.Context, user *usermodel.UserModel) (interface{}, bool) {
+func (uSrv *UserService) CreateNewUser(ctx context.Context, user usermodel.UserModel) (interface{}, bool) {
 
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result, err := coll.InsertOne(ctx, user)
@@ -156,6 +157,44 @@ func (uSrv UserService) GetUserByEmailAddress(email string) (bool, *usermodel.Us
 	}
 
 	return true, &user
+}
+
+// Fetch all records
+func (uSrv UserService) FetchAll(filters usermodel.UserFilterModel) ([]usermodel.UserWithoutPasswordModel, bool) {
+
+	ctx := context.Background()
+	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
+
+	//	Pagination
+	if filters.Page <= 0 {
+		filters.Page = 1
+	}
+	if filters.Limit <= 0 {
+		filters.Limit = 15
+	}
+
+	skip := filters.Page*filters.Limit - filters.Limit
+
+	findOptions := options.Find()
+	findOptions.SetSkip(int64(skip))
+	findOptions.SetLimit(int64(filters.Limit))
+
+	//find all
+	cursor, err := coll.Find(ctx, bson.D{}, findOptions)
+
+	if err != nil {
+		return nil, false
+	}
+
+	defer cursor.Close(ctx)
+
+	var users []usermodel.UserWithoutPasswordModel
+	if err := cursor.All(ctx, &users); err != nil {
+		return nil, false
+	}
+
+	return users, true
+
 }
 
 // Delete user by id
