@@ -337,7 +337,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usermodel.UserUpdateModel"
+                            "$ref": "#/definitions/usermodel.UserUpdateSwaggerModel"
                         }
                     },
                     {
@@ -549,7 +549,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usermodel.UserUpdateModel": {
+        "usermodel.UserUpdateSwaggerModel": {
             "type": "object",
             "required": [
                 "email",
@@ -573,9 +573,6 @@ const docTemplate = `{
                         "moderator",
                         "user"
                     ]
-                },
-                "updated_at": {
-                    "type": "string"
                 },
                 "username": {
                     "type": "string"

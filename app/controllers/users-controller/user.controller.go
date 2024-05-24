@@ -153,7 +153,7 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 // @Produce		json
 // @Success		200				{object}	usermodel.UserSwaggerParams
 // @Param			request			body		usermodel.UserUpdateSwaggerModel	true	"query params"
-// @Param			Accept-Language	header		string						false	"Language preference"
+// @Param			Accept-Language	header		string								false	"Language preference"
 //
 // @Router			/api/v1/user/update [put]
 func (uController *UserController) Update(ginCtx *gin.Context) {
@@ -175,7 +175,7 @@ func (uController *UserController) Update(ginCtx *gin.Context) {
 	}
 
 	//Create new user
-	isUpdated, _ := uController.Service.UpdateUserInformations(newInformations, id)
+	isUpdated, user := uController.Service.UpdateUserInformations(newInformations, id)
 
 	if !isUpdated {
 		response.SetMessage(translator.GetMessage(ginCtx, "connot_update")).BadWithAbort()
@@ -183,7 +183,7 @@ func (uController *UserController) Update(ginCtx *gin.Context) {
 	}
 
 	//return the resonse
-	response.Success()
+	response.Payload(user).Success()
 
 }
 
@@ -254,7 +254,7 @@ func (uController *UserController) FetchAll(ginCtx *gin.Context) {
 // @Param			request			body		usermodel.UserDeleteModel	true	"query params"
 // @Param			Accept-Language	header		string						false	"Language preference"
 //
-// @Router			/api/v1/user/deleteById [delete]
+// @Router			/api/v1/user/delete [delete]
 func (uController *UserController) Delete(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}

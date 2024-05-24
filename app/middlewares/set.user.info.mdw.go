@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	usermodel "github.com/gptverse/init/app/models/user-model"
 	userservice "github.com/gptverse/init/app/service/user-service"
 	"github.com/gptverse/init/database"
 	"github.com/gptverse/init/framework"
@@ -46,17 +45,11 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 
 		sesStore := sessions.Default(ctx)
 		oldUserInfos := sesStore.Get("CurrentUserInformations")
+		fmt.Println("user.oldUserInfos()", oldUserInfos)
 
-		if oldUserInfos != nil {
-			if currentUserInfo, ok := oldUserInfos.(*usermodel.UserModel); ok {
-				if currentUserInfo.Role != "" {
-					fmt.Println("User information already in session", currentUserInfo)
-					ctx.Next()
-					return
-				}
-			} else {
-				fmt.Println("Failed to assert user information to UserModel")
-			}
+		if oldUserInfos == nil {
+			ctx.Next()
+			return
 		}
 
 		// Fetch user information from the database
@@ -69,7 +62,6 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 
 		// Set the user information in the session
 		sesStore.Set("CurrentUserInformations", user)
-		fmt.Println("user.ToUserWithoutPassword()", user)
 		if err := sesStore.Save(); err != nil {
 			fmt.Println("Failed to save session:", err)
 		}

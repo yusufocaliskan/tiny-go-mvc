@@ -56,6 +56,7 @@ func CheckPermissions(fw *framework.Framework, ctx *gin.Context, emailAddress st
 	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
 
 	currentUserInfo, ok := fetchCurrentUserInfo.(*usermodel.UserModel)
+	fmt.Println("user.oldUserInfos()---currentUserInfo---", currentUserInfo)
 	if !ok {
 
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get user data"})

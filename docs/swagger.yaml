@@ -131,7 +131,7 @@ definitions:
     - password
     - role
     type: object
-  usermodel.UserUpdateModel:
+  usermodel.UserUpdateSwaggerModel:
     properties:
       email:
         type: string
@@ -144,8 +144,6 @@ definitions:
         - admin
         - moderator
         - user
-        type: string
-      updated_at:
         type: string
       username:
         type: string
@@ -401,7 +399,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usermodel.UserUpdateModel'
+          $ref: '#/definitions/usermodel.UserUpdateSwaggerModel'
       - description: Language preference
         in: header
         name: Accept-Language

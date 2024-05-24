@@ -22,7 +22,6 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Creates new user
 		v1UserRoutes.POST("/create/",
-			middlewares.RateLimeter(),
 			middlewares.ValidateAndBind(&uController.User),
 			middlewares.AuthCheck(fw),
 			// middlewares.ForceOnlyRole("admin"),
@@ -31,7 +30,6 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Get by Id
 		v1UserRoutes.GET("/fetch",
-			middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserWithIDFormIDModel),
 
@@ -39,14 +37,12 @@ func SetUserRoutes(fw *framework.Framework) {
 
 		//Get by Id
 		v1UserRoutes.GET("/fetch-all",
-			middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserFilterModel),
 
 			uController.FetchAll)
 
 		v1UserRoutes.PUT("/update",
-			// middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserUpdateModel),
 
@@ -55,7 +51,6 @@ func SetUserRoutes(fw *framework.Framework) {
 		//Delete user
 		//Only the one with {delete} permissions.
 		v1UserRoutes.DELETE("/delete/",
-			middlewares.RateLimeter(),
 			middlewares.AuthCheck(fw),
 			middlewares.ValidateAndBind(&uController.UserDeleteModel),
 
