@@ -1,3 +1,3 @@
 # Mongo DB
 
-[✅] Transaction Replate Settings
+[✅] Transaction Replica Settings

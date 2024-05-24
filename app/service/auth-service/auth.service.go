@@ -16,7 +16,7 @@ import (
 
 // check auth.route
 type AuthService struct {
-	Collection string // auth
+	Collection string // user_auth
 	Fw         *framework.Framework
 }
 

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/gptverse/init/config"
 )
 
 type SingleToken struct {
@@ -52,7 +53,7 @@ func (tToken *TinyToken) CreateToken(data interface{}, expiryTime time.Duration)
 // Creates Refresh token for 1 day
 func (tToken *TinyToken) AccessTokenGenerator(data interface{}) *SingleToken {
 
-	expiryTime := time.Hour * 24
+	expiryTime := config.AccessTokenExpiryTime
 	token, _ := tToken.CreateToken(data, expiryTime)
 	return &SingleToken{
 		BearerKey:  token,
@@ -63,7 +64,7 @@ func (tToken *TinyToken) AccessTokenGenerator(data interface{}) *SingleToken {
 // Creates Refresh token for 7 days
 func (tToken *TinyToken) RefreshTokenGenerator(data interface{}) *SingleToken {
 
-	expiryTime := time.Hour * 24 * 7
+	expiryTime := config.RefreshTokenExpiryTime
 	token, _ := tToken.CreateToken(data, expiryTime)
 	return &SingleToken{
 		BearerKey:  token,

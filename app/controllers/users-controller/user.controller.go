@@ -2,7 +2,6 @@ package usercontroller
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -80,13 +79,13 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 		SecretKey: uController.Service.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
 	}
 
-	token.GenerateAccessTokens(&uController.User.Email)
 	err = mongo.WithSession(ctx, dbSession, func(sc mongo.SessionContext) error {
 		err := dbSession.StartTransaction(options.Transaction())
 		if err != nil {
 			return err
 		}
 
+		token.GenerateAccessTokens(&uController.User.Email)
 		//Genetate Id & Create new user
 		uController.User.Id = primitive.NewObjectID()
 		uController.User.Ip = request.GetLocalIP()
@@ -96,19 +95,17 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 		//Create new user
 		_, isUserInserted := uController.Service.CreateNewUser(sc, &uController.User)
 
-		fmt.Println("err isUserInserted---->", isUserInserted)
 		if !isUserInserted {
 			dbSession.AbortTransaction(sc)
 			return err
 		}
-		//save the token
-		isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Id, "active")
+		// //save the token
+		// isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Id, "active")
 
-		fmt.Println("err isTokenSaved---->", isTokenSaved)
-		if !isTokenSaved {
-			dbSession.AbortTransaction(sc)
-			return err
-		}
+		// if !isTokenSaved {
+		// 	dbSession.AbortTransaction(sc)
+		// 	return err
+		// }
 
 		err = dbSession.CommitTransaction(sc)
 		if err != nil {
@@ -118,9 +115,7 @@ func (uController *UserController) CreateNewUserByEmailAdress(ginCtx *gin.Contex
 
 	})
 
-	fmt.Println("err---->", err)
 	if err != nil {
-
 		response.SetMessage(translator.GetMessage(ginCtx, "transaction_failed")).BadWithAbort()
 		return
 	}

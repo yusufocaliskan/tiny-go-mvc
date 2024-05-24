@@ -1,11 +1,16 @@
 package config
 
+import "time"
+
 const (
 	ActivateReteLimiter = true
 	//6 request in 2 mins
 	RateLimiterToken = 6  //5 request
 	RateLimterTime   = 21 //scs
 	DefaultLanguage  = "en"
+
+	AccessTokenExpiryTime  = time.Hour * 24     //24 hours
+	RefreshTokenExpiryTime = time.Hour * 24 * 7 //7 days
 )
 
 var AcceptableLangs = []string{"en", "tr"}
