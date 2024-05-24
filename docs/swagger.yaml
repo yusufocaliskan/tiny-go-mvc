@@ -62,6 +62,13 @@ definitions:
     required:
     - id
     type: object
+  usermodel.UserFilterModel:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+    type: object
   usermodel.UserModel:
     properties:
       created_at:
@@ -360,12 +367,12 @@ paths:
       description: Get user details by id
       operationId: fetch-all-users
       parameters:
-      - description: user id
-        format: ObjectID
-        in: query
-        name: id
+      - description: query params
+        in: body
+        name: request
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/usermodel.UserFilterModel'
       - description: Language preference
         in: header
         name: Accept-Language

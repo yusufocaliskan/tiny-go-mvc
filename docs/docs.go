@@ -291,12 +291,13 @@ const docTemplate = `{
                 "operationId": "fetch-all-users",
                 "parameters": [
                     {
-                        "type": "string",
-                        "format": "ObjectID",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserFilterModel"
+                        }
                     },
                     {
                         "type": "string",
@@ -447,6 +448,17 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "string"
+                }
+            }
+        },
+        "usermodel.UserFilterModel": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
                 }
             }
         },

@@ -152,7 +152,7 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Success		200				{object}	usermodel.UserSwaggerParams
-// @Param			request			body		usermodel.UserUpdateModel	true	"query params"
+// @Param			request			body		usermodel.UserUpdateSwaggerModel	true	"query params"
 // @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/update [put]
@@ -171,6 +171,7 @@ func (uController *UserController) Update(ginCtx *gin.Context) {
 	if !isExists {
 		useExistsError := translator.GetMessage(ginCtx, "user_not_found")
 		response.SetMessage(useExistsError).BadWithAbort()
+		return
 	}
 
 	//Create new user
@@ -220,8 +221,8 @@ func (uController *UserController) Fetch(ginCtx *gin.Context) {
 // @Produce		json
 // @Security		BearerAuth
 // @Success		200				{object}	usermodel.UserWithoutPasswordModel
-// @Param			id				query		string	true	"user id"	Format(ObjectID)
-// @Param			Accept-Language	header		string	false	"Language preference"
+// @Param			request			body		usermodel.UserFilterModel	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/fetch-all [GET]
 func (uController *UserController) FetchAll(ginCtx *gin.Context) {
