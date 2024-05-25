@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	authservice "github.com/gptverse/init/app/service/auth-service"
@@ -45,14 +46,14 @@ type UserController struct {
 // @Router			/api/v1/user/create [post]
 func (uController *UserController) Create(ginCtx *gin.Context) {
 
-	// sesStore := sessions.Default(ginCtx)
+	sesStore := sessions.Default(ginCtx)
 	response := responser.Response{Ctx: ginCtx}
 	//Is user exists?
 	isExists, _ := uController.Service.CheckByEmailAddress(uController.User.Email)
-	// fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
+	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
 
-	// currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
-	// fmt.Println("currentUserInfocurrentUserInfocurrentUserInfo-->", currentUserInfo)
+	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
+	fmt.Println("currentUserInfo000---:>", &currentUserInfo.Id, currentUserInfo.Id)
 
 	if isExists {
 
@@ -61,11 +62,11 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 	}
 
 	//No current user informations added to the Context
-	// if fetchCurrentUserInfo == nil {
-	// 	response.SetMessage(translator.GetMessage(ginCtx, "unknow_errors")).BadWithAbort()
+	if fetchCurrentUserInfo == nil {
+		response.SetMessage(translator.GetMessage(ginCtx, "unknow_errors")).BadWithAbort()
 
-	// 	return
-	// }
+		return
+	}
 
 	//Start e transaction
 	ctx := context.TODO()
@@ -94,6 +95,7 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 		uController.User.Id = primitive.NewObjectID()
 		uController.User.Ip = request.GetLocalIP()
 		uController.User.CreatedAt = time.Now()
+		uController.User.CreatedBy = currentUserInfo.Id
 
 		//hash the user's password
 		hashedPassword, passwordHashingError := bcrypt.GenerateFromPassword([]byte(uController.User.Password), bcrypt.DefaultCost)
@@ -104,7 +106,6 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 			dbSession.AbortTransaction(sc)
 			return fmt.Errorf("connot hash the password")
 		}
-		// uController.User.CreatedBy = currentUserInfo.Id
 
 		//Create new user
 		_, isUserInserted := uController.Service.CreateNewUser(sc, uController.User)
@@ -262,7 +263,7 @@ func (uController *UserController) Delete(ginCtx *gin.Context) {
 	isDeleted := uController.Service.DeleteUserById(&uController.UserDeleteModel)
 
 	if !isDeleted {
-		response.SetMessage(translator.GetMessage(ginCtx, "connot_delete_user")).BadWithAbort()
+		response.SetMessage(translator.GetMessage(ginCtx, "user_connot_delete")).BadWithAbort()
 		return
 	}
 

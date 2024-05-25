@@ -37,6 +37,7 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 		}
 
 		emailAddress, ok := claims["data"].(string)
+
 		if !ok || emailAddress == "" {
 			fmt.Println("Email address claim is missing or empty")
 			ctx.Next()
@@ -45,9 +46,8 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 
 		sesStore := sessions.Default(ctx)
 		oldUserInfos := sesStore.Get("CurrentUserInformations")
-		fmt.Println("user.oldUserInfos()", oldUserInfos)
 
-		if oldUserInfos == nil {
+		if oldUserInfos == nil && emailAddress == "" {
 			ctx.Next()
 			return
 		}

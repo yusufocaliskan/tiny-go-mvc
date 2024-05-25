@@ -42,6 +42,7 @@ func (u *UserModel) ToUserWithoutPassword() UserModel {
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
+		CreatedBy: u.CreatedBy,
 		Role:      u.Role,
 	}
 }

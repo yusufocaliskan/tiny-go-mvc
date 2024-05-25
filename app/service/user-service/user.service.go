@@ -24,6 +24,7 @@ type UserService struct {
 // Creeate a new user
 func (uSrv *UserService) CreateNewUser(ctx context.Context, user usermodel.UserModel) (interface{}, bool) {
 
+	fmt.Println("USer serviceL-->", user.CreatedBy)
 	coll := uSrv.Fw.Database.Instance.Collection(uSrv.Collection)
 	result, err := coll.InsertOne(ctx, user)
 	if err != nil {

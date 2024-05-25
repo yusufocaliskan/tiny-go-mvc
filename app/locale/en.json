@@ -1,34 +1,34 @@
 {
-  "user_not_found": {
-    "text": "User connot be found",
-    "code": "UF001"
-  },
-  "user_exists": {
-    "text": "The user has already existed.",
-    "code": "UF002"
-  },
-  "user_deleted": {
-    "text": "User deleted succesfully",
-    "code": "UF003"
-  },
-  "connot_delete_user": {
-    "text": "Connot delete the user",
-    "code": "UF004"
+  "reached_request_threshold": {
+    "code": "UF006",
+    "text": "Reached the request limit."
   },
   "success_message": {
-    "text": "Success!",
-    "code": "UF005"
-  },
-  "reached_request_threshold": {
-    "text": "Reached the request limit.",
-    "code": "UF006"
-  },
-  "unknow_errors": {
-    "text": "Unknow Error.",
-    "code": "UF007"
+    "code": "UF005",
+    "text": "Success!"
   },
   "transaction_failed": {
-    "text": "Transaction has been failed.",
-    "code": "UF008"
+    "code": "UF008",
+    "text": "Transaction has been failed."
+  },
+  "unknow_errors": {
+    "code": "UF007",
+    "text": "Unknow Error."
+  },
+  "user_connot_delete": {
+    "code": "UF004",
+    "text": "Connot delete the user"
+  },
+  "user_deleted": {
+    "code": "UF003",
+    "text": "User deleted succesfully"
+  },
+  "user_exists": {
+    "code": "UF002",
+    "text": "The user has already existed."
+  },
+  "user_not_found": {
+    "code": "UF001",
+    "text": "User connot be found"
   }
 }
