@@ -39,9 +39,10 @@ type UserController struct {
 // @ID				create-user
 // @Accept			json
 // @Produce		json
+// @Security		BearerAuth
 // @Success		200				{object}	usermodel.UserWithToken
-// @Param			id				query		string	true	"query params"
-// @Param			Accept-Language	header		string	false	"Language preference"
+// @Param			request			body		usermodel.UserSwaggerParams	true	"query params"
+// @Param			Accept-Language	header		string						false	"Language preference"
 //
 // @Router			/api/v1/user/create [post]
 func (uController *UserController) Create(ginCtx *gin.Context) {

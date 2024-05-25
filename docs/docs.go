@@ -147,8 +147,151 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/file-manager/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a user by given user id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Delete user",
+                "operationId": "delete-file",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserDeleteModel"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/translator.TranslationSwaggerResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file-manager/fetch-all": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get user details by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "summary": "List All Records",
+                "operationId": "fetch-all-files",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserWithoutPasswordModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file-manager/upload": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload file",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Upload file",
+                "operationId": "upload-file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language preference",
+                        "name": "Accept-Language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/filemanagermodel.FileModel"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates new user",
                 "consumes": [
                     "application/json"
@@ -163,11 +306,13 @@ const docTemplate = `{
                 "operationId": "create-user",
                 "parameters": [
                     {
-                        "type": "string",
                         "description": "query params",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usermodel.UserSwaggerParams"
+                        }
                     },
                     {
                         "type": "string",
@@ -392,6 +537,40 @@ const docTemplate = `{
                 }
             }
         },
+        "filemanagermodel.FileModel": {
+            "type": "object",
+            "required": [
+                "file"
+            ],
+            "properties": {
+                "file": {
+                    "$ref": "#/definitions/multipart.FileHeader"
+                }
+            }
+        },
+        "multipart.FileHeader": {
+            "type": "object",
+            "properties": {
+                "filename": {
+                    "type": "string"
+                },
+                "header": {
+                    "$ref": "#/definitions/textproto.MIMEHeader"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "textproto.MIMEHeader": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
         "time.Duration": {
             "type": "integer",
             "enum": [
@@ -505,6 +684,9 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
+                "profile_image": {
+                    "type": "string"
+                },
                 "role": {
                     "type": "string",
                     "enum": [
@@ -544,6 +726,9 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "example": "password123"
+                },
+                "profile_image": {
+                    "type": "string"
                 },
                 "role": {
                     "type": "string",
@@ -618,6 +803,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "profile_image": {
                     "type": "string"
                 },
                 "role": {

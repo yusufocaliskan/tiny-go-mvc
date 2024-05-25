@@ -1,34 +1,44 @@
 {
-  "reached_request_threshold": {
-    "code": "UF006",
-    "text": "Reached the request limit."
-  },
-  "success_message": {
-    "code": "UF005",
-    "text": "Success!"
-  },
-  "transaction_failed": {
-    "code": "UF008",
-    "text": "Transaction has been failed."
-  },
-  "unknow_errors": {
-    "code": "UF007",
-    "text": "Unknow Error."
-  },
-  "user_connot_delete": {
-    "code": "UF004",
-    "text": "Connot delete the user"
-  },
-  "user_deleted": {
-    "code": "UF003",
-    "text": "User deleted succesfully"
+  "user_not_found": {
+    "code": "UF001",
+    "text": "User connot be found"
   },
   "user_exists": {
     "code": "UF002",
     "text": "The user has already existed."
   },
-  "user_not_found": {
-    "code": "UF001",
-    "text": "User connot be found"
+  "user_deleted": {
+    "code": "UF003",
+    "text": "User deleted succesfully"
+  },
+  "user_connot_delete": {
+    "code": "UF004",
+    "text": "Connot delete the user"
+  },
+  "success_message": {
+    "code": "UF005",
+    "text": "Success!"
+  },
+  "reached_request_threshold": {
+    "code": "UF006",
+    "text": "Reached the request limit."
+  },
+  "unknow_errors": {
+    "code": "UF007",
+    "text": "Unknow Error."
+  },
+  "transaction_failed": {
+    "code": "UF008",
+    "text": "Transaction has been failed."
+  },
+
+  "file_connot_upload": {
+    "code": "UF009",
+    "text": "An unknow error occoured while uploading the file."
+  },
+
+  "file_uploaded_successfuly": {
+    "code": "UF0010",
+    "text": "The file uploaded"
   }
 }

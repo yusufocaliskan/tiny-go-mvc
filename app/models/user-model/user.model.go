@@ -14,6 +14,7 @@ type UserModel struct {
 
 	Email          string    `json:"email" validate:"required,email"`
 	Password       string    `json:"password,omitempty" validate:"required" bson:"-"`
+	ProfileImage   string    `json:"profile_image"  bson:"profile_image"`
 	HashedPassword string    `json:"hashed_password" bson:"hashed_password"`
 	CreatedAt      time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt      time.Time `bson:"updated_at" json:"updated_at"`
@@ -29,8 +30,10 @@ type UserWithoutPasswordModel struct {
 	UserName  string             `json:"username" validate:"required"`
 	Email     string             `json:"email" validate:"required,email"`
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Role      string             `json:"role" validate:"required,oneof=admin moderator user"`
+
+	ProfileImage string    `json:"profile_image"  bson:"profile_image"`
+	UpdatedAt    time.Time `bson:"updated_at" json:"updated_at"`
+	Role         string    `json:"role" validate:"required,oneof=admin moderator user"`
 }
 
 // Remove password.
@@ -89,10 +92,11 @@ type UserWithToken struct {
 }
 
 type UserSwaggerParams struct {
-	Email    string `json:"email" binding:"required" example:"user@example.com"`
-	Password string `json:"password" binding:"required" example:"password123"`
-	Name     string `json:"name" example:"johndoe"`
-	FullName string `json:"fullname" example:"John Doe"`
-	UserName string `json:"username" example:"johndoe"`
-	Role     string `json:"role" validate:"required,oneof=admin moderator user"`
+	Email        string `json:"email" binding:"required" example:"user@example.com"`
+	Password     string `json:"password" binding:"required" example:"password123"`
+	Name         string `json:"name" example:"johndoe"`
+	FullName     string `json:"fullname" example:"John Doe"`
+	UserName     string `json:"username" example:"johndoe"`
+	ProfileImage string `json:"profile_image"`
+	Role         string `json:"role" validate:"required,oneof=admin moderator user"`
 }

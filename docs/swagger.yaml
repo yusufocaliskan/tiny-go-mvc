@@ -17,6 +17,28 @@ definitions:
     required:
     - refresh_token
     type: object
+  filemanagermodel.FileModel:
+    properties:
+      file:
+        $ref: '#/definitions/multipart.FileHeader'
+    required:
+    - file
+    type: object
+  multipart.FileHeader:
+    properties:
+      filename:
+        type: string
+      header:
+        $ref: '#/definitions/textproto.MIMEHeader'
+      size:
+        type: integer
+    type: object
+  textproto.MIMEHeader:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
   time.Duration:
     enum:
     - -9223372036854775808
@@ -90,6 +112,8 @@ definitions:
         type: string
       password:
         type: string
+      profile_image:
+        type: string
       role:
         enum:
         - admin
@@ -119,6 +143,8 @@ definitions:
         type: string
       password:
         example: password123
+        type: string
+      profile_image:
         type: string
       role:
         enum:
@@ -171,6 +197,8 @@ definitions:
       fullname:
         type: string
       id:
+        type: string
+      profile_image:
         type: string
       role:
         enum:
@@ -279,16 +307,48 @@ paths:
       summary: Refresh Token
       tags:
       - Auth
-  /api/v1/user/create:
-    post:
+  /api/v1/file-manager/delete:
+    delete:
       consumes:
       - application/json
-      description: Creates new user
-      operationId: create-user
+      description: Deletes a user by given user id
+      operationId: delete-file
       parameters:
       - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserDeleteModel'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translator.TranslationSwaggerResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - Files
+  /api/v1/file-manager/fetch-all:
+    get:
+      description: Get user details by id
+      operationId: fetch-all-files
+      parameters:
+      - description: page number
         in: query
-        name: id
+        name: page
+        required: true
+        type: string
+      - description: limit number
+        in: query
+        name: limit
         required: true
         type: string
       - description: Language preference
@@ -301,7 +361,66 @@ paths:
         "200":
           description: OK
           schema:
+            $ref: '#/definitions/usermodel.UserWithoutPasswordModel'
+      security:
+      - BearerAuth: []
+      summary: List All Records
+      tags:
+      - Files
+  /api/v1/file-manager/upload:
+    post:
+      consumes:
+      - application/json
+      description: Upload file
+      operationId: upload-file
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/filemanagermodel.FileModel'
+      security:
+      - BearerAuth: []
+      summary: Upload file
+      tags:
+      - Files
+  /api/v1/user/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates new user
+      operationId: create-user
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usermodel.UserSwaggerParams'
+      - description: Language preference
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
             $ref: '#/definitions/usermodel.UserWithToken'
+      security:
+      - BearerAuth: []
       summary: New user
       tags:
       - Users

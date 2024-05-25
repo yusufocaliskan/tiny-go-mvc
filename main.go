@@ -111,6 +111,8 @@ func LoadMiddleWares() {
 		ReferrerPolicy:        "strict-origin-when-cross-origin",
 	})
 
+	fw.GinServer.Engine.Static("/storage", "./storage")
+
 	//Set the secure host
 	fw.GinServer.Engine.Use(secureConfigs)
 
@@ -135,6 +137,7 @@ func LoadV1Routes() {
 	v1routes.SetAuthRoutes(&fw)
 	v1routes.SetUserRoutes(&fw)
 	v1routes.SetSwaggerRoute(&fw)
+	v1routes.SetFileManagerRoutes(&fw)
 
 	//(..., call others here)
 }
