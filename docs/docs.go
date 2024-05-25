@@ -44,7 +44,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/authmodel.AuthRefreshTokenModel"
+                            "$ref": "#/definitions/authmodel.AuthLoginModel"
                         }
                     },
                     {
@@ -66,6 +66,11 @@ const docTemplate = `{
         },
         "/api/v1/auth/logout": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Sing out",
                 "consumes": [
                     "application/json"
@@ -79,15 +84,6 @@ const docTemplate = `{
                 "summary": "Logout",
                 "operationId": "sing-out",
                 "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/authmodel.AuthRefreshTokenModel"
-                        }
-                    },
                     {
                         "type": "string",
                         "description": "Language preference",
@@ -107,6 +103,11 @@ const docTemplate = `{
         },
         "/api/v1/auth/refreshToken": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Generating new accessToken using refreshToken",
                 "consumes": [
                     "application/json"
@@ -364,6 +365,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "authmodel.AuthLoginModel": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "authmodel.AuthRefreshTokenModel": {
             "type": "object",
             "required": [

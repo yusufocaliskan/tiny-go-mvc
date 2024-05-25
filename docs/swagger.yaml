@@ -1,4 +1,14 @@
 definitions:
+  authmodel.AuthLoginModel:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   authmodel.AuthRefreshTokenModel:
     properties:
       refresh_token:
@@ -202,7 +212,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/authmodel.AuthRefreshTokenModel'
+          $ref: '#/definitions/authmodel.AuthLoginModel'
       - description: Language preference
         in: header
         name: Accept-Language
@@ -224,12 +234,6 @@ paths:
       description: Sing out
       operationId: sing-out
       parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/authmodel.AuthRefreshTokenModel'
       - description: Language preference
         in: header
         name: Accept-Language
@@ -241,6 +245,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/translator.TranslationSwaggerResponse'
+      security:
+      - BearerAuth: []
       summary: Logout
       tags:
       - Auth
@@ -268,6 +274,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/usermodel.UserWithToken'
+      security:
+      - BearerAuth: []
       summary: Refresh Token
       tags:
       - Auth

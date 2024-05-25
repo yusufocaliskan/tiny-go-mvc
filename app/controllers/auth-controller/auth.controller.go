@@ -21,17 +21,17 @@ type AuthController struct {
 	AuthRefreshTokenModel authmodel.AuthRefreshTokenModel
 }
 
-// @Tags			Auth
-// @Summary		Login
-// @Description	Sing-in With Access Token
-// @ID				access-token-login
-// @Accept			json
-// @Produce		json
-// @Success		200				{object}	usermodel.UserWithToken
-// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-// @Param			Accept-Language	header		string							false	"Language preference"
+//	@Tags			Auth
+//	@Summary		Login
+//	@Description	Sing-in With Access Token
+//	@ID				access-token-login
+//	@Accept			json
+//	@Produce		json
+//	@Success		200				{object}	usermodel.UserWithToken
+//	@Param			request			body		authmodel.AuthLoginModel	true	"query params"
+//	@Param			Accept-Language	header		string						false	"Language preference"
 //
-// @Router			/api/v1/auth/login [post]
+//	@Router			/api/v1/auth/login [post]
 func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -68,17 +68,17 @@ func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
 
 }
 
-// @Tags			Auth
-// @Summary		Logout
-// @Description	Sing out
-// @ID				sing-out
-// @Accept			json
-// @Produce		json
-// @Success		200				{object}	translator.TranslationSwaggerResponse
-// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-// @Param			Accept-Language	header		string							false	"Language preference"
+//	@Tags			Auth
+//	@Summary		Logout
+//	@Description	Sing out
+//	@ID				sing-out
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200				{object}	translator.TranslationSwaggerResponse
+//	@Param			Accept-Language	header		string	false	"Language preference"
 //
-// @Router			/api/v1/auth/logout [post]
+//	@Router			/api/v1/auth/logout [post]
 func (authCtrl *AuthController) Logout(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
@@ -90,17 +90,18 @@ func (authCtrl *AuthController) Logout(ginCtx *gin.Context) {
 
 }
 
-// @Tags			Auth
-// @Summary		Refresh Token
-// @Description	Generating new accessToken using refreshToken
-// @ID				refresh-token
-// @Accept			json
-// @Produce		json
-// @Success		200				{object}	usermodel.UserWithToken
-// @Param			request			body		authmodel.AuthRefreshTokenModel	true	"query params"
-// @Param			Accept-Language	header		string							false	"Language preference"
+//	@Tags			Auth
+//	@Summary		Refresh Token
+//	@Description	Generating new accessToken using refreshToken
+//	@ID				refresh-token
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	usermodel.UserWithToken
+//	@Security		BearerAuth
+//	@Param			request			body	authmodel.AuthRefreshTokenModel	true	"query params"
+//	@Param			Accept-Language	header	string							false	"Language preference"
 //
-// @Router			/api/v1/auth/refreshToken [post]
+//	@Router			/api/v1/auth/refreshToken [post]
 func (authCtrl *AuthController) GenerateNewAccessTokenByRefreshToken(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
