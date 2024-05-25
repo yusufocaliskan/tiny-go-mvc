@@ -8,6 +8,7 @@ import (
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	authservice "github.com/gptverse/init/app/service/auth-service"
 	userservice "github.com/gptverse/init/app/service/user-service"
+	"github.com/gptverse/init/app/utils"
 	"github.com/gptverse/init/framework/http/responser"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
 	"github.com/gptverse/init/framework/translator"
@@ -72,25 +73,10 @@ func (authCtrl *AuthController) Logout(ginCtx *gin.Context) {
 
 	response := responser.Response{Ctx: ginCtx}
 
-	user, isExists := authCtrl.UserService.GetUserByEmailAndPassword(authCtrl.AuthLoginModel.Email, authCtrl.AuthLoginModel.Password)
+	currentUser := utils.GetCurrentUserInformations(ginCtx)
 
-	if !isExists {
-		log.Printf("Failed login attempt for email: %s", authCtrl.AuthLoginModel.Email)
-
-		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
-		return
-	}
-	token := tinytoken.TinyToken{
-		SecretKey: authCtrl.AuthService.Fw.Configs.AUTH_TOKEN_SECRET_KEY,
-	}
-
-	token.GenerateAccessTokens(authCtrl.AuthLoginModel.Email)
-	payload := usermodel.UserWithToken{
-		Token: token.Data,
-		User:  user.ToUserWithoutPassword(),
-	}
-
-	response.Payload(payload).Success()
+	authCtrl.AuthService.SetTokenStatus("passive", currentUser.Email)
+	response.Payload(currentUser).Success()
 
 }
 

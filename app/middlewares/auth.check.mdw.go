@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	usermodel "github.com/gptverse/init/app/models/user-model"
+	authservice "github.com/gptverse/init/app/service/auth-service"
 	"github.com/gptverse/init/config"
 	"github.com/gptverse/init/framework"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
@@ -15,7 +17,7 @@ import (
 
 // Checking if the coming data valid
 // AuthCheck validates the Authorization header token.
-func AuthCheck(fw *framework.Framework) gin.HandlerFunc {
+func AuthCheck(fw *framework.Framework, authService *authservice.AuthService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var secretKey = fw.Configs.AUTH_TOKEN_SECRET_KEY
 		authHeader := ctx.GetHeader("Authorization")
@@ -40,8 +42,26 @@ func AuthCheck(fw *framework.Framework) gin.HandlerFunc {
 			return
 		}
 
+		//Fetch user token from database
+		emailAddress := claims["data"].(string)
+		_, tokenInDatabase := authService.GetToken(emailAddress)
+		if tokenInDatabase != nil {
+
+			if tokenInDatabase.Status == "passive" {
+
+				ctx.AbortWithStatusJSON(401, gin.H{"error": "Invalid or expired token"})
+				return
+			}
+
+			if isExpired(time.Now(), tokenInDatabase.Token.AccessToken.ExpiryTime) {
+
+				ctx.AbortWithStatusJSON(401, gin.H{"error": "Invalid or expired token"})
+			}
+
+		}
+
 		//Check Permissions
-		CheckPermissions(fw, ctx, claims["data"].(string))
+		CheckPermissions(fw, ctx, emailAddress)
 
 		ctx.Set("claim", claims["data"])
 		ctx.Next()
@@ -99,4 +119,9 @@ func CheckPermissions(fw *framework.Framework, ctx *gin.Context, emailAddress st
 
 	// Proceed to the next handler
 	ctx.Next()
+}
+
+func isExpired(issueTime time.Time, duration time.Duration) bool {
+	expirationTime := issueTime.Add(duration)
+	return expirationTime.Before(time.Now())
 }

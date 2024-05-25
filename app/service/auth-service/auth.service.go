@@ -5,11 +5,10 @@ import (
 	"errors"
 	"time"
 
-	usermodel "github.com/gptverse/init/app/models/user-model"
+	authmodel "github.com/gptverse/init/app/models/auth-model"
 	"github.com/gptverse/init/framework"
 	tinytoken "github.com/gptverse/init/framework/tiny-token"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -20,14 +19,14 @@ type AuthService struct {
 	Fw         *framework.Framework
 }
 
-func (Srv *AuthService) SaveToken(ctx context.Context, token *tinytoken.TinyTokenData, userId primitive.ObjectID, status string) (bool, int64) {
+func (Srv *AuthService) SaveToken(ctx context.Context, token *tinytoken.TinyTokenData, email string, status string) (bool, int64) {
 
-	filter := bson.M{"userId": userId}
+	filter := bson.M{"email": email}
 
 	updateData := bson.M{
 		"$set": bson.M{
 			"token":      token,
-			"userId":     userId,
+			"email":      email,
 			"status":     status,
 			"updated_at": time.Now(),
 		},
@@ -44,15 +43,37 @@ func (Srv *AuthService) SaveToken(ctx context.Context, token *tinytoken.TinyToke
 	return true, result.ModifiedCount
 }
 
+func (Srv *AuthService) SetTokenStatus(status string, email string) (bool, int64) {
+
+	ctx := context.Background()
+	filter := bson.M{"email": email}
+
+	updateData := bson.M{
+		"$set": bson.M{
+			"status":     status,
+			"updated_at": time.Now(),
+		},
+	}
+
+	coll := Srv.Fw.Database.Instance.Collection(Srv.Collection)
+
+	result, err := coll.UpdateOne(ctx, filter, updateData)
+	if err != nil {
+		return false, 0
+	}
+
+	return true, result.ModifiedCount
+}
+
 // Check if user exists by given email address
-func (Srv AuthService) GetToken(email string) (bool, *usermodel.UserModel) {
+func (Srv AuthService) GetToken(email string) (bool, *authmodel.AuthUserTokenModel) {
 
 	ctx := context.Background()
 
 	coll := Srv.Fw.Database.Instance.Collection(Srv.Collection)
 	result := coll.FindOne(ctx, bson.M{"email": email})
 
-	var user usermodel.UserModel
+	var user authmodel.AuthUserTokenModel
 	result.Decode(&user)
 
 	//User not found

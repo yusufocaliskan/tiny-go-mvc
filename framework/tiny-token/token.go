@@ -9,7 +9,7 @@ import (
 )
 
 type SingleToken struct {
-	ExpiryTime time.Duration `json:"expiry_time" bson:"expiry_time" example:"86400000000000"`
+	ExpiryTime time.Duration `json:"expiry_time" bson:"expiry_time" example:"864000"`
 	BearerKey  string        `json:"key" bson:"bearer_key"`
 }
 
@@ -55,6 +55,7 @@ func (tToken *TinyToken) AccessTokenGenerator(data interface{}) *SingleToken {
 
 	expiryTime := config.AccessTokenExpiryTime
 	token, _ := tToken.CreateToken(data, expiryTime)
+
 	return &SingleToken{
 		BearerKey:  token,
 		ExpiryTime: expiryTime,

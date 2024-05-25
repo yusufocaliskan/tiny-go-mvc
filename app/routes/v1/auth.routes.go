@@ -26,10 +26,10 @@ func SetAuthRoutes(fw *framework.Framework) {
 
 		v1AuthRoutes.POST("/logout",
 			// middlewares.RateLimeter(),
-			middlewares.ValidateAndBind(&authController.AuthLoginModel),
-			middlewares.AuthCheck(fw),
+			// middlewares.ValidateAndBind(&authController.AuthLoginModel),
+			middlewares.AuthCheck(fw, authService),
 
-			authController.LoginWithAccessToken)
+			authController.Logout)
 
 		//Refrsh token
 		v1AuthRoutes.POST("/refreshToken/",

@@ -62,6 +62,7 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 
 		// Set the user information in the session
 		sesStore.Set("CurrentUserInformations", user)
+		sesStore.Set("BearerToken", bearerToken)
 		if err := sesStore.Save(); err != nil {
 			fmt.Println("Failed to save session:", err)
 		}

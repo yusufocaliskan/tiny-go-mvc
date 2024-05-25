@@ -291,13 +291,18 @@ const docTemplate = `{
                 "operationId": "fetch-all-users",
                 "parameters": [
                     {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/usermodel.UserFilterModel"
-                        }
+                        "type": "string",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -403,7 +408,7 @@ const docTemplate = `{
                             "$ref": "#/definitions/time.Duration"
                         }
                     ],
-                    "example": 86400000000000
+                    "example": 864000
                 },
                 "key": {
                     "type": "string"
@@ -448,17 +453,6 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "string"
-                }
-            }
-        },
-        "usermodel.UserFilterModel": {
-            "type": "object",
-            "properties": {
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
                 }
             }
         },

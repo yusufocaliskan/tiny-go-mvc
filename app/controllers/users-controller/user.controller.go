@@ -114,13 +114,14 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 			dbSession.AbortTransaction(sc)
 			return fmt.Errorf("connot create the user")
 		}
-		// //save the token
-		// isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Id, "active")
 
-		// if !isTokenSaved {
-		// 	dbSession.AbortTransaction(sc)
-		// 	return err
-		// }
+		//save the token
+		isTokenSaved, _ := uController.AuthService.SaveToken(sc, &token.Data, uController.User.Email, "active")
+
+		if !isTokenSaved {
+			dbSession.AbortTransaction(sc)
+			return err
+		}
 
 		err = dbSession.CommitTransaction(sc)
 		if err != nil {
@@ -222,8 +223,9 @@ func (uController *UserController) Fetch(ginCtx *gin.Context) {
 // @Produce		json
 // @Security		BearerAuth
 // @Success		200				{object}	usermodel.UserWithoutPasswordModel
-// @Param			request			body		usermodel.UserFilterModel	true	"query params"
-// @Param			Accept-Language	header		string						false	"Language preference"
+// @Param			page			query		string	true	"page number"	int
+// @Param			limit			query		string	true	"limit number"	int
+// @Param			Accept-Language	header		string	false	"Language preference"
 //
 // @Router			/api/v1/user/fetch-all [GET]
 func (uController *UserController) FetchAll(ginCtx *gin.Context) {

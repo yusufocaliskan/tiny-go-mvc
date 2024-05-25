@@ -32,7 +32,7 @@ definitions:
       expiry_time:
         allOf:
         - $ref: '#/definitions/time.Duration'
-        example: 86400000000000
+        example: 864000
       key:
         type: string
     type: object
@@ -61,13 +61,6 @@ definitions:
         type: string
     required:
     - id
-    type: object
-  usermodel.UserFilterModel:
-    properties:
-      limit:
-        type: integer
-      page:
-        type: integer
     type: object
   usermodel.UserModel:
     properties:
@@ -365,12 +358,16 @@ paths:
       description: Get user details by id
       operationId: fetch-all-users
       parameters:
-      - description: query params
-        in: body
-        name: request
+      - description: page number
+        in: query
+        name: page
         required: true
-        schema:
-          $ref: '#/definitions/usermodel.UserFilterModel'
+        type: string
+      - description: limit number
+        in: query
+        name: limit
+        required: true
+        type: string
       - description: Language preference
         in: header
         name: Accept-Language
