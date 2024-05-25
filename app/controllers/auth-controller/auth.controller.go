@@ -49,6 +49,16 @@ func (authCtrl *AuthController) LoginWithAccessToken(ginCtx *gin.Context) {
 	}
 
 	token.GenerateAccessTokens(authCtrl.AuthLoginModel.Email)
+
+	// Save the generated token
+
+	isTokenSaved, _ := authCtrl.AuthService.SaveToken(ginCtx, &token.Data, authCtrl.AuthLoginModel.Email, "active")
+
+	if !isTokenSaved {
+		response.SetMessage(translator.GetMessage(ginCtx, "user_not_found")).BadWithAbort()
+		return
+	}
+
 	payload := usermodel.UserWithToken{
 		Token: token.Data,
 		User:  user.ToUserWithoutPassword(),
@@ -76,7 +86,7 @@ func (authCtrl *AuthController) Logout(ginCtx *gin.Context) {
 	currentUser := utils.GetCurrentUserInformations(ginCtx)
 
 	authCtrl.AuthService.SetTokenStatus("passive", currentUser.Email)
-	response.Payload(currentUser).Success()
+	response.Success()
 
 }
 
