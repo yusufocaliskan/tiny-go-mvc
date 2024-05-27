@@ -1,3 +1,5 @@
+![Main Interface](ss.png)
+
 # Introduction ⚓️
 
 Welcome to our lightweight and fun Go framework built on the MVC (Model-View-Controller) architecture. This framework is designed to help developers quickly build web applications with a clean and maintainable structure, ensuring an enjoyable development experience.
