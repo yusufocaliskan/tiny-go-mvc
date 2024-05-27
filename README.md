@@ -1,4 +1,4 @@
-![Main Interface](ss.png)
+![Main Interface](ss1.png)
 
 # Introduction ⚓️
 
