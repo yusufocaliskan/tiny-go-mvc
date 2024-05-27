@@ -1,8 +1,8 @@
-# Introduction
+# Introduction ⚓️
 
 Welcome to our lightweight and fun Go framework built on the MVC (Model-View-Controller) architecture. This framework is designed to help developers quickly build web applications with a clean and maintainable structure, ensuring an enjoyable development experience.
 
-## Features
+## Features 🚀
 
 - MVC Architecture: Maintain a clean separation of concerns in your application.
 - Hot-Reloading: Develop faster with real-time code reloading using Fresh.
@@ -10,7 +10,7 @@ Welcome to our lightweight and fun Go framework built on the MVC (Model-View-Con
 - Swagger Integration: Automatically generate and view your API documentation.
 - gRPC Support: Build high-performance microservices with gRPC. (Comming Soon)
 
-## Instllation
+## Instllation 🛠️
 
 To get started with the framework, you have several options:
 
@@ -70,3 +70,15 @@ The framework includes integrated Swagger support for API documentation. You can
 <http://localhost:8080/swagger/index.html>
 
 This makes it easy to explore and test your API endpoints interactively.
+
+## Contributing to Lite Go Core
+
+I'm excited to have you contribute to Tiny Go Mvc! Your help in improving this lightweight and fun Go framework is invaluable. Here’s how you can get involved:
+
+### Reporting Issues
+
+If you find a bug or have a suggestion, please create an issue on our GitHub repository. Be sure to include as much detail as possible, including steps to reproduce the issue if applicable.
+
+### Improving Documentation
+
+We strive to keep our documentation clear and comprehensive. If you notice any gaps or areas that could be improved, please feel free to submit a pull request or suggest changes.
