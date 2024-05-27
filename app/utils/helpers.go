@@ -24,3 +24,10 @@ func GetCurrentUserInformations(ctx *gin.Context) *usermodel.UserModel {
 	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
 	return currentUserInfo
 }
+
+func ClearCurrentUserInformations(ctx *gin.Context) {
+	sesStore := sessions.Default(ctx)
+	sesStore.Delete("CurrentUserInformations")
+	sesStore.Save()
+
+}

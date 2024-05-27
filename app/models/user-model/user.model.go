@@ -24,19 +24,7 @@ type UserModel struct {
 	CreatedBy primitive.ObjectID `json:"created_by" bson:"created_by"`
 }
 
-type UserWithoutPasswordModel struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	FullName  string             `json:"fullname"`
-	UserName  string             `json:"username" validate:"required"`
-	Email     string             `json:"email" validate:"required,email"`
-	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
-
-	ProfileImage string    `json:"profile_image"  bson:"profile_image"`
-	UpdatedAt    time.Time `bson:"updated_at" json:"updated_at"`
-	Role         string    `json:"role" validate:"required,oneof=admin moderator user"`
-}
-
-// Remove password.
+// Remove the  password.
 func (u *UserModel) ToUserWithoutPassword() UserModel {
 	return UserModel{
 		Id:        u.Id,
@@ -50,6 +38,18 @@ func (u *UserModel) ToUserWithoutPassword() UserModel {
 	}
 }
 
+type UserWithoutPasswordModel struct {
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	FullName  string             `json:"fullname"`
+	UserName  string             `json:"username" validate:"required"`
+	Email     string             `json:"email" validate:"required,email"`
+	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
+
+	ProfileImage string    `json:"profile_image"  bson:"profile_image"`
+	UpdatedAt    time.Time `bson:"updated_at" json:"updated_at"`
+	Role         string    `json:"role" validate:"required,oneof=admin moderator user"`
+}
+
 type UserUpdateModel struct {
 	Id        string    `bson:"_id,omitempty" json:"id"`
 	FullName  string    `json:"fullname" bson:"fullname"`
@@ -58,6 +58,7 @@ type UserUpdateModel struct {
 	Role      string    `json:"role" validate:"required,oneof=admin moderator user"`
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
+
 type UserUpdateSwaggerModel struct {
 	Id       string `bson:"_id,omitempty" json:"id"`
 	FullName string `json:"fullname" bson:"fullname"`

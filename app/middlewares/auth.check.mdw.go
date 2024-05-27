@@ -43,6 +43,7 @@ func AuthCheck(fw *framework.Framework, authService *authservice.AuthService) gi
 		}
 
 		//Fetch user token from database
+		///todo: cache it
 		emailAddress := claims["data"].(string)
 		_, tokenInDatabase := authService.GetToken(emailAddress)
 		if tokenInDatabase != nil {

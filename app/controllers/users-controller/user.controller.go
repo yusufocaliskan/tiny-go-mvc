@@ -54,10 +54,8 @@ func (uController *UserController) Create(ginCtx *gin.Context) {
 	fetchCurrentUserInfo := sesStore.Get("CurrentUserInformations")
 
 	currentUserInfo, _ := fetchCurrentUserInfo.(*usermodel.UserModel)
-	fmt.Println("currentUserInfo000---:>", &currentUserInfo.Id, currentUserInfo.Id)
 
 	if isExists {
-
 		response.SetMessage(translator.GetMessage(ginCtx, "user_exists")).BadWithAbort()
 		return
 	}

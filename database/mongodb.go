@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -23,7 +24,9 @@ func (mongDb *MongoDatabase) Connect() {
 
 	fmt.Println("------------ {Establising Database Connection} ------------ ")
 
-	ctx := context.Background()
+	fmt.Println("Database mongDb.DbUri:--> ", mongDb.DbUri)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
 	//Set auth
 	// authCredential := options.Credential{
@@ -34,7 +37,6 @@ func (mongDb *MongoDatabase) Connect() {
 	//Database connection
 	clientOptions := options.Client().ApplyURI(mongDb.DbUri)
 	client, err := mongo.Connect(ctx, clientOptions)
-	// defer client.Disconnect(context.Background())
 
 	if err != nil {
 		log.Fatal(err)
@@ -42,14 +44,8 @@ func (mongDb *MongoDatabase) Connect() {
 	// Check the connection
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to ping MongoDB: %v", err)
 	}
-
-	//check if the database accessable
-	// isConnected := client.Ping(context.Background(), nil)
-	// if isConnected != nil {
-	// 	log.Fatal("Failed to Ping database", isConnected)
-	// }
 
 	db := client.Database(mongDb.DBName)
 

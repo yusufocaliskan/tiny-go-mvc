@@ -40,7 +40,7 @@ var fw = framework.Framework{}
 
 // Loadd the configuratins
 var ldr = loader.Loader{}
-var confs = ldr.LoadEnvironmetns()
+var confs = ldr.LoadEnvironments()
 
 func main() {
 
@@ -50,10 +50,6 @@ func main() {
 
 // Workflow of the app..
 func InitialTheTinyGoMvc() {
-
-	// translation := translator.LoadErrorTextFile()
-
-	// print("translation: ", translator.GetMessage(translation,"user_not_found"))
 
 	//1. Make database connection ad it to ginServer
 	MongoDBConnection()

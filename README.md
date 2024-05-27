@@ -14,6 +14,16 @@ The framework also support hot-reload using fresh, use the below codes.
 
 `make hot`
 
+To test units, run the docker-compose.dev. (Remember, testing units is a bit tricky, and you might encounter errors.)
+
+`make test-all`
+
+Or
+
+```shell
+docker-compose -f docker-compose.dev.yml exec gptv_backend go test -v ./...
+```
+
 Every time you run **make hot** the swagger files will be regenared
 
 ## Docker
