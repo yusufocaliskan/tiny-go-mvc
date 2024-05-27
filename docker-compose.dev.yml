@@ -10,7 +10,7 @@ services:
       - ./storage/mongodb_data:/data/db
       - ./config/mongo-config:/data/configdb
     networks:
-      - mongo-net
+      - gpt_network
 
   mongosetup:
     image: mongo
@@ -29,7 +29,7 @@ services:
         '/scripts/init.sh',
       ]
     networks:
-      - mongo-net
+      - gpt_network
 
   gptv_backend:
     build:
@@ -45,7 +45,7 @@ services:
       - redis
       - mongosetup
     networks:
-      - mongo-net
+      - gpt_network
     env_file:
       - ./config/dev.env
 
@@ -54,11 +54,11 @@ services:
     ports:
       - 6379:6379
     networks:
-      - mongo-net
+      - gpt_network
 
 volumes:
   mongodb_data:
   mongodb_config:
 
 networks:
-  mongo-net:
+  gpt_network:

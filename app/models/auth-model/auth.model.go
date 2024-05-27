@@ -24,3 +24,8 @@ type AuthUserTokenModel struct {
 type AuthModel struct {
 	tinytoken.TinyToken
 }
+
+type SessionModel struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password,omitempty" validate:"required"`
+}

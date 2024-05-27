@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gptverse/init/app/middlewares"
+	authmodel "github.com/gptverse/init/app/models/auth-model"
 	usermodel "github.com/gptverse/init/app/models/user-model"
 	v1routes "github.com/gptverse/init/app/routes/v1"
 	"github.com/gptverse/init/config"
@@ -74,6 +75,7 @@ func InitialTheTinyGoMvc() {
 func BuildGinServer() {
 
 	ginServer := server.GinServer{}
+
 	//Create the server
 	ginServer.CreateServer(confs.GIN_SERVER_PORT)
 
@@ -122,10 +124,13 @@ func CreateSessionStore() {
 
 	//Create session store using redis
 	redisStore, _ := redis.NewStore(10, "tcp", confs.REDIS_DRIVER, "", []byte("secret"))
-	fw.GinServer.Engine.Use(sessions.Sessions(confs.SESSION_KEY_NAME, redisStore))
 
 	// Register the types with gob
 	gob.Register(usermodel.UserModel{})
+	gob.Register(authmodel.SessionModel{}) //for testing
+
+	fw.GinServer.Engine.Use(sessions.Sessions(confs.SESSION_KEY_NAME, redisStore))
+
 }
 
 // Loads the v1 routes
