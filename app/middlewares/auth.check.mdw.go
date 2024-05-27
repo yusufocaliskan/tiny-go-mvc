@@ -23,7 +23,7 @@ func AuthCheck(fw *framework.Framework, authService *authservice.AuthService) gi
 		authHeader := ctx.GetHeader("Authorization")
 
 		if authHeader == "" {
-			ctx.AbortWithStatusJSON(401, gin.H{"error": "Authorization header is required"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
 			return
 		}
 

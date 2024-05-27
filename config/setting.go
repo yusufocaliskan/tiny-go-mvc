@@ -14,7 +14,7 @@ const (
 )
 
 var AcceptableLangs = []string{"en", "tr"}
-var AllowedHost = []string{"localhost:8080"}
+var AllowedHost = []string{"localhost:8080", "localhost"}
 
 var SSLHost = ""
 

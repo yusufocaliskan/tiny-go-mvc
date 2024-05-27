@@ -17,6 +17,8 @@ func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
 		var secretKey = fw.Configs.AUTH_TOKEN_SECRET_KEY
 		authHeader := ctx.GetHeader("Authorization")
 
+		fmt.Println("---ctx.Request.Host", ctx.Request.Host)
+
 		bearerToken := strings.TrimPrefix(authHeader, "Bearer ")
 
 		// Check if the token is provided
