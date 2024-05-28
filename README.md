@@ -73,7 +73,7 @@ The framework includes integrated Swagger support for API documentation. You can
 
 This makes it easy to explore and test your API endpoints interactively.
 
-## Contributing to Lite Go Core
+## Contributing to Tiny Go Mvc
 
 I'm excited to have you contribute to Tiny Go Mvc! Your help in improving this lightweight and fun Go framework is invaluable. Here’s how you can get involved:
 
