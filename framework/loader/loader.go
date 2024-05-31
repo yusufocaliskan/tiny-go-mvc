@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gptverse/init/config"
+	"github.com/yusufocaliskan/tiny-go-mvc/config"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )

@@ -11,10 +11,10 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	authmodel "github.com/gptverse/init/app/models/auth-model"
-	userservice "github.com/gptverse/init/app/service/user-service"
-	"github.com/gptverse/init/database"
-	"github.com/gptverse/init/framework/loader"
+	authmodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/auth-model"
+	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/database"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/loader"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

@@ -1,6 +1,6 @@
 package tinyerror
 
-import "github.com/gptverse/init/framework/translator"
+import "github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 
 // Create a custom error message
 func New(err *translator.TranslationEntry) *translator.TranslationEntry {

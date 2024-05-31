@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	authmodel "github.com/gptverse/init/app/models/auth-model"
-	"github.com/gptverse/init/framework"
-	tinytoken "github.com/gptverse/init/framework/tiny-token"
+	authmodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/auth-model"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

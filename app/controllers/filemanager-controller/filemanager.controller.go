@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	filemanagermodel "github.com/gptverse/init/app/models/filemanager-model"
-	filemanagerservice "github.com/gptverse/init/app/service/filemanager-service"
-	"github.com/gptverse/init/app/utils"
-	"github.com/gptverse/init/framework/http/responser"
-	"github.com/gptverse/init/framework/translator"
+	filemanagermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/filemanager-model"
+	filemanagerservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/filemanager-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/utils"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 type FileManagerController struct {

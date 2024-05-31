@@ -1,7 +1,7 @@
 package v1routes
 
 import (
-	"github.com/gptverse/init/framework"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

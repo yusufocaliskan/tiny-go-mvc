@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	filemanagermodel "github.com/gptverse/init/app/models/filemanager-model"
-	"github.com/gptverse/init/framework"
+	filemanagermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/filemanager-model"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
 // check auth.route

@@ -4,14 +4,14 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	authmodel "github.com/gptverse/init/app/models/auth-model"
-	usermodel "github.com/gptverse/init/app/models/user-model"
-	authservice "github.com/gptverse/init/app/service/auth-service"
-	userservice "github.com/gptverse/init/app/service/user-service"
-	"github.com/gptverse/init/app/utils"
-	"github.com/gptverse/init/framework/http/responser"
-	tinytoken "github.com/gptverse/init/framework/tiny-token"
-	"github.com/gptverse/init/framework/translator"
+	authmodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/auth-model"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
+	authservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/auth-service"
+	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/utils"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
+	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 type AuthController struct {

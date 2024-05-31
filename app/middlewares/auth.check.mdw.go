@@ -8,11 +8,11 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	usermodel "github.com/gptverse/init/app/models/user-model"
-	authservice "github.com/gptverse/init/app/service/auth-service"
-	"github.com/gptverse/init/config"
-	"github.com/gptverse/init/framework"
-	tinytoken "github.com/gptverse/init/framework/tiny-token"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
+	authservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/auth-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/config"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 )
 
 // Checking if the coming data valid

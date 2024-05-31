@@ -3,7 +3,7 @@ package utils
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	usermodel "github.com/gptverse/init/app/models/user-model"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
 )
 
 // Check if array contains a value

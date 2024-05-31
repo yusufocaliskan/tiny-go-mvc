@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gptverse/init/config"
-	"github.com/gptverse/init/framework/http/request"
-	responser "github.com/gptverse/init/framework/http/responser"
-	tinysession "github.com/gptverse/init/framework/tiny-session"
-	"github.com/gptverse/init/framework/translator"
+	"github.com/yusufocaliskan/tiny-go-mvc/config"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/http/request"
+	responser "github.com/yusufocaliskan/tiny-go-mvc/framework/http/responser"
+	tinysession "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-session"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 type Limiter struct {

@@ -3,7 +3,7 @@ package authmodel
 import (
 	"time"
 
-	tinytoken "github.com/gptverse/init/framework/tiny-token"
+	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 )
 
 type AuthRefreshTokenModel struct {

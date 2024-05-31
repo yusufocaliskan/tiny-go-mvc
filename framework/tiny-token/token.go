@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/gptverse/init/config"
+	"github.com/yusufocaliskan/tiny-go-mvc/config"
 )
 
 type SingleToken struct {

@@ -7,7 +7,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
-	"github.com/gptverse/init/framework/translator"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework/translator"
 )
 
 var validatorInstance = validator.New()

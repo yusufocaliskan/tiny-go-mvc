@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	usermodel "github.com/gptverse/init/app/models/user-model"
-	"github.com/gptverse/init/framework"
+	usermodel "github.com/yusufocaliskan/tiny-go-mvc/app/models/user-model"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

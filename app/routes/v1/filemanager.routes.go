@@ -1,12 +1,12 @@
 package v1routes
 
 import (
-	filemanagercontroller "github.com/gptverse/init/app/controllers/filemanager-controller"
-	"github.com/gptverse/init/app/middlewares"
-	authservice "github.com/gptverse/init/app/service/auth-service"
-	filemanagerservice "github.com/gptverse/init/app/service/filemanager-service"
-	"github.com/gptverse/init/database"
-	"github.com/gptverse/init/framework"
+	filemanagercontroller "github.com/yusufocaliskan/tiny-go-mvc/app/controllers/filemanager-controller"
+	"github.com/yusufocaliskan/tiny-go-mvc/app/middlewares"
+	authservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/auth-service"
+	filemanagerservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/filemanager-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/database"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
 )
 
 func SetFileManagerRoutes(fw *framework.Framework) {

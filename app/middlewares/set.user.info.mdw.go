@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	userservice "github.com/gptverse/init/app/service/user-service"
-	"github.com/gptverse/init/database"
-	"github.com/gptverse/init/framework"
-	tinytoken "github.com/gptverse/init/framework/tiny-token"
+	userservice "github.com/yusufocaliskan/tiny-go-mvc/app/service/user-service"
+	"github.com/yusufocaliskan/tiny-go-mvc/database"
+	"github.com/yusufocaliskan/tiny-go-mvc/framework"
+	tinytoken "github.com/yusufocaliskan/tiny-go-mvc/framework/tiny-token"
 )
 
 func SetUserInformation2Session(fw *framework.Framework) gin.HandlerFunc {
